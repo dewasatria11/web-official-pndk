@@ -1,18 +1,32 @@
 (function () {
   const BUTTON_SELECTOR = '[data-install-button]';
+  const UNAVAILABLE_HINT =
+    'Install tersedia ketika browser mendeteksi aplikasi dapat dipasang.';
 
   const setButtonsState = (buttons, available) => {
     buttons.forEach((button) => {
-      button.classList.toggle('hidden', !available);
       button.disabled = !available;
-      if (!available) {
-        button.classList.remove('opacity-70', 'cursor-not-allowed');
+      if (available) {
+        button.removeAttribute('aria-disabled');
+        button.removeAttribute('title');
+      } else {
+        button.setAttribute('aria-disabled', 'true');
+        if (button.dataset.installUnavailableText) {
+          button.title = button.dataset.installUnavailableText;
+        } else {
+          button.title = UNAVAILABLE_HINT;
+        }
       }
     });
   };
 
   const setButtonsLoading = (buttons, isLoading) => {
     buttons.forEach((button) => {
+      if (isLoading) {
+        button.setAttribute('aria-busy', 'true');
+      } else {
+        button.removeAttribute('aria-busy');
+      }
       button.classList.toggle('opacity-70', isLoading);
       button.classList.toggle('cursor-not-allowed', isLoading);
     });
