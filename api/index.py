@@ -138,6 +138,20 @@ class handler(BaseHTTPRequestHandler):
                 else:
                     WhySectionUpdateHandler.do_OPTIONS(self)
 
+            elif action == 'locales':
+                from lib.handlers.locales import handler as LocalesHandler
+                if self.command == 'GET':
+                    LocalesHandler.do_GET(self)
+                else:
+                    LocalesHandler.do_OPTIONS(self)
+
+            elif action == 'sections_upsert':
+                from lib.handlers.sections_upsert import handler as SectionsUpsertHandler
+                if self.command == 'POST':
+                    SectionsUpsertHandler.do_POST(self)
+                else:
+                    SectionsUpsertHandler.do_OPTIONS(self)
+
             elif action == 'alur_steps':
                 from lib.handlers.alur_steps import handler as AlurStepsHandler
                 if self.command == 'GET':

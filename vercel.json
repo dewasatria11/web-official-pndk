@@ -13,7 +13,7 @@
     }
   },
   "rewrites": [
-    { "source": "/locales/:lang.json", "destination": "/api/locales?lang=:lang" },
+    { "source": "/locales/:lang.json", "destination": "/api/index?action=locales&lang=:lang" },
     { "source": "/api/pendaftar_create", "destination": "/api/index?action=pendaftar_create" },
     { "source": "/api/pendaftar_list", "destination": "/api/index?action=pendaftar_list" },
     { "source": "/api/pendaftar_cek_status", "destination": "/api/index?action=pendaftar_cek_status" },
@@ -37,6 +37,7 @@
     { "source": "/api/hero_images_update_order", "destination": "/api/index?action=hero_images_update_order" },
     { "source": "/api/why_section_list", "destination": "/api/index?action=why_section_list" },
     { "source": "/api/why_section_update", "destination": "/api/index?action=why_section_update" },
+    { "source": "/api/admin/sections/upsert", "destination": "/api/index?action=sections_upsert" },
     { "source": "/api/alur_steps", "destination": "/api/index?action=alur_steps" },
     { "source": "/api/syarat_items", "destination": "/api/index?action=syarat_items" },
     { "source": "/api/biaya_items", "destination": "/api/index?action=biaya_items" },
