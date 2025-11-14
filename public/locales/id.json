@@ -507,6 +507,26 @@
       "instruction": {
         "title": "🎉 Selamat! Pendaftaran Anda Telah Diverifikasi",
         "summary": "<strong>✅ Status:</strong> Berkas Anda telah diverifikasi oleh admin.<br><strong>📌 Langkah Terakhir:</strong> Silakan lakukan pembayaran untuk menyelesaikan proses pendaftaran."
+      },
+      "modal": {
+        "title": "Detail Bukti Pembayaran",
+        "subtitle": "Bukti pembayaran yang Anda unggah tersimpan aman dan akan diperiksa oleh admin.",
+        "proofTitle": "Bukti Transfer",
+        "openImage": "Buka di Tab Baru",
+        "noImage": "Bukti pembayaran belum tersedia.",
+        "noImageDesc": "Silakan hubungi admin jika Anda sudah mengunggah bukti tetapi belum terlihat.",
+        "studentInfo": "Pendaftar",
+        "amountLabel": "Jumlah Pembayaran",
+        "methodLabel": "Metode",
+        "methodFallback": "Transfer Bank",
+        "uploadedLabel": "Diunggah",
+        "verifiedLabel": "Diverifikasi",
+        "statusLabel": "Status Pembayaran",
+        "noteLabel": "Catatan Admin",
+        "noteEmpty": "Tidak ada catatan tambahan dari admin.",
+        "close": "Tutup",
+        "toastNoData": "Data pembayaran belum tersedia.",
+        "noImageToast": "Bukti pembayaran belum dapat ditampilkan."
       }
     },
     "revision": {

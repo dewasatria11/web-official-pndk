@@ -405,6 +405,7 @@
   // expose agar bisa dipakai dari HTML
   window.toggleSidebar = toggleSidebar;
   window.switchTab = switchTab;
+  window.loadPendaftar = loadPendaftar; // needed for inline event handlers (e.g., modal refresh buttons)
 
   /* =========================
      3) PENDAFTAR

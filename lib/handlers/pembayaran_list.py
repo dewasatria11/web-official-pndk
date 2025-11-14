@@ -2,6 +2,18 @@ from http.server import BaseHTTPRequestHandler
 import json
 from lib._supabase import supabase_client
 
+def safe_float(value, default=0.0):
+    """
+    Convert value to float safely.
+    Supabase rows might have NULL jumlah (None) which would raise TypeError.
+    """
+    try:
+        if value is None:
+            return default
+        return float(value)
+    except (TypeError, ValueError):
+        return default
+
 class handler(BaseHTTPRequestHandler):
     def do_GET(self):
         try:
@@ -24,7 +36,7 @@ class handler(BaseHTTPRequestHandler):
                     'nik': nik,
                     'nikcalon': nik,  # Add nikcalon for compatibility
                     'nama_lengkap': item.get('nama_lengkap'),
-                    'jumlah': float(item.get('jumlah', 0)),
+                    'jumlah': safe_float(item.get('jumlah'), 0.0),
                     'status': item.get('status_pembayaran'),  # Gunakan field yang benar
                     'tanggal_upload': item.get('tanggal_upload'),
                     'tanggal_verifikasi': item.get('tanggal_verifikasi'),

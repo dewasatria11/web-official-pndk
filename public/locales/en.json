@@ -507,6 +507,26 @@
       "instruction": {
         "title": "🎉 Congratulations! Your Registration Has Been Verified",
         "summary": "<strong>✅ Status:</strong> Your documents have been approved.<br><strong>📌 Final Step:</strong> Please proceed with payment to complete your registration."
+      },
+      "modal": {
+        "title": "Payment Proof Details",
+        "subtitle": "The payment proof you uploaded is stored securely and reviewed by our admin team.",
+        "proofTitle": "Transfer Receipt",
+        "openImage": "Open in New Tab",
+        "noImage": "Payment proof is not available yet.",
+        "noImageDesc": "Please contact the admin if you have uploaded proof but it is not visible.",
+        "studentInfo": "Registrant",
+        "amountLabel": "Amount Paid",
+        "methodLabel": "Method",
+        "methodFallback": "Bank Transfer",
+        "uploadedLabel": "Uploaded At",
+        "verifiedLabel": "Verified At",
+        "statusLabel": "Payment Status",
+        "noteLabel": "Admin Note",
+        "noteEmpty": "No additional notes from the admin.",
+        "close": "Close",
+        "toastNoData": "Payment data is not available yet.",
+        "noImageToast": "Payment proof cannot be displayed yet."
       }
     },
     "revision": {
