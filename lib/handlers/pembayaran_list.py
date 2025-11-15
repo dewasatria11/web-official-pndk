@@ -26,15 +26,17 @@ class handler(BaseHTTPRequestHandler):
             # Map fields for frontend compatibility dengan field yang konsisten
             result_data = []
             for item in raw_data:
-                # Get identifier - try nisn first, fallback to nik, then nikcalon
-                nisn = item.get('nisn')
-                nik = item.get('nik') or item.get('nikcalon')
+                # Normalise identifiers supaya konsisten antara tabel pendaftar/pembayaran
+                nisn = (item.get('nisn') or "").strip()
+                nik = (item.get('nik') or "").strip()
+                nikcalon = (item.get('nikcalon') or "").strip()
                 
                 mapped = {
                     'id': item.get('id'),
-                    'nisn': nisn,
-                    'nik': nik,
-                    'nikcalon': nik,  # Add nikcalon for compatibility
+                    'nisn': nisn or None,
+                    'nik': nik or None,
+                    # Simpan nikcalon asli jika ada (jangan timpa dengan nik)
+                    'nikcalon': nikcalon or None,
                     'nama_lengkap': item.get('nama_lengkap'),
                     'jumlah': safe_float(item.get('jumlah'), 0.0),
                     'status': item.get('status_pembayaran'),  # Gunakan field yang benar

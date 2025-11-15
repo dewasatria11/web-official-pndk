@@ -114,6 +114,23 @@
 
   const badge = (text, cls) => `<span class="badge bg-${cls}">${text}</span>`;
 
+  const normalizeDigits = (value = "") =>
+    String(value || "").replace(/\D/g, "");
+
+  const dedupeList = (list = []) => {
+    const seen = new Set();
+    const result = [];
+    list
+      .map((item) => (item === null || item === undefined ? "" : String(item).trim()))
+      .filter(Boolean)
+      .forEach((item) => {
+        if (seen.has(item)) return;
+        seen.add(item);
+        result.push(item);
+      });
+    return result;
+  };
+
   /**
    * Safe Toastr wrapper to prevent "Cannot read properties of undefined" errors
    * Checks for full Toastr initialization (toastr.options must exist)
@@ -415,6 +432,12 @@
   let cachedVerifiedPayments = null;
   let lastStatsFetchTime = 0;
   const STATS_CACHE_DURATION = 60000; // 1 menit
+
+  function invalidateStatisticsCache() {
+    cachedAllDataForStats = null;
+    cachedVerifiedPayments = null;
+    lastStatsFetchTime = 0;
+  }
   
   async function loadPendaftar() {
     try {
@@ -966,10 +989,27 @@
         const r = await fetch("/api/pembayaran_list");
         const result = await r.json();
         if (r.ok && result.data) {
-          const nisn = pendaftar.nisn;
-          const payment = result.data.find(
-            (p) => p.nisn === nisn
-          );
+          const identifiers = dedupeList([
+            pendaftar.nisn,
+            pendaftar.nikcalon,
+            pendaftar.nik,
+            normalizeDigits(pendaftar.nisn),
+            normalizeDigits(pendaftar.nikcalon),
+            normalizeDigits(pendaftar.nik),
+          ]);
+
+          const payment = result.data.find((p) => {
+            const paymentIdentifiers = dedupeList([
+              p.nisn,
+              p.nik,
+              p.nikcalon,
+              normalizeDigits(p.nisn),
+              normalizeDigits(p.nik),
+              normalizeDigits(p.nikcalon),
+            ]);
+            return paymentIdentifiers.some((id) => identifiers.includes(id));
+          });
+
           if (payment) {
             const raw = (payment.status || "PENDING").toUpperCase();
             paymentStatus =
@@ -1380,6 +1420,9 @@
         const modal = bootstrap.Modal.getInstance($("#verifikasiModal"));
         if (modal) modal.hide();
         
+        invalidateStatisticsCache();
+        loadPendaftar();
+        
         // 📱 WHATSAPP MANUAL - Tampilkan modal konfirmasi (ANTI POPUP BLOCKER!)
         if (status.toUpperCase() === 'DITERIMA' && result.pendaftar) {
           const { nama, nisn, telepon } = result.pendaftar;
@@ -1426,11 +1469,9 @@ Jazakumullahu khairan,
           } else {
             console.warn('[VERIFIKASI] No phone number available for:', nama);
             alert('⚠️ Nomor telepon tidak tersedia. Silakan hubungi manual.');
-            loadPendaftar();
           }
         } else {
           alert(`✅ Status berhasil diubah menjadi "${status}"!`);
-          loadPendaftar();
         }
       } else {
         alert("Error: " + (result.error || "Gagal mengubah status"));
@@ -1547,6 +1588,110 @@ Jazakumullahu khairan,
      ========================= */
   // Track if pembayaran has been loaded at least once
   let pembayaranLoadedOnce = false;
+
+  function refreshDataAfterPaymentChange() {
+    invalidateStatisticsCache();
+    loadPembayaran();
+    loadPendaftar();
+  }
+
+  async function fetchPendaftarContactByIdentifier(identifier) {
+    const candidates = dedupeList([
+      identifier,
+      normalizeDigits(identifier),
+      currentPembayaranData?.nisn,
+      normalizeDigits(currentPembayaranData?.nisn),
+      currentPembayaranData?.nik,
+      normalizeDigits(currentPembayaranData?.nik),
+      currentPembayaranData?.nikcalon,
+      normalizeDigits(currentPembayaranData?.nikcalon),
+    ]);
+
+    if (candidates.length === 0) {
+      return null;
+    }
+
+    // Coba pakai endpoint cek status (mendukung NISN/NIK setelah normalisasi)
+    for (const candidate of candidates) {
+      const digits = normalizeDigits(candidate);
+      if (!digits || (digits.length !== 10 && digits.length !== 16)) continue;
+      try {
+        const res = await fetch(`/api/pendaftar_cek_status?nisn=${encodeURIComponent(digits)}`);
+        const json = await res.json();
+        if (res.ok && json.ok && json.data) {
+          const phone =
+            json.data.telepon_orang_tua ||
+            json.data.telepon ||
+            "";
+          if (phone) {
+            return {
+              nama: json.data.nama || json.data.namalengkap || "",
+              nisn: json.data.nisn || digits,
+              telepon: phone,
+            };
+          }
+        }
+      } catch (lookupErr) {
+        console.warn("[PEMBAYARAN] cek status lookup error:", lookupErr);
+      }
+    }
+
+    // Fallback: iterate daftar pendaftar per halaman (max 50 data per request)
+    try {
+      const pageSize = 50;
+      let page = 1;
+      let totalPages = 1;
+      while (page <= totalPages) {
+        const res = await fetch(`/api/pendaftar_list?page=${page}&pageSize=${pageSize}`);
+        const json = await res.json();
+        if (!res.ok || !json.success) break;
+
+        const dataRows = json.data || [];
+        const match = dataRows.find((item) => {
+          const rowIdentifiers = dedupeList([
+            item.nisn,
+            item.nikcalon,
+            item.nik,
+            normalizeDigits(item.nisn),
+            normalizeDigits(item.nikcalon),
+            normalizeDigits(item.nik),
+          ]);
+          return rowIdentifiers.some((id) => candidates.includes(id));
+        });
+
+        if (match) {
+          return {
+            nama: match.nama || match.namalengkap || match.nama_lengkap || "",
+            nisn:
+              match.nisn ||
+              normalizeDigits(match.nikcalon) ||
+              candidates[0],
+            telepon:
+              match.telepon_orang_tua ||
+              match.no_hp ||
+              match.nomorhportu ||
+              "",
+          };
+        }
+
+        const totalItems =
+          json.total ||
+          dataRows.length + (page - 1) * pageSize;
+        totalPages = Math.max(
+          totalPages,
+          Math.max(1, Math.ceil(totalItems / pageSize))
+        );
+        if (dataRows.length < pageSize) {
+          break;
+        }
+        page += 1;
+      }
+    } catch (fallbackErr) {
+      console.warn("[PEMBAYARAN] Fallback pendaftar lookup error:", fallbackErr);
+    }
+
+    return null;
+  }
   
   async function loadPembayaran() {
     try {
@@ -1744,7 +1889,7 @@ Jazakumullahu khairan,
   }
 
   async function confirmVerifikasiPembayaran() {
-    const nisn = $("#verify-nisn").value;
+    const identifierInput = $("#verify-nisn").value;
     const status = $("#verify-status").value;
     const catatan = $("#verify-catatan").value;
     const btn = $("#btnConfirmVerifyPayment");
@@ -1758,7 +1903,7 @@ Jazakumullahu khairan,
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          nisn: nisn,
+          nisn: identifierInput,
           status,
           catatan_admin: catatan,
           verified_by: localStorage.getItem("adminEmail") || "admin",
@@ -1775,63 +1920,71 @@ Jazakumullahu khairan,
       const dModal = bootstrap.Modal.getInstance($("#detailPembayaranModal"));
       if (dModal) dModal.hide();
 
-      // 📱 WHATSAPP MODAL - Kirim WA jika VERIFIED (ANTI POPUP BLOCKER!)
-      if (status === "VERIFIED" && currentPembayaranData) {
+      refreshDataAfterPaymentChange();
+
+      if (status === "VERIFIED") {
         try {
-          const pRes = await fetch("/api/pendaftar_list");
-          const pJson = await pRes.json();
-          if (pJson.success && pJson.data) {
-            const pendaftar = pJson.data.find(
-              (p) =>
-                (p.nisn || p.nikcalon || p.nik) === (currentPembayaranData.nisn || currentPembayaranData.nik)
-            );
-            if (pendaftar && pendaftar.telepon_orang_tua) {
-              let phone = pendaftar.telepon_orang_tua.replace(/\D/g, '');
-              if (phone.startsWith('0')) {
-                phone = '62' + phone.substring(1);
-              }
-              
-              const message = encodeURIComponent(
-                `Assalamualaikum Wr. Wb.
+          const lookupIdentifier =
+            currentPembayaranData?.nisn ||
+            currentPembayaranData?.nik ||
+            currentPembayaranData?.nikcalon ||
+            identifierInput;
+
+          const contact = await fetchPendaftarContactByIdentifier(
+            lookupIdentifier
+          );
+
+          if (contact && contact.telepon) {
+            let phone = normalizeDigits(contact.telepon);
+            if (phone.startsWith("0")) {
+              phone = "62" + phone.substring(1);
+            } else if (!phone.startsWith("62")) {
+              phone = "62" + phone;
+            }
+
+            const namaLengkap =
+              contact.nama ||
+              currentPembayaranData?.nama_lengkap ||
+              "-";
+            const nisnDisplay =
+              contact.nisn ||
+              currentPembayaranData?.nisn ||
+              currentPembayaranData?.nik ||
+              lookupIdentifier;
+
+            const message = encodeURIComponent(
+              `Assalamualaikum Wr. Wb.
 
 ✅ *Pembayaran telah TERVERIFIKASI*
 
-• Nama Siswa: *${currentPembayaranData.nama_lengkap}*
-• NISN: ${currentPembayaranData.nisn || currentPembayaranData.nik}
-• Jumlah: ${rupiah(currentPembayaranData.jumlah)}
+• Nama Siswa: *${namaLengkap}*
+• NISN: ${nisnDisplay}
+• Jumlah: ${rupiah(currentPembayaranData?.jumlah)}
 
 🎉 *Proses pendaftaran telah SELESAI!*
 Kami akan menghubungi Anda kembali untuk informasi lebih lanjut.
 
 Jazakumullahu khairan,
 *PONDOK PESANTREN AL IKHSAN BEJI*`
-              );
+            );
 
-              const waWeb = `https://wa.me/${phone}?text=${message}`;
-              
-              // Tampilkan modal WhatsApp (100% tidak kena popup blocker!)
-              showWhatsAppModalPembayaran(
-                currentPembayaranData.nama_lengkap,
-                currentPembayaranData.nisn || currentPembayaranData.nik,
-                phone,
-                waWeb
-              );
-            } else {
-              alert("✅ Pembayaran berhasil diverifikasi!");
-              loadPembayaran();
-            }
+            const waWeb = `https://wa.me/${phone}?text=${message}`;
+            
+            showWhatsAppModalPembayaran(
+              namaLengkap,
+              nisnDisplay,
+              phone,
+              waWeb
+            );
           } else {
             alert("✅ Pembayaran berhasil diverifikasi!");
-            loadPembayaran();
           }
         } catch (err) {
           console.error("WA notify error:", err);
           alert("✅ Pembayaran berhasil diverifikasi!");
-          loadPembayaran();
         }
       } else {
         alert(`✅ Pembayaran berhasil di${status.toLowerCase()}!`);
-        loadPembayaran();
       }
     } catch (e) {
       console.error("verify error:", e);

@@ -26,7 +26,7 @@ class handler(BaseHTTPRequestHandler):
         try:
             print(f"[CEK_STATUS] Request path: {request_handler.path}")
             
-            # Helper to normalize NISN (keep digits only)
+            # Helper to normalize NISN/NIK (keep digits only)
             def normalize_nisn(value: str) -> str:
                 return "".join(ch for ch in value if ch.isdigit())
 
@@ -38,7 +38,7 @@ class handler(BaseHTTPRequestHandler):
             
             print(f"[CEK_STATUS] NISN raw: {raw_nisn}, normalized: {normalized_nisn}")
 
-            # Validasi: NISN wajib diisi
+            # Validasi: identifier wajib diisi
             if not raw_nisn:
                 print("[CEK_STATUS] Error: NISN kosong")
                 return send_json(400, {
@@ -46,12 +46,12 @@ class handler(BaseHTTPRequestHandler):
                     "error": "NISN harus diisi"
                 })
 
-            # Validasi: NISN harus 10 digit angka (setelah normalisasi)
-            if len(normalized_nisn) != 10:
-                print(f"[CEK_STATUS] Error: NISN invalid format - {raw_nisn}")
+            # Validasi: identifier harus 10 digit (NISN) atau 16 digit (NIK)
+            if len(normalized_nisn) not in (10, 16):
+                print(f"[CEK_STATUS] Error: Identifier invalid format - {raw_nisn}")
                 return send_json(400, {
                     "ok": False,
-                    "error": "Format NISN tidak valid (10 digit)"
+                    "error": "Format identifier tidak valid (masukkan NISN 10 digit atau NIK 16 digit)"
                 })
 
             print("[CEK_STATUS] Connecting to Supabase...")
@@ -172,6 +172,18 @@ class handler(BaseHTTPRequestHandler):
                 "created_at": row.get("createdat"),
                 "createdat": row.get("createdat"),  # Add both formats for compatibility
                 "updated_at": row.get("updatedat"),
+                "telepon_orang_tua": (
+                    row.get("telepon_orang_tua")
+                    or row.get("teleponorangtua")
+                    or row.get("nomorhportu")
+                    or ""
+                ),
+                "telepon": (
+                    row.get("telepon_orang_tua")
+                    or row.get("teleponorangtua")
+                    or row.get("nomorhportu")
+                    or ""
+                ),
                 "pembayaran": pembayaran_data  # Tambahkan data pembayaran
             }
 

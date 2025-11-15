@@ -1,135 +1,213 @@
 from http.server import BaseHTTPRequestHandler
 import json
-from lib._supabase import supabase_client
 import re
+from typing import List, Optional
+from lib._supabase import supabase_client
+
+def _normalize_digits(value: str) -> str:
+    """Hilangkan semua karakter non-digit."""
+    return re.sub(r"\D", "", value or "")
+
+def _dedupe(values: List[str]) -> List[str]:
+    seen = set()
+    result: List[str] = []
+    for value in values:
+        if not value:
+            continue
+        if value in seen:
+            continue
+        seen.add(value)
+        result.append(value)
+    return result
 
 class handler(BaseHTTPRequestHandler):
     def do_POST(self):
         try:
             # Read request body
-            content_length = int(self.headers['Content-Length'])
+            content_length = int(self.headers["Content-Length"])
             post_data = self.rfile.read(content_length)
-            data = json.loads(post_data.decode('utf-8'))
-            
-            # Validasi required fields dengan pengecekan lebih ketat
-            if 'nisn' not in data or not data['nisn']:
-                self.send_response(400)
-                self.send_header('Content-Type', 'application/json')
-                self.end_headers()
-                self.wfile.write(json.dumps({
-                    'error': 'NISN is required'
-                }).encode())
+            data = json.loads(post_data.decode("utf-8"))
+
+            raw_identifier = str(
+                data.get("nisn")
+                or data.get("identifier")
+                or data.get("nik")
+                or ""
+            ).strip()
+
+            if not raw_identifier:
+                self._send_json(400, {"error": "Identifier (NISN / NIK) wajib diisi"})
                 return
-            
-            if 'status' not in data or not data['status']:
-                self.send_response(400)
-                self.send_header('Content-Type', 'application/json')
-                self.end_headers()
-                self.wfile.write(json.dumps({
-                    'error': 'status is required'
-                }).encode())
+
+            normalized_identifier = _normalize_digits(raw_identifier)
+            identifier_candidates = _dedupe(
+                [raw_identifier, normalized_identifier]
+            )
+
+            if not normalized_identifier or len(normalized_identifier) not in (10, 16):
+                self._send_json(
+                    400,
+                    {
+                        "error": "Identifier tidak valid. Gunakan NISN (10 digit) atau NIK (16 digit)"
+                    },
+                )
                 return
-            
-            # Validasi format NISN (10 digit)
-            nisn = data['nisn'].strip()
-            if not re.match(r'^\d{10}$', nisn):
-                self.send_response(400)
-                self.send_header('Content-Type', 'application/json')
-                self.end_headers()
-                self.wfile.write(json.dumps({
-                    'error': 'Format NISN tidak valid. Harus 10 digit angka'
-                }).encode())
+
+            if "status" not in data or not data["status"]:
+                self._send_json(400, {"error": "status is required"})
                 return
-            
-            # Validasi status dengan lebih ketat
-            valid_statuses = ['VERIFIED', 'REJECTED']
-            status = str(data['status']).upper()
-            
+
+            valid_statuses = ["VERIFIED", "REJECTED"]
+            status = str(data["status"]).upper()
             if status not in valid_statuses:
-                self.send_response(400)
-                self.send_header('Content-Type', 'application/json')
-                self.end_headers()
-                self.wfile.write(json.dumps({
-                    'error': f'Invalid status. Must be one of: {", ".join(valid_statuses)}'
-                }).encode())
+                self._send_json(
+                    400,
+                    {
+                        "error": f"Invalid status. Must be one of: {', '.join(valid_statuses)}"
+                    },
+                )
                 return
-            
-            # Get Supabase client with service role for admin operations
+
             supa = supabase_client(service_role=True)
-            
-            # Cek apakah pembayaran dengan NISN tersebut ada
-            existing_payment = supa.table('pembayaran').select('*').or_(f'nisn.eq.{nisn},nik.eq.{nisn}').execute()
-            
-            if not existing_payment.data:
-                self.send_response(404)
-                self.send_header('Content-Type', 'application/json')
-                self.end_headers()
-                self.wfile.write(json.dumps({
-                    'error': 'Pembayaran dengan NISN tersebut tidak ditemukan'
-                }).encode())
+
+            # Cari pembayaran berdasarkan NISN/NIK
+            payment_row: Optional[dict] = None
+            matched_identifier: Optional[str] = None
+            for candidate in identifier_candidates:
+                if not candidate:
+                    continue
+                found = False
+                for field in ("nisn", "nik"):
+                    try:
+                        result = (
+                            supa.table("pembayaran")
+                            .select("*")
+                            .eq(field, candidate)
+                            .order("updated_at", desc=True)
+                            .limit(1)
+                            .execute()
+                        )
+                    except Exception as query_error:
+                        print(
+                            f"[PEMBAYARAN_VERIFY] Warning: gagal query pembayaran field={field} candidate={candidate}: {query_error}"
+                        )
+                        continue
+
+                    if result.data:
+                        payment_row = result.data[0]
+                        matched_identifier = candidate
+                        found = True
+                        break
+                if found:
+                    break
+
+            if not payment_row:
+                self._send_json(
+                    404, {"error": "Pembayaran dengan NISN/NIK tersebut tidak ditemukan"}
+                )
                 return
-            
-            # Update payment status dengan field yang konsisten
-            update_data = {
-                'status_pembayaran': status,
-                'verified_by': data.get('verified_by', data.get('verifiedBy', 'admin')),
-                'catatan_admin': data.get('catatan_admin', ''),
-                'tanggal_verifikasi': 'now()',  # Set timestamp verifikasi
-                'updated_at': 'now()'           # Update timestamp
+
+            payment_id = payment_row.get("id")
+            if not payment_id:
+                self._send_json(500, {"error": "Data pembayaran tidak lengkap (ID kosong)"})
+                return
+
+            verified_by = data.get("verified_by", data.get("verifiedBy", "admin"))
+            update_payload = {
+                "status_pembayaran": status,
+                "verified_by": verified_by,
+                "catatan_admin": data.get("catatan_admin", ""),
+                "tanggal_verifikasi": "now()",
+                "updated_at": "now()",
             }
-            
-            result = supa.table('pembayaran').update(update_data).or_(f'nisn.eq.{nisn},nik.eq.{nisn}').execute()
-            
-            # Validasi hasil update
-            if not result.data:
-                self.send_response(404)
-                self.send_header('Content-Type', 'application/json')
-                self.end_headers()
-                self.wfile.write(json.dumps({
-                    'error': 'Pembayaran tidak ditemukan'
-                }).encode())
+
+            update_result = (
+                supa.table("pembayaran").update(update_payload).eq("id", payment_id).execute()
+            )
+
+            if not update_result.data:
+                self._send_json(500, {"error": "Gagal memperbarui data pembayaran"})
                 return
-            
-            # Jika pembayaran VERIFIED, update juga status pendaftar terkait
-            if status == 'VERIFIED':
+
+            pendaftar_updated = False
+            if status == "VERIFIED":
                 try:
-                    # Update status pendaftar berdasarkan NISN
-                    pendaftar_update = {
-                        'statusberkas': 'DITERIMA',
-                        'verifiedby': data.get('verified_by', data.get('verifiedBy', 'admin')),
-                        'verifiedat': 'now()',
-                        'updatedat': 'now()'
-                    }
-                    
-                    supa.table('pendaftar').update(pendaftar_update).or_(f'nisn.eq.{nisn},nikcalon.eq.{nisn}').execute()
-                except Exception as e:
-                    # Jika terjadi error saat update pendaftar, log error tapi tidak menggagalkan request
-                    print(f"Warning: Gagal update status pendaftar: {str(e)}")
-            
-            # Send success response
-            self.send_response(200)
-            self.send_header('Content-Type', 'application/json')
-            self.send_header('Access-Control-Allow-Origin', '*')
-            self.end_headers()
-            self.wfile.write(json.dumps({
-                'message': f'Pembayaran berhasil di{status.lower()}',
-                'nisn': nisn,
-                'status': status
-            }).encode())
-            
+                    pendaftar_identifiers = _dedupe(
+                        identifier_candidates
+                        + [
+                            str(payment_row.get("nisn") or "").strip(),
+                            _normalize_digits(payment_row.get("nisn") or ""),
+                            str(payment_row.get("nik") or "").strip(),
+                            _normalize_digits(payment_row.get("nik") or ""),
+                        ]
+                    )
+
+                    pendaftar_row: Optional[dict] = None
+                    for candidate in pendaftar_identifiers:
+                        if not candidate:
+                            continue
+                        matched = False
+                        for field in ("nisn", "nikcalon", "nik"):
+                            try:
+                                res = (
+                                    supa.table("pendaftar")
+                                    .select("id")
+                                    .eq(field, candidate)
+                                    .order("updatedat", desc=True)
+                                    .limit(1)
+                                    .execute()
+                                )
+                            except Exception as p_query_error:
+                                print(
+                                    f"[PEMBAYARAN_VERIFY] Warning: gagal query pendaftar field={field} candidate={candidate}: {p_query_error}"
+                                )
+                                continue
+
+                            if res.data:
+                                pendaftar_row = res.data[0]
+                                matched = True
+                                break
+                        if matched:
+                            break
+
+                    if pendaftar_row and pendaftar_row.get("id"):
+                        pendaftar_update = {
+                            "statusberkas": "DITERIMA",
+                            "verifiedby": verified_by,
+                            "verifiedat": "now()",
+                            "updatedat": "now()",
+                        }
+                        supa.table("pendaftar").update(pendaftar_update).eq(
+                            "id", pendaftar_row["id"]
+                        ).execute()
+                        pendaftar_updated = True
+                except Exception as update_err:
+                    print(f"Warning: Gagal update status pendaftar: {update_err}")
+
+            self._send_json(
+                200,
+                {
+                    "message": f"Pembayaran berhasil di{status.lower()}",
+                    "identifier": matched_identifier or normalized_identifier,
+                    "status": status,
+                    "pendaftar_updated": pendaftar_updated,
+                },
+            )
+
         except Exception as e:
             print(f"Error in pembayaran_verify: {str(e)}")
-            self.send_response(500)
-            self.send_header('Content-Type', 'application/json')
-            self.send_header('Access-Control-Allow-Origin', '*')
-            self.end_headers()
-            self.wfile.write(json.dumps({
-                'error': str(e)
-            }).encode())
-    
+            self._send_json(500, {"error": str(e)})
+
     def do_OPTIONS(self):
         self.send_response(200)
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Access-Control-Allow-Methods', 'POST, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Methods", "POST, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type")
         self.end_headers()
+
+    def _send_json(self, status_code: int, payload: dict) -> None:
+        self.send_response(status_code)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.end_headers()
+        self.wfile.write(json.dumps(payload).encode())
