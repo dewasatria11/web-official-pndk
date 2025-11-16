@@ -438,6 +438,81 @@
     cachedVerifiedPayments = null;
     lastStatsFetchTime = 0;
   }
+
+  const PENDAFTAR_STATUS_CLASSES = {
+    pending: "warning",
+    revisi: "info",
+    diterima: "success",
+    ditolak: "danger",
+  };
+
+  const PENDAFTAR_STATUS_LABELS = {
+    pending: "Pending",
+    revisi: "Perlu Revisi",
+    diterima: "Diterima",
+    ditolak: "Ditolak",
+  };
+
+  const normalizeStatusValue = (status) =>
+    (status || "pending").toString().trim().toLowerCase();
+
+  function renderPendaftarStatusBadge(status) {
+    const normalized = normalizeStatusValue(status);
+    const cls = PENDAFTAR_STATUS_CLASSES[normalized] || "secondary";
+    const label =
+      PENDAFTAR_STATUS_LABELS[normalized] ||
+      capitalize(normalized || "Tidak diketahui");
+    return `<span class="badge status-badge bg-${cls}" data-status="${normalized}">${label}</span>`;
+  }
+
+  function renderPendaftarActions(id, status) {
+    const normalized = normalizeStatusValue(status);
+    if (normalized === "pending" || normalized === "revisi") {
+      return `
+        <button class="btn btn-sm btn-success" onclick="openVerifikasiModal(${id}, 'diterima')" title="Terima">
+          <i class="bi bi-check-circle"></i>
+        </button>
+        <button class="btn btn-sm btn-info" onclick="openVerifikasiModal(${id}, 'revisi')" title="Revisi">
+          <i class="bi bi-arrow-repeat"></i>
+        </button>
+        <button class="btn btn-sm btn-danger" onclick="openVerifikasiModal(${id}, 'ditolak')" title="Tolak">
+          <i class="bi bi-x-circle"></i>
+        </button>
+      `;
+    }
+    return `<span class="badge bg-secondary">Selesai</span>`;
+  }
+
+  function updatePendaftarRowStatus(pendaftarId, newStatus) {
+    if (!pendaftarId) return;
+    const normalized = normalizeStatusValue(newStatus);
+    const numericId = Number(pendaftarId);
+
+    if (!Number.isNaN(numericId)) {
+      const target = allPendaftarData.find(
+        (item) => Number(item.id) === numericId
+      );
+      if (target) {
+        target.status = normalized;
+        target.statusberkas = normalized.toUpperCase();
+      }
+    }
+
+    const row = document.querySelector(
+      `tr[data-pendaftar-id="${pendaftarId}"]`
+    );
+    if (!row) return;
+
+    const statusCell = row.querySelector(".pendaftar-status-cell");
+    if (statusCell) {
+      statusCell.innerHTML = renderPendaftarStatusBadge(normalized);
+    }
+
+    const actionsCell = row.querySelector(".pendaftar-actions-cell");
+    if (actionsCell) {
+      actionsCell.innerHTML = renderPendaftarActions(pendaftarId, normalized);
+    }
+  }
   
   async function loadPendaftar() {
     try {
@@ -489,52 +564,32 @@
           // Calculate starting number based on current page
           const startNum = (currentPage - 1) * pageSize;
         
-        tbody.innerHTML = result.data
-          .map((item, i) => {
-            const statusClass =
-              item.status === "pending"
-                ? "warning"
-                : item.status === "revisi"
-                ? "info"
-                : item.status === "diterima"
-                ? "success"
-                : "danger";
-
-            return `
-              <tr>
-                <td>${startNum + i + 1}</td>
-                <td><strong>${
-                  item.nisn || item.nikcalon || item.nik || "-"
-                }</strong></td>
-                <td>${item.nama}</td>
-                <td>${badge(item.status, statusClass)}</td>
-                <td>${formatIDDate(item.createdat)}</td>
-                <td>
-                  <button class="btn btn-sm btn-secondary" onclick="lihatDetail(${
-                    item.id
-                  })" title="Lihat Detail & Berkas">
-                    <i class="bi bi-eye"></i>
-                  </button>
-                  ${
-                    item.status === "pending" || item.status === "revisi"
-                      ? `
-                        <button class="btn btn-sm btn-success" onclick="openVerifikasiModal(${item.id}, 'diterima')" title="Terima">
-                          <i class="bi bi-check-circle"></i>
-                        </button>
-                        <button class="btn btn-sm btn-info" onclick="openVerifikasiModal(${item.id}, 'revisi')" title="Revisi">
-                          <i class="bi bi-arrow-repeat"></i>
-                        </button>
-                        <button class="btn btn-sm btn-danger" onclick="openVerifikasiModal(${item.id}, 'ditolak')" title="Tolak">
-                          <i class="bi bi-x-circle"></i>
-                        </button>
-                      `
-                      : `<span class="badge bg-secondary">Selesai</span>`
-                  }
-                </td>
-              </tr>
-            `;
-          })
-          .join("");
+          tbody.innerHTML = result.data
+            .map((item, i) => {
+              const normalizedStatus = normalizeStatusValue(item.status);
+              return `
+                <tr data-pendaftar-id="${item.id}">
+                  <td>${startNum + i + 1}</td>
+                  <td><strong>${
+                    item.nisn || item.nikcalon || item.nik || "-"
+                  }</strong></td>
+                  <td>${item.nama}</td>
+                  <td class="pendaftar-status-cell">${renderPendaftarStatusBadge(
+                    normalizedStatus
+                  )}</td>
+                  <td>${formatIDDate(item.createdat)}</td>
+                  <td class="pendaftar-actions-cell">
+                    <button class="btn btn-sm btn-secondary" onclick="lihatDetail(${
+                      item.id
+                    })" title="Lihat Detail & Berkas">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                    ${renderPendaftarActions(item.id, normalizedStatus)}
+                  </td>
+                </tr>
+              `;
+            })
+            .join("");
           
           console.log('[PENDAFTAR] ✅ Table rendered successfully');
         }
@@ -1419,6 +1474,8 @@
       if (result.success) {
         const modal = bootstrap.Modal.getInstance($("#verifikasiModal"));
         if (modal) modal.hide();
+
+        updatePendaftarRowStatus(id, status);
         
         invalidateStatisticsCache();
         loadPendaftar();

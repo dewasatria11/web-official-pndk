@@ -56,6 +56,12 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // 🚫 Jangan cache request API supaya data admin (pendaftar/pembayaran/etc) selalu real-time
+  if (url.pathname.startsWith('/api/')) {
+    event.respondWith(networkOnly(event.request));
+    return;
+  }
+
   if (isHtmlRequest(event.request)) {
     event.respondWith(networkFirst(event.request));
     return;
@@ -95,5 +101,13 @@ async function cacheFirst(request) {
     return freshResponse;
   } catch (error) {
     return isHtmlRequest(request) ? cache.match('/offline.html') : Response.error();
+  }
+}
+
+async function networkOnly(request) {
+  try {
+    return await fetch(request);
+  } catch (error) {
+    return Response.error();
   }
 }
