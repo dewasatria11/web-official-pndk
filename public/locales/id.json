@@ -52,12 +52,14 @@
     }
   },
   "hero": {
+    "headingMain": "Penerimaan Santri Baru",
     "badge": "PPDB Online 2025/2026",
     "titleHighlight": "Penerimaan Peserta Didik dan Santri Baru",
     "titleMain": "<span class='text-yellow-400' style='text-shadow:2px 4px 8px rgba(0,0,0,0.5);'>(PPDSB) PONDOK PESANTREN AL IKHSAN BEJI</span>",
     "subtitle": "Bergabunglah menjadi santri Pondok Pesantren Al Ikhsan Beji. Pendidikan islami terpadu dengan pembinaan akhlak, tahfidz Al-Qur'an, dan ilmu pengetahuan yang membentuk generasi Qur'ani dan berprestasi.",
     "ctaApply": "Daftar Sekarang",
-    "ctaStatus": "Cek Status"
+    "ctaStatus": "Cek Status",
+    "ctaBrochure": "Download Brosur"
   },
   "sections": {
     "berita": {
