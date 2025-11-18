@@ -44,4 +44,4 @@ Platform ini digunakan Pondok Pesantren Al Ikhsan Beji untuk mengelola seluruh p
 
 Kontribusi, isu, atau perbaikan dapat diajukan melalui repository ini. Semoga bermanfaat untuk keberlangsungan PPDSB Al Ikhsan Beji.
 
-Salam Hangat Dewa S.
+Salam Hangat Dewa S. iya
