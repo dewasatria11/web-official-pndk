@@ -1,57 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
   <url>
-    <loc>https://www.alikhsan-beji.app/</loc>
-    <lastmod>2025-11-18</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.00</priority>
+    <loc>https://alikhsan-beji.app/</loc>
+    <priority>1.0</priority>
   </url>
+
   <url>
-    <loc>https://www.alikhsan-beji.app/daftar</loc>
-    <lastmod>2025-11-18</lastmod>
-    <changefreq>daily</changefreq>
+    <loc>https://alikhsan-beji.app/daftar</loc>
     <priority>0.95</priority>
   </url>
+
   <url>
-    <loc>https://www.alikhsan-beji.app/cek-status</loc>
-    <lastmod>2025-11-18</lastmod>
-    <changefreq>daily</changefreq>
+    <loc>https://alikhsan-beji.app/cek-status</loc>
     <priority>0.90</priority>
   </url>
+
   <url>
-    <loc>https://www.alikhsan-beji.app/pembayaran</loc>
-    <lastmod>2025-11-18</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://alikhsan-beji.app/pembayaran</loc>
     <priority>0.85</priority>
   </url>
+
   <url>
-    <loc>https://www.alikhsan-beji.app/biaya</loc>
-    <lastmod>2025-11-18</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://alikhsan-beji.app/biaya</loc>
     <priority>0.80</priority>
   </url>
+
   <url>
-    <loc>https://www.alikhsan-beji.app/brosur</loc>
-    <lastmod>2025-11-18</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://alikhsan-beji.app/brosur</loc>
     <priority>0.75</priority>
   </url>
+
   <url>
-    <loc>https://www.alikhsan-beji.app/alur-pendaftaran</loc>
-    <lastmod>2025-11-18</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://alikhsan-beji.app/alur-pendaftaran</loc>
     <priority>0.75</priority>
   </url>
+
   <url>
-    <loc>https://www.alikhsan-beji.app/syarat-pendaftaran</loc>
-    <lastmod>2025-11-18</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://alikhsan-beji.app/syarat-pendaftaran</loc>
     <priority>0.75</priority>
   </url>
+
   <url>
-    <loc>https://www.alikhsan-beji.app/kontak</loc>
-    <lastmod>2025-11-18</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://alikhsan-beji.app/kontak</loc>
     <priority>0.70</priority>
   </url>
+
 </urlset>

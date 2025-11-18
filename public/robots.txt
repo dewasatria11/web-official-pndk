@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://alikhsan-beji.app/sitemap.xml
