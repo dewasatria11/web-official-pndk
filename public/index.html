@@ -160,7 +160,7 @@
     .hero-ppdb {
       position: relative;
       text-align: center;
-      padding: 80px 16px 80px;
+      padding: 70px 16px 80px;
       background: linear-gradient(180deg, #047857 0%, #10b981 100%);
       overflow: hidden;
     }
@@ -237,6 +237,33 @@
       display: grid;
       gap: 2rem;
     }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    .quick-links a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.6rem 1.25rem;
+      border-radius: 999px;
+      border: 1px solid rgba(4, 120, 87, 0.2);
+      color: #047857;
+      font-weight: 600;
+      transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .quick-links a:hover {
+      background: rgba(4, 120, 87, 0.08);
+      color: #065f46;
+      box-shadow: 0 10px 20px rgba(4, 120, 87, 0.15);
+    }
     @media (min-width: 1024px) {
       .news-grid {
         grid-template-columns: minmax(0, 1.7fr) minmax(260px, 1fr);
@@ -252,6 +279,11 @@
       .btn-secondary {
         width: 100%;
         max-width: 260px;
+      }
+    }
+    @media (max-width: 1023px) {
+      .news-grid {
+        grid-template-columns: 1fr;
       }
     }
 
@@ -693,42 +725,49 @@
     <!-- SEO HEADING SECTION -->
     <section class="py-12 bg-white border-b border-gray-100">
       <div class="container mx-auto px-4">
-        <div class="grid gap-6 md:grid-cols-2">
+        <div class="sr-only">
           <div>
-            <h3 class="text-lg font-semibold text-brand-900" data-i18n="seo.headings.flow">Alur Pendaftaran</h3>
-            <p class="text-sm text-gray-600 mb-2">Ikuti tahapan registrasi online, verifikasi, hingga daftar ulang secara terperinci.</p>
-            <a href="/alur-pendaftaran.html" class="text-brand-700 font-semibold inline-flex items-center gap-1">
-              Pelajari Alur <i class="bi bi-arrow-right-short text-2xl"></i>
-            </a>
+            <h3 data-i18n="seo.headings.flow">Alur Pendaftaran</h3>
+            <p>Ikuti tahapan registrasi online, verifikasi, hingga daftar ulang secara terperinci.</p>
           </div>
           <div>
-            <h3 class="text-lg font-semibold text-brand-900" data-i18n="seo.headings.requirements">Syarat Pendaftaran</h3>
-            <p class="text-sm text-gray-600 mb-2">Siapkan dokumen administrasi, ijazah, dan ketentuan umur sesuai panduan resmi.</p>
-            <a href="/syarat-pendaftaran.html" class="text-brand-700 font-semibold inline-flex items-center gap-1">
-              Lihat Syarat <i class="bi bi-arrow-right-short text-2xl"></i>
-            </a>
+            <h3 data-i18n="seo.headings.requirements">Syarat Pendaftaran</h3>
+            <p>Siapkan dokumen administrasi, ijazah, dan ketentuan umur sesuai panduan resmi.</p>
           </div>
           <div>
-            <h3 class="text-lg font-semibold text-brand-900" data-i18n="seo.headings.fees">Biaya Pendidikan</h3>
-            <p class="text-sm text-gray-600 mb-2">Transparansi uang pangkal, SPP, dan kebutuhan lain disajikan secara jelas.</p>
-            <a href="/biaya.html" class="text-brand-700 font-semibold inline-flex items-center gap-1">
-              Rincian Biaya <i class="bi bi-arrow-right-short text-2xl"></i>
-            </a>
+            <h3 data-i18n="seo.headings.fees">Biaya Pendidikan</h3>
+            <p>Transparansi uang pangkal, SPP, dan kebutuhan lain disajikan secara jelas.</p>
           </div>
           <div>
-            <h3 class="text-lg font-semibold text-brand-900" data-i18n="seo.headings.brochure">Brosur PPDB</h3>
-            <p class="text-sm text-gray-600 mb-2">Unduh brosur digital untuk melihat fasilitas, program unggulan, dan jadwal PPDB.</p>
-            <a href="/brosur.html" class="text-brand-700 font-semibold inline-flex items-center gap-1">
-              Unduh Brosur <i class="bi bi-arrow-right-short text-2xl"></i>
-            </a>
+            <h3 data-i18n="seo.headings.brochure">Brosur PPDB</h3>
+            <p>Unduh brosur digital untuk melihat fasilitas, program unggulan, dan jadwal PPDB.</p>
           </div>
-          <div class="md:col-span-2">
-            <h3 class="text-lg font-semibold text-brand-900" data-i18n="seo.headings.contact">Kontak & Informasi Lengkap</h3>
-            <p class="text-sm text-gray-600 mb-2">Konsultasikan kebutuhan keluarga melalui WhatsApp, telepon, atau kunjungan langsung.</p>
-            <a href="/kontak.html" class="text-brand-700 font-semibold inline-flex items-center gap-1">
-              Hubungi Kami <i class="bi bi-arrow-right-short text-2xl"></i>
-            </a>
+          <div>
+            <h3 data-i18n="seo.headings.contact">Kontak & Informasi Lengkap</h3>
+            <p>Konsultasikan kebutuhan keluarga melalui WhatsApp, telepon, atau kunjungan langsung.</p>
           </div>
+        </div>
+        <div class="flex flex-wrap items-center justify-center gap-3 quick-links text-sm">
+          <a href="/alur-pendaftaran.html">
+            <i class="bi bi-arrow-right-circle"></i>
+            <span data-i18n="seo.headings.flow">Alur Pendaftaran</span>
+          </a>
+          <a href="/syarat-pendaftaran.html">
+            <i class="bi bi-check-circle"></i>
+            <span data-i18n="seo.headings.requirements">Syarat Pendaftaran</span>
+          </a>
+          <a href="/biaya.html">
+            <i class="bi bi-cash-stack"></i>
+            <span data-i18n="seo.headings.fees">Biaya Pendidikan</span>
+          </a>
+          <a href="/brosur.html">
+            <i class="bi bi-file-earmark-text"></i>
+            <span data-i18n="seo.headings.brochure">Brosur PPDB</span>
+          </a>
+          <a href="/kontak.html">
+            <i class="bi bi-telephone-forward"></i>
+            <span data-i18n="seo.headings.contact">Kontak & Informasi Lengkap</span>
+          </a>
         </div>
       </div>
     </section>
@@ -787,16 +826,18 @@
     <!-- BERITA & ARTIKEL -->
     <section class="py-16 bg-gray-50">
       <div class="container mx-auto px-4">
-        <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 mb-10">
-          <div>
+        <div class="flex flex-col lg:flex-row items-start lg:items-center gap-4 mb-10">
+          <div class="flex-1">
             <h2 class="text-3xl lg:text-4xl font-bold text-gray-900" data-i18n="sections.berita.title">Berita Terkini</h2>
             <div class="w-16 h-1 bg-brand-600 rounded-full mt-3 mb-4"></div>
             <p class="text-lg text-gray-600 max-w-2xl" data-i18n="sections.berita.subtitle">Berita terbaru seputar Pondok Pesantren Al Ikhsan Beji</p>
           </div>
-          <a href="/berita.html" class="inline-flex items-center text-brand-700 font-semibold text-base hover:text-brand-800 transition">
-            <span data-i18n="sections.berita.viewAll">Lihat Semua</span>
-            <i class="bi bi-arrow-right-short text-2xl"></i>
-          </a>
+          <div class="w-full lg:w-auto">
+            <a href="/berita.html" class="ml-auto inline-flex items-center text-brand-700 font-semibold text-base hover:text-brand-800 transition">
+              <span data-i18n="sections.berita.viewAll">Lihat Semua</span>
+              <i class="bi bi-arrow-right-short text-2xl"></i>
+            </a>
+          </div>
         </div>
 
         <!-- Dynamic Berita Cards -->
@@ -1457,7 +1498,7 @@
           </div>`;
 
         container.innerHTML = `
-          <div class="space-y-6">${featuredHTML}</div>
+          <div>${featuredHTML}</div>
           <div class="space-y-4">${sideColumn}</div>
         `;
       } catch (error) {
