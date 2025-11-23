@@ -42,8 +42,8 @@ class handler(BaseHTTPRequestHandler):
                     req = supa.table("faq_kb").select("*")
                     for word in words:
                         # Chain .or_() filters. In PostgREST, chaining filters means AND.
-                        # So this becomes: (q ILIKE %w1% OR k ILIKE %w1%) AND (q ILIKE %w2% OR k ILIKE %w2%) ...
-                        req = req.or_(f"question.ilike.%{word}%,keywords.ilike.%{word}%")
+                        # So this becomes: (q ILIKE *w1* OR k ILIKE *w1*) AND (q ILIKE *w2* OR k ILIKE *w2*) ...
+                        req = req.or_(f"question.ilike.*{word}*,keywords.ilike.*{word}*")
                     
                     res_fallback = req.limit(3).execute()
                     matches = res_fallback.data
@@ -55,8 +55,8 @@ class handler(BaseHTTPRequestHandler):
                  # Construct one big OR filter: q.ilike.w1,k.ilike.w1,q.ilike.w2,k.ilike.w2...
                  or_conditions = []
                  for word in words:
-                     or_conditions.append(f"question.ilike.%{word}%")
-                     or_conditions.append(f"keywords.ilike.%{word}%")
+                     or_conditions.append(f"question.ilike.*{word}*")
+                     or_conditions.append(f"keywords.ilike.*{word}*")
                  
                  req = req.or_(",".join(or_conditions))
                  res_last = req.limit(1).execute()
