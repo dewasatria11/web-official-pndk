@@ -1,14 +1,20 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <meta name="csrf-token" content="{{CSRF_TOKEN}}" />
-  <meta name="description" content="PPDB Pondok Pesantren Al Ikhsan Beji 2025/2026 kini dibuka. Daftar PPDB online, cek status pendaftaran, lihat syarat, biaya, brosur, dan alur pendaftaran resmi." data-i18n="meta.description.home" data-i18n-attr="content" data-i18n-skip-text />
-  <meta name="keywords" content="PPDB Beji, Pondok Pesantren Al Ikhsan Beji, PPDB Online Beji, Daftar pondok pesantren beji, Pesantren Banyumas, Pendaftaran santri baru" />
-  <meta property="og:title" content="Pondok Pesantren Al Ikhsan Beji | PPDB Online 2025/2026" data-i18n="meta.title.home" data-i18n-attr="content" data-i18n-skip-text />
-  <meta property="og:description" content="Pendaftaran PPDB Al Ikhsan Beji 2025/2026 dibuka. Daftar online, cek status, syarat & biaya lengkap." />
+  <meta name="description"
+    content="PPDB Pondok Pesantren Al Ikhsan Beji 2025/2026 kini dibuka. Daftar PPDB online, cek status pendaftaran, lihat syarat, biaya, brosur, dan alur pendaftaran resmi."
+    data-i18n="meta.description.home" data-i18n-attr="content" data-i18n-skip-text />
+  <meta name="keywords"
+    content="PPDB Beji, Pondok Pesantren Al Ikhsan Beji, PPDB Online Beji, Daftar pondok pesantren beji, Pesantren Banyumas, Pendaftaran santri baru" />
+  <meta property="og:title" content="Pondok Pesantren Al Ikhsan Beji | PPDB Online 2025/2026"
+    data-i18n="meta.title.home" data-i18n-attr="content" data-i18n-skip-text />
+  <meta property="og:description"
+    content="Pendaftaran PPDB Al Ikhsan Beji 2025/2026 dibuka. Daftar online, cek status, syarat & biaya lengkap." />
   <meta property="og:image" content="https://alikhsan-beji.app/logo.png" />
   <meta property="og:url" content="https://alikhsan-beji.app" />
   <meta property="og:type" content="website" />
@@ -41,34 +47,58 @@
     :root {
       --tw-font-sans: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif;
     }
-    html, body { font-family: var(--tw-font-sans); }
-    
+
+    html,
+    body {
+      font-family: var(--tw-font-sans);
+    }
+
     /* ===== RESPONSIVE ENHANCEMENTS ===== */
-    
+
     /* Mobile-first responsive typography */
     @media (max-width: 640px) {
-      h1 { font-size: 1.875rem !important; line-height: 2.25rem !important; }
-      h2 { font-size: 1.5rem !important; line-height: 2rem !important; }
-      h3 { font-size: 1.25rem !important; line-height: 1.75rem !important; }
-      .text-lg { font-size: 1rem !important; line-height: 1.5rem !important; }
-      .text-xl { font-size: 1.125rem !important; line-height: 1.75rem !important; }
+      h1 {
+        font-size: 1.875rem !important;
+        line-height: 2.25rem !important;
+      }
+
+      h2 {
+        font-size: 1.5rem !important;
+        line-height: 2rem !important;
+      }
+
+      h3 {
+        font-size: 1.25rem !important;
+        line-height: 1.75rem !important;
+      }
+
+      .text-lg {
+        font-size: 1rem !important;
+        line-height: 1.5rem !important;
+      }
+
+      .text-xl {
+        font-size: 1.125rem !important;
+        line-height: 1.75rem !important;
+      }
     }
 
     /* Navbar mobile fixes - Simple and working */
     @media (max-width: 767px) {
+
       /* Navbar container */
       nav.sticky {
         position: sticky !important;
         top: 0 !important;
         z-index: 50 !important;
       }
-      
+
       /* Navbar inner container */
       nav .max-w-7xl {
         padding-left: 1rem !important;
         padding-right: 1rem !important;
       }
-      
+
       /* Logo responsive */
       nav img.h-12,
       nav img[alt="Logo Al Ikhsan"] {
@@ -76,13 +106,13 @@
         height: 64px !important;
         width: auto !important;
       }
-      
+
       /* Navbar row */
-      nav > div > div.flex {
+      nav>div>div.flex {
         min-height: 64px !important;
         height: auto !important;
       }
-      
+
       /* Mobile menu button - ensure it's visible and clickable */
       nav button[type="button"][aria-label="Toggle menu"],
       nav button[type="button"][aria-label="Close menu"] {
@@ -95,19 +125,20 @@
         justify-content: center !important;
         padding: 0.5rem !important;
       }
-      
+
       /* Hide desktop nav */
       nav .hidden.md\:block {
         display: none !important;
       }
-      
+
       /* Show mobile button */
       nav .md\:hidden {
         display: flex !important;
       }
     }
-    
+
     @media (max-width: 640px) {
+
       /* Smaller logo on very small screens */
       nav img.h-12,
       nav img[alt="Logo Al Ikhsan"] {
@@ -121,30 +152,31 @@
       .hero-content {
         padding: 1.25rem 1rem !important;
       }
+
       section.relative.min-h-\[30vh\] {
         min-height: 26vh !important;
       }
-      
+
       /* Adjust hero text size on mobile */
       section.relative h1 {
         font-size: 1.5rem !important;
         line-height: 2rem !important;
         margin-bottom: 0.75rem !important;
       }
-      
+
       section.relative p {
         font-size: 0.9rem !important;
         line-height: 1.4rem !important;
         margin-bottom: 1.25rem !important;
       }
-      
+
       /* Adjust buttons on mobile */
       section.relative a {
         padding: 0.625rem 1.25rem !important;
         font-size: 0.875rem !important;
       }
     }
-    
+
     /* Tablet adjustments */
     @media (min-width: 641px) and (max-width: 1024px) {
       section.relative h1 {
@@ -152,11 +184,12 @@
         line-height: 2.6rem !important;
       }
     }
-    
+
     /* Better text readability on hero */
     .hero-text-shadow {
-      text-shadow: 2px 4px 8px rgba(0,0,0,0.4);
+      text-shadow: 2px 4px 8px rgba(0, 0, 0, 0.4);
     }
+
     .hero-ppdb {
       position: relative;
       padding-top: 28px;
@@ -165,6 +198,7 @@
       background: linear-gradient(180deg, #047857 0%, #10b981 100%);
       overflow: hidden;
     }
+
     .hero-inner {
       position: relative;
       z-index: 1;
@@ -172,6 +206,7 @@
       margin: 0 auto;
       color: #ffffff;
     }
+
     .hero-badge {
       display: inline-block;
       padding: 10px 32px;
@@ -183,6 +218,7 @@
       font-weight: 600;
       box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
     }
+
     .hero-title {
       font-size: clamp(32px, 5vw, 56px);
       font-weight: 600;
@@ -190,6 +226,7 @@
       margin-bottom: 12px;
       text-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
     }
+
     .hero-subtitle {
       font-size: clamp(20px, 3.5vw, 34px);
       font-weight: 500;
@@ -198,6 +235,7 @@
       color: rgba(255, 255, 255, 0.95);
       text-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
     }
+
     .hero-desc {
       font-size: 16px;
       line-height: 1.7;
@@ -205,12 +243,14 @@
       margin: 0 auto 20px;
       color: rgba(255, 255, 255, 0.92);
     }
+
     .hero-actions {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 16px;
     }
+
     .btn-primary,
     .btn-secondary {
       display: inline-flex;
@@ -223,19 +263,23 @@
       box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
       transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
+
     .btn-primary {
       background: #fbbf24;
       color: #065f46;
     }
+
     .btn-secondary {
       background: #ffffff;
       color: #047857;
     }
+
     .btn-primary:hover,
     .btn-secondary:hover {
       transform: translateY(-2px);
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
     }
+
     .hero-wave {
       position: absolute;
       left: 0;
@@ -243,12 +287,14 @@
       width: 100%;
       height: auto;
     }
+
     .news-grid {
       display: grid;
       gap: 2rem;
       grid-template-columns: minmax(0, 1fr);
       width: 100%;
     }
+
     .featured-berita .featured-image {
       position: relative;
       width: 100%;
@@ -258,6 +304,7 @@
       border-top-left-radius: inherit;
       border-top-right-radius: inherit;
     }
+
     .featured-berita .featured-image img {
       display: block;
       width: 100%;
@@ -265,24 +312,28 @@
       max-width: 100%;
       object-fit: cover;
     }
+
     @media (min-width: 1024px) {
       .featured-berita .featured-image {
         aspect-ratio: 20 / 9;
         max-height: 520px;
       }
     }
+
     @media (max-width: 768px) {
       .featured-berita .featured-image {
         aspect-ratio: 4 / 3;
         max-height: 360px;
       }
     }
+
     @media (max-width: 640px) {
       .featured-berita .featured-image {
         aspect-ratio: 3 / 2;
         max-height: 240px;
       }
     }
+
     .sr-only {
       position: absolute;
       width: 1px;
@@ -294,6 +345,7 @@
       white-space: nowrap;
       border: 0;
     }
+
     .quick-links a {
       display: inline-flex;
       align-items: center;
@@ -305,34 +357,40 @@
       font-weight: 600;
       transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
     }
+
     .quick-links a:hover {
       background: rgba(4, 120, 87, 0.08);
       color: #065f46;
       box-shadow: 0 10px 20px rgba(4, 120, 87, 0.15);
     }
+
     @media (min-width: 1024px) {
       .news-grid {
         grid-template-columns: minmax(0, 1.4fr) minmax(260px, 1fr);
         align-items: flex-start;
       }
     }
+
     @media (max-width: 640px) {
       .hero-ppdb {
         padding-top: 44px;
         padding-bottom: 90px;
       }
+
       .btn-primary,
       .btn-secondary {
         width: 100%;
         max-width: 260px;
       }
     }
+
     @media (max-width: 1023px) {
       .news-grid {
         grid-template-columns: minmax(0, 1fr);
         justify-items: center;
       }
-      .news-grid > * {
+
+      .news-grid>* {
         width: min(100%, 640px);
       }
     }
@@ -350,9 +408,11 @@
         padding: 0.75rem 1rem !important;
         font-size: 0.875rem !important;
       }
+
       .whatsapp-widget .flex-col span:first-child {
         font-size: 0.75rem !important;
       }
+
       .whatsapp-widget .flex-col span:last-child {
         font-size: 0.625rem !important;
       }
@@ -366,10 +426,12 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
+
     .line-clamp-2 {
       -webkit-line-clamp: 2;
       line-clamp: 2;
     }
+
     .line-clamp-3 {
       -webkit-line-clamp: 3;
       line-clamp: 3;
@@ -389,7 +451,9 @@
 
     /* Improve button touch targets on mobile */
     @media (max-width: 640px) {
-      a, button {
+
+      a,
+      button {
         min-height: 44px;
         min-width: 44px;
       }
@@ -405,25 +469,26 @@
 
     /* Mobile menu - Simple and working */
     @media (max-width: 767px) {
+
       /* Mobile menu panel */
       .mobile-menu {
         width: 100vw !important;
         max-width: 100vw !important;
       }
-      
+
       /* Mobile menu logo */
       .mobile-menu img {
         max-height: 64px !important;
         height: 64px !important;
       }
-      
+
       /* Mobile menu links - ensure touch targets */
       .mobile-menu a {
         min-height: 44px !important;
         display: flex !important;
         align-items: center !important;
       }
-      
+
       /* Mobile menu summary */
       .mobile-menu summary {
         min-height: 44px !important;
@@ -433,38 +498,38 @@
         cursor: pointer !important;
         list-style: none !important;
       }
-      
+
       .mobile-menu summary::-webkit-details-marker {
         display: none !important;
       }
-      
+
       .mobile-menu summary::marker {
         display: none !important;
       }
-      
+
       /* Mobile menu sub-items */
-      .mobile-menu details > div {
+      .mobile-menu details>div {
         padding-left: 1rem !important;
         border-left: 2px solid #e5e7eb !important;
       }
-      
+
       .mobile-menu details a {
         font-size: 0.875rem !important;
         min-height: 64px !important;
       }
-      
+
       /* Details arrow rotation */
       .mobile-menu details[open] summary i {
         transform: rotate(180deg) !important;
       }
     }
-    
+
     @media (max-width: 640px) {
       .mobile-menu {
         width: 100vw !important;
         max-width: 100vw !important;
       }
-      
+
       .mobile-menu a,
       .mobile-menu summary {
         font-size: 0.9rem !important;
@@ -488,6 +553,7 @@
         from {
           transform: translate3d(0, 0, 0);
         }
+
         to {
           transform: translate3d(0, -120px, 0);
         }
@@ -501,7 +567,8 @@
       max-width: 1000px;
       margin: 0 auto;
       padding: 1.5rem 1rem;
-      height: 380px; /* Ukuran dikecilkan */
+      height: 380px;
+      /* Ukuran dikecilkan */
     }
 
     #imageSlider {
@@ -545,7 +612,7 @@
         height: 220px;
         padding: 0.75rem;
       }
-      
+
       #imageSlider {
         border-radius: 12px;
       }
@@ -558,38 +625,24 @@
   <header class="relative z-50">
     <div id="superHeader" class="bg-yellow-300 text-gray-900 text-xs tracking-wide">
       <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3 px-4 sm:px-6 lg:px-8 py-1.5">
-        <button
-          type="button"
+        <button type="button"
           class="inline-flex items-center gap-2 bg-white/40 hover:bg-white/60 text-gray-900 px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-semibold uppercase shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900 transition disabled:opacity-60 disabled:cursor-not-allowed"
           data-install-button
-          data-install-unavailable-text="Install tersedia setelah browser mendukung pemasangan aplikasi."
-        >
+          data-install-unavailable-text="Install tersedia setelah browser mendukung pemasangan aplikasi.">
           <i class="bi bi-cloud-arrow-down-fill text-base" aria-hidden="true"></i>
           <span data-i18n="nav.install">Download App</span>
         </button>
         <div class="flex items-center gap-2 sm:gap-3 text-[11px] sm:text-xs font-semibold uppercase">
-          <button
-            type="button"
-            data-setlang="id"
+          <button type="button" data-setlang="id"
             class="inline-flex items-center gap-1 text-gray-900 hover:text-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900 transition"
-            aria-label="Bahasa Indonesia"
-            data-i18n="nav.language.id"
-            data-i18n-attr="aria-label"
-            data-i18n-skip-text
-          >
+            aria-label="Bahasa Indonesia" data-i18n="nav.language.id" data-i18n-attr="aria-label" data-i18n-skip-text>
             <span aria-hidden="true" class="text-base leading-none">🇮🇩</span>
             <span>ID</span>
           </button>
           <span class="text-gray-600" aria-hidden="true">|</span>
-          <button
-            type="button"
-            data-setlang="en"
+          <button type="button" data-setlang="en"
             class="inline-flex items-center gap-1 text-gray-900 hover:text-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900 transition"
-            aria-label="English"
-            data-i18n="nav.language.en"
-            data-i18n-attr="aria-label"
-            data-i18n-skip-text
-          >
+            aria-label="English" data-i18n="nav.language.en" data-i18n-attr="aria-label" data-i18n-skip-text>
             <span aria-hidden="true" class="text-base leading-none">🇬🇧</span>
             <span>EN</span>
           </button>
@@ -598,7 +651,8 @@
     </div>
   </header>
   <!-- NAVBAR -->
-  <nav class="sticky top-0 z-[130] bg-white/95 backdrop-blur supports-backdrop-blur:bg-white/85 shadow-lg" data-nav-root>
+  <nav class="sticky top-0 z-[130] bg-white/95 backdrop-blur supports-backdrop-blur:bg-white/85 shadow-lg"
+    data-nav-root>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16 min-h-[64px]">
         <!-- Logo -->
@@ -611,47 +665,47 @@
         <!-- Desktop Navigation -->
         <div class="hidden md:block">
           <div class="flex items-baseline space-x-4">
-            <a href="/" class="text-gray-600 hover:text-brand-600 px-3 py-2 rounded-md text-sm font-medium" data-nav-link data-i18n="nav.home">Beranda</a>
+            <a href="/" class="text-gray-600 hover:text-brand-600 px-3 py-2 rounded-md text-sm font-medium"
+              data-nav-link data-i18n="nav.home">Beranda</a>
 
             <!-- Dropdown Informasi -->
             <div class="relative">
-              <button 
-                type="button"
+              <button type="button"
                 class="text-gray-600 hover:text-brand-600 px-3 py-2 rounded-md text-sm font-medium flex items-center transition"
-                data-dropdown-toggle="desktopInfoDropdown"
-                aria-expanded="false"
-                aria-controls="desktopInfoDropdown"
+                data-dropdown-toggle="desktopInfoDropdown" aria-expanded="false" aria-controls="desktopInfoDropdown"
                 aria-haspopup="true">
                 <span data-i18n="nav.info">Informasi</span>
                 <i class="bi bi-caret-down-fill ml-1 text-xs transition-transform duration-200" data-dropdown-caret></i>
               </button>
-              <div
-                id="desktopInfoDropdown"
+              <div id="desktopInfoDropdown"
                 class="absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg py-2 z-50 border border-gray-100 hidden"
                 role="menu">
-                <a href="/alur-pendaftaran.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" data-nav-link data-i18n="nav.flow">Alur Pendaftaran</a>
-                <a href="/syarat-pendaftaran.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" data-nav-link data-i18n="nav.requirements">Syarat Pendaftaran</a>
-                <a href="/biaya.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" data-nav-link data-i18n="nav.fees">Biaya</a>
+                <a href="/alur-pendaftaran.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                  data-nav-link data-i18n="nav.flow">Alur Pendaftaran</a>
+                <a href="/syarat-pendaftaran.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                  data-nav-link data-i18n="nav.requirements">Syarat Pendaftaran</a>
+                <a href="/biaya.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" data-nav-link
+                  data-i18n="nav.fees">Biaya</a>
               </div>
             </div>
 
-            <a href="/brosur.html" class="text-gray-600 hover:text-brand-600 px-3 py-2 rounded-md text-sm font-medium" data-nav-link data-i18n="nav.brochure">Brosur</a>
-            <a href="/kontak.html" class="text-gray-600 hover:text-brand-600 px-3 py-2 rounded-md text-sm font-medium" data-nav-link data-i18n="nav.contact">Kontak</a>
+            <a href="/brosur.html" class="text-gray-600 hover:text-brand-600 px-3 py-2 rounded-md text-sm font-medium"
+              data-nav-link data-i18n="nav.brochure">Brosur</a>
+            <a href="/kontak.html" class="text-gray-600 hover:text-brand-600 px-3 py-2 rounded-md text-sm font-medium"
+              data-nav-link data-i18n="nav.contact">Kontak</a>
           </div>
         </div>
 
         <!-- CTA Button Desktop -->
         <div class="hidden md:block">
-          <a href="/login" class="bg-brand-700 hover:bg-brand-800 text-white px-6 py-2 rounded-lg text-sm font-medium shadow-md hover:shadow-lg" data-i18n="nav.admin">Admin</a>
+          <a href="/login"
+            class="bg-brand-700 hover:bg-brand-800 text-white px-6 py-2 rounded-lg text-sm font-medium shadow-md hover:shadow-lg"
+            data-i18n="nav.admin">Admin</a>
         </div>
 
         <!-- Mobile menu button -->
         <div class="md:hidden">
-          <button 
-            type="button"
-            aria-label="Toggle menu"
-            aria-expanded="false"
-            aria-controls="mobileNavMenu"
+          <button type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobileNavMenu"
             class="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-brand-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-brand-500"
             data-mobile-toggle>
             <i class="bi bi-list text-xl" data-mobile-icon="open"></i>
@@ -664,78 +718,52 @@
   </nav>
 
   <!-- MOBILE NAV OVERLAY -->
-  <div
-    id="mobileNavBackdrop"
-    class="md:hidden absolute inset-0 z-[140] bg-black/60 hidden"
-    data-mobile-backdrop></div>
+  <div id="mobileNavBackdrop" class="md:hidden absolute inset-0 z-[140] bg-black/60 hidden" data-mobile-backdrop></div>
 
-  <div
-    id="mobileNavMenu"
+  <div id="mobileNavMenu"
     class="md:hidden absolute inset-y-0 left-0 z-[141] mobile-menu bg-white shadow-2xl border-r border-gray-200 overflow-y-auto hidden"
-    data-mobile-menu
-    role="dialog"
-    aria-modal="true">
+    data-mobile-menu role="dialog" aria-modal="true">
     <div class="flex items-center justify-between p-4 border-b border-gray-200 bg-white">
       <div class="flex items-center">
         <img src="/assets/img/logo-alikhsan.png" alt="Logo Al Ikhsan" class="h-12 w-auto" />
       </div>
-      <button 
-        type="button"
-        aria-label="Close menu"
-        class="p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100"
-        data-close-mobile>
+      <button type="button" aria-label="Close menu"
+        class="p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100" data-close-mobile>
         <i class="bi bi-x-lg text-xl"></i>
       </button>
     </div>
 
     <div class="px-2 pt-4 pb-6 space-y-1">
-      <a 
-        href="/" 
-        class="block px-4 py-3 rounded-md text-base font-medium text-gray-700 hover:text-brand-700 hover:bg-gray-50" 
-        data-nav-link data-i18n="nav.home"
-        data-close-mobile>Beranda</a>
+      <a href="/"
+        class="block px-4 py-3 rounded-md text-base font-medium text-gray-700 hover:text-brand-700 hover:bg-gray-50"
+        data-nav-link data-i18n="nav.home" data-close-mobile>Beranda</a>
 
       <details class="px-1">
-        <summary class="cursor-pointer text-gray-700 hover:text-brand-700 hover:bg-gray-50 px-4 py-3 rounded-md text-base font-medium flex items-center justify-between" data-i18n="nav.info">
+        <summary
+          class="cursor-pointer text-gray-700 hover:text-brand-700 hover:bg-gray-50 px-4 py-3 rounded-md text-base font-medium flex items-center justify-between"
+          data-i18n="nav.info">
           <span>Informasi</span>
           <i class="bi bi-chevron-down text-xs"></i>
         </summary>
         <div class="pl-4 space-y-1 mt-1">
-          <a 
-            href="/alur-pendaftaran.html" 
-            class="block px-4 py-2 text-sm rounded-md hover:bg-gray-50" 
-            data-nav-link data-i18n="nav.flow"
-            data-close-mobile>Alur Pendaftaran</a>
-          <a 
-            href="/syarat-pendaftaran.html" 
-            class="block px-4 py-2 text-sm rounded-md hover:bg-gray-50" 
-            data-nav-link data-i18n="nav.requirements"
-            data-close-mobile>Syarat Pendaftaran</a>
-          <a 
-            href="/biaya.html" 
-            class="block px-4 py-2 text-sm rounded-md hover:bg-gray-50" 
-            data-nav-link data-i18n="nav.fees"
-            data-close-mobile>Biaya</a>
+          <a href="/alur-pendaftaran.html" class="block px-4 py-2 text-sm rounded-md hover:bg-gray-50" data-nav-link
+            data-i18n="nav.flow" data-close-mobile>Alur Pendaftaran</a>
+          <a href="/syarat-pendaftaran.html" class="block px-4 py-2 text-sm rounded-md hover:bg-gray-50" data-nav-link
+            data-i18n="nav.requirements" data-close-mobile>Syarat Pendaftaran</a>
+          <a href="/biaya.html" class="block px-4 py-2 text-sm rounded-md hover:bg-gray-50" data-nav-link
+            data-i18n="nav.fees" data-close-mobile>Biaya</a>
         </div>
       </details>
 
-      <a 
-        href="/brosur.html" 
-        class="block px-4 py-3 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50" 
-        data-nav-link data-i18n="nav.brochure"
-        data-close-mobile>Brosur</a>
-      <a 
-        href="/kontak.html" 
-        class="block px-4 py-3 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50" 
-        data-nav-link data-i18n="nav.contact"
-        data-close-mobile>Kontak</a>
+      <a href="/brosur.html" class="block px-4 py-3 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50"
+        data-nav-link data-i18n="nav.brochure" data-close-mobile>Brosur</a>
+      <a href="/kontak.html" class="block px-4 py-3 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50"
+        data-nav-link data-i18n="nav.contact" data-close-mobile>Kontak</a>
 
       <div class="pt-4 pb-2 px-2 border-t border-gray-200 mt-4">
-        <a 
-          href="/login.html" 
-          class="w-full bg-brand-700 hover:bg-brand-800 text-white px-4 py-3 rounded-lg text-base font-medium shadow-md hover:shadow-lg block text-center" 
-          data-i18n="nav.admin"
-          data-close-mobile>Admin</a>
+        <a href="/login.html"
+          class="w-full bg-brand-700 hover:bg-brand-800 text-white px-4 py-3 rounded-lg text-base font-medium shadow-md hover:shadow-lg block text-center"
+          data-i18n="nav.admin" data-close-mobile>Admin</a>
       </div>
     </div>
   </div>
@@ -757,7 +785,8 @@
           Penerimaan resmi untuk jenjang MTs, MA, dan Program Pondok Pesantren terintegrasi.
         </h2>
         <p class="hero-desc" data-i18n="hero.subtitle">
-          Bergabunglah menjadi santri Pondok Pesantren Al Ikhsan Beji. Pendidikan islami terpadu dengan pembinaan akhlak, tahfidz Al-Qur'an, dan ilmu pengetahuan yang membentuk generasi Qur'ani dan berprestasi.
+          Bergabunglah menjadi santri Pondok Pesantren Al Ikhsan Beji. Pendidikan islami terpadu dengan pembinaan
+          akhlak, tahfidz Al-Qur'an, dan ilmu pengetahuan yang membentuk generasi Qur'ani dan berprestasi.
         </p>
         <div class="hero-actions">
           <a href="/daftar.html" class="btn-primary">
@@ -771,7 +800,9 @@
         </div>
       </div>
       <svg class="hero-wave" viewBox="0 0 1440 320" aria-hidden="true" preserveAspectRatio="none">
-        <path fill="#ffffff" fill-opacity="1" d="M0,224L48,213.3C96,203,192,181,288,176C384,171,480,181,576,192C672,203,768,213,864,202.7C960,192,1056,160,1152,160C1248,160,1344,192,1392,208L1440,224L1440,320L0,320Z"></path>
+        <path fill="#ffffff" fill-opacity="1"
+          d="M0,224L48,213.3C96,203,192,181,288,176C384,171,480,181,576,192C672,203,768,213,864,202.7C960,192,1056,160,1152,160C1248,160,1344,192,1392,208L1440,224L1440,320L0,320Z">
+        </path>
       </svg>
     </section>
 
@@ -831,7 +862,8 @@
         <div id="imageSlider">
           <div id="sliderTrack" class="slider-track">
             <!-- Fallback gradient -->
-            <div id="sliderFallback" class="slider-slide" style="background: linear-gradient(135deg, #047857 0%, #064e3b 100%);"></div>
+            <div id="sliderFallback" class="slider-slide"
+              style="background: linear-gradient(135deg, #047857 0%, #064e3b 100%);"></div>
           </div>
         </div>
       </div>
@@ -855,11 +887,13 @@
 
     <!-- GELOMBANG PENDAFTARAN -->
     <section class="py-12 bg-gray-50">
-        <div class="container mx-auto px-4">
-          <div class="flex justify-center mb-12">
-            <div class="w-full lg:w-2/3 text-center">
-            <h2 class="text-3xl lg:text-4xl font-bold mb-3 text-gray-800" data-i18n="sections.gelombang.title">Gelombang Pendaftaran</h2>
-            <p class="text-lg text-gray-600" data-i18n="sections.gelombang.subtitle">Pilih gelombang sesuai jadwal keluarga Anda</p>
+      <div class="container mx-auto px-4">
+        <div class="flex justify-center mb-12">
+          <div class="w-full lg:w-2/3 text-center">
+            <h2 class="text-3xl lg:text-4xl font-bold mb-3 text-gray-800" data-i18n="sections.gelombang.title">Gelombang
+              Pendaftaran</h2>
+            <p class="text-lg text-gray-600" data-i18n="sections.gelombang.subtitle">Pilih gelombang sesuai jadwal
+              keluarga Anda</p>
           </div>
         </div>
 
@@ -881,12 +915,15 @@
       <div class="container mx-auto px-4">
         <div class="flex flex-col lg:flex-row items-start lg:items-center gap-4 mb-10">
           <div class="flex-1">
-            <h2 class="text-3xl lg:text-4xl font-bold text-gray-900" data-i18n="sections.berita.title">Berita Terkini</h2>
+            <h2 class="text-3xl lg:text-4xl font-bold text-gray-900" data-i18n="sections.berita.title">Berita Terkini
+            </h2>
             <div class="w-16 h-1 bg-brand-600 rounded-full mt-3 mb-4"></div>
-            <p class="text-lg text-gray-600 max-w-2xl" data-i18n="sections.berita.subtitle">Berita terbaru seputar Pondok Pesantren Al Ikhsan Beji</p>
+            <p class="text-lg text-gray-600 max-w-2xl" data-i18n="sections.berita.subtitle">Berita terbaru seputar
+              Pondok Pesantren Al Ikhsan Beji</p>
           </div>
           <div class="w-full lg:w-auto">
-            <a href="/berita.html" class="ml-auto inline-flex items-center text-brand-700 font-semibold text-base hover:text-brand-800 transition">
+            <a href="/berita.html"
+              class="ml-auto inline-flex items-center text-brand-700 font-semibold text-base hover:text-brand-800 transition">
               <span data-i18n="sections.berita.viewAll">Lihat Semua</span>
               <i class="bi bi-arrow-right-short text-2xl"></i>
             </a>
@@ -911,23 +948,13 @@
   <!-- FOOTER -->
   <footer class="bg-white text-gray-600 py-6 shadow-2xl border-t border-gray-200 mt-auto">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <p class="text-sm"><span data-i18n="footer.copyright">© 2025/2026 Pondok Pesantren Al Ikhsan Beji. All rights reserved.</span> <span class="hidden sm:inline" data-i18n="footer.credit">Development by Tim IT Pesantren</span></p>
+      <p class="text-sm"><span data-i18n="footer.copyright">© 2025/2026 Pondok Pesantren Al Ikhsan Beji. All rights
+          reserved.</span> <span class="hidden sm:inline" data-i18n="footer.credit">Development by Tim IT
+          Pesantren</span></p>
     </div>
   </footer>
 
-  <!--Start of Tawk.to Script-->
-  <script type="text/javascript">
-  var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-  (function(){
-  var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-  s1.async=true;
-  s1.src='https://embed.tawk.to/691d6c8616325219597dfa07/1jadevrji';
-  s1.charset='UTF-8';
-  s1.setAttribute('crossorigin','*');
-  s0.parentNode.insertBefore(s1,s0);
-  })();
-  </script>
-  <!--End of Tawk.to Script-->
+
 
   <!-- Vendors JS (optional) -->
   <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
@@ -936,10 +963,10 @@
   <script>
     // Shim toastr -> toastify agar kompatibel dgn snippet lama
     window.toastr = {
-      success(msg){ Toastify({ text: msg, duration: 4000, close: true, gravity: 'top', position: 'right', style: { background: '#10b981', color: '#fff' }}).showToast(); },
-      error(msg){ Toastify({ text: msg, duration: 4000, close: true, gravity: 'top', position: 'right', style: { background: '#ef4444', color: '#fff' }}).showToast(); },
-      warning(msg){ Toastify({ text: msg, duration: 4000, close: true, gravity: 'top', position: 'right', style: { background: '#f59e0b', color: '#fff' }}).showToast(); },
-      info(msg){ Toastify({ text: msg, duration: 4000, close: true, gravity: 'top', position: 'right', style: { background: '#3b82f6', color: '#fff' }}).showToast(); }
+      success(msg) { Toastify({ text: msg, duration: 4000, close: true, gravity: 'top', position: 'right', style: { background: '#10b981', color: '#fff' } }).showToast(); },
+      error(msg) { Toastify({ text: msg, duration: 4000, close: true, gravity: 'top', position: 'right', style: { background: '#ef4444', color: '#fff' } }).showToast(); },
+      warning(msg) { Toastify({ text: msg, duration: 4000, close: true, gravity: 'top', position: 'right', style: { background: '#f59e0b', color: '#fff' } }).showToast(); },
+      info(msg) { Toastify({ text: msg, duration: 4000, close: true, gravity: 'top', position: 'right', style: { background: '#3b82f6', color: '#fff' } }).showToast(); }
     }
   </script>
 
@@ -1420,7 +1447,7 @@
           const dateB = b.published_date || b.created_at;
           return new Date(dateB) - new Date(dateA);
         });
-        
+
         const [featuredBerita, ...otherBerita] = sortedBerita;
 
         const buildImageUrl = (berita) => {
@@ -1613,26 +1640,26 @@
   <!-- Supabase Real-Time Sync (Optional - for cross-tab/cross-device sync) -->
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-    
+
     // Initialize Supabase client (same credentials as admin)
     const SUPABASE_URL = 'https://sxbvadzcwpaovkhghttv.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN4YnZhZHpjd3Bhb3ZraGdodHR2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjExMDg4MDYsImV4cCI6MjA3NjY4NDgwNn0.miJeKmsNgjgS4fWegGlwrxF_cPUoZBT0YKl1oxmmXTE';
-    
+
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    
+
     console.log('[SUPABASE INDEX] ✅ Client initialized for real-time sync');
-    
+
     // Subscribe to gelombang table changes (real-time across devices)
     const channel = supabase
       .channel('gelombang-changes-public')
-      .on('postgres_changes', { 
-        event: '*', 
-        schema: 'public', 
-        table: 'gelombang' 
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'gelombang'
       }, (payload) => {
         console.log('[SUPABASE INDEX] 🔄 Gelombang data changed:', payload);
         console.log('[SUPABASE INDEX] Event type:', payload.eventType);
-        
+
         // Show notification to user
         if (typeof toastr !== 'undefined' && toastr.info) {
           const message = typeof window.__ === 'function'
@@ -1640,7 +1667,7 @@
             : '📊 Data gelombang diperbarui dari server';
           toastr.info(message);
         }
-        
+
         // Reload immediately (database already consistent)
         setTimeout(() => {
           console.log('[SUPABASE INDEX] 🔄 Reloading gelombang display from Supabase event...');
@@ -1660,14 +1687,14 @@
         }
         console.log('[SUPABASE INDEX] Connection status:', status);
       });
-    
+
     // Cleanup on page unload
     window.addEventListener('beforeunload', () => {
       console.log('[SUPABASE INDEX] 🔌 Unsubscribing from real-time updates');
       supabase.removeChannel(channel);
     });
   </script>
-  
+
   <!-- Image Slider Script (Card Minimalis - Slide Animation) -->
   <script>
     /**
@@ -1684,65 +1711,65 @@
     async function loadImageSlider() {
       try {
         console.log('[IMAGE_SLIDER] 🚀 Starting to load images...');
-        
+
         // Add cache buster to ensure fresh data
         const cacheBuster = new Date().getTime();
         const response = await fetch(`/api/hero_images_list?_t=${cacheBuster}`);
         console.log('[IMAGE_SLIDER] API Response status:', response.status, response.statusText);
-        
+
         const result = await response.json();
         console.log('[IMAGE_SLIDER] API Result:', result);
-        
+
         // Get slider track element
         sliderTrack = document.getElementById('sliderTrack');
         if (!sliderTrack) {
           console.error('[IMAGE_SLIDER] ❌ Slider track not found!');
           return;
         }
-        
+
         if (!result.ok || !result.data || result.data.length === 0) {
           console.log('[IMAGE_SLIDER] ⚠️ No images found, keeping fallback gradient');
           // Reset position to 0
           sliderTrack.style.transform = 'translateX(0)';
           return;
         }
-        
+
         console.log('[IMAGE_SLIDER] ✅ Found', result.data.length, 'images');
         console.log('[IMAGE_SLIDER] Image URLs:', result.data.map(img => img.image_url));
-        
+
         // Remove fallback gradient
         const fallback = document.getElementById('sliderFallback');
         if (fallback) {
           console.log('[IMAGE_SLIDER] 🗑️ Removing fallback gradient...');
           fallback.remove();
         }
-        
+
         // Clear track
         sliderTrack.innerHTML = '';
         console.log('[IMAGE_SLIDER] 🧹 Cleared slider track');
-        
+
         // Create slide elements
         result.data.forEach((image, index) => {
           let cleanUrl = image.image_url;
           if (cleanUrl) {
             cleanUrl = cleanUrl.trim().replace(/\?$/, '');
           }
-          
+
           console.log(`[IMAGE_SLIDER] 📸 Creating slide ${index} with URL:`, cleanUrl);
-          
+
           const slideDiv = document.createElement('div');
           slideDiv.className = 'slider-slide';
-          
+
           // Set background image - NO opacity, NO fade, just background
           slideDiv.style.backgroundImage = `url("${cleanUrl}")`;
           slideDiv.style.backgroundSize = 'cover';
           slideDiv.style.backgroundPosition = 'center';
           slideDiv.style.backgroundRepeat = 'no-repeat';
-          
+
           slideDiv.dataset.slideIndex = index;
           slideDiv.dataset.imageUrl = cleanUrl;
           sliderTrack.appendChild(slideDiv);
-          
+
           // Verify image loads
           const testImg = new Image();
           testImg.onload = () => {
@@ -1753,13 +1780,13 @@
           };
           testImg.src = cleanUrl;
         });
-        
+
         // Reset to first slide
         currentImageSlideIndex = 0;
         updateSliderPosition();
-        
+
         console.log('[IMAGE_SLIDER] 📊 Total slides created:', result.data.length);
-        
+
         // Start auto-slider if more than 1 image
         if (result.data.length > 1) {
           startImageSlider();
@@ -1767,7 +1794,7 @@
         } else if (result.data.length === 1) {
           console.log('[IMAGE_SLIDER] ✅ Single image loaded (no auto-slide)');
         }
-        
+
       } catch (error) {
         console.error('[IMAGE_SLIDER] ❌ Error loading images:', error);
         console.error('[IMAGE_SLIDER] Error details:', error.message, error.stack);
@@ -1779,11 +1806,11 @@
      */
     function updateSliderPosition() {
       if (!sliderTrack) return;
-      
+
       // Calculate translateX: move track to the left by current index * 100%
       const translateX = -currentImageSlideIndex * 100;
       sliderTrack.style.transform = `translateX(${translateX}%)`;
-      
+
       console.log('[IMAGE_SLIDER] Position updated to index:', currentImageSlideIndex, 'translateX:', translateX + '%');
     }
 
@@ -1794,7 +1821,7 @@
       if (imageSliderInterval) {
         clearInterval(imageSliderInterval);
       }
-      
+
       imageSliderInterval = setInterval(() => {
         nextImageSlide();
       }, 4000); // 4 seconds
@@ -1805,16 +1832,16 @@
      */
     function nextImageSlide() {
       if (!sliderTrack) return;
-      
+
       const slides = sliderTrack.querySelectorAll('.slider-slide');
       if (slides.length === 0) return;
-      
+
       // Calculate next index (loop back to 0 after last)
       currentImageSlideIndex = (currentImageSlideIndex + 1) % slides.length;
-      
+
       // Update position with slide animation (translateX)
       updateSliderPosition();
-      
+
       console.log('[IMAGE_SLIDER] Slide changed to index:', currentImageSlideIndex);
     }
 
@@ -1839,7 +1866,7 @@
 
     // Load images on page load
     document.addEventListener('DOMContentLoaded', loadImageSlider);
-    
+
     // Pause slider when page is hidden (performance optimization)
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
@@ -1853,20 +1880,20 @@
         }
       }
     });
-    
+
     // ===== REAL-TIME SYNC: Listen to hero_images changes =====
-    window.addEventListener('load', function() {
+    window.addEventListener('load', function () {
       if (typeof supabase !== 'undefined') {
         const imageChannel = supabase
           .channel('image-slider-public')
-          .on('postgres_changes', { 
-            event: '*', 
-            schema: 'public', 
-            table: 'hero_images' 
+          .on('postgres_changes', {
+            event: '*',
+            schema: 'public',
+            table: 'hero_images'
           }, (payload) => {
             console.log('[IMAGE_SLIDER] 🔄 Images changed from admin:', payload);
             console.log('[IMAGE_SLIDER] 🔄 Reloading slider...');
-            
+
             // Reload images
             stopImageSlider();
             setTimeout(() => {
@@ -1878,7 +1905,7 @@
               console.log('[IMAGE_SLIDER] 🎧 Subscribed to real-time updates');
             }
           });
-        
+
         // Cleanup
         window.addEventListener('beforeunload', () => {
           supabase.removeChannel(imageChannel);
@@ -1888,7 +1915,7 @@
   </script>
 
   <script>
-    (function() {
+    (function () {
       const blob = document.getElementById("yellowBlob");
       if (!blob) return;
 
@@ -1949,5 +1976,8 @@
   <script src="/assets/js/navbar.js" defer></script>
   <script src="/assets/js/pwa.js" defer></script>
   <script src="/assets/js/install-button.js" defer></script>
+  <!-- Chat Widget -->
+  <script src="/assets/js/chat-widget.js" defer></script>
 </body>
+
 </html>

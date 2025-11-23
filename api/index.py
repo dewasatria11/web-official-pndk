@@ -247,6 +247,20 @@ class handler(BaseHTTPRequestHandler):
                     BeritaItemsHandler.do_DELETE(self)
                 else:
                     BeritaItemsHandler.do_OPTIONS(self)
+
+            elif action == 'admin_faq_upload':
+                from lib.handlers.admin_faq import handler as AdminFaqHandler
+                if self.command == 'POST':
+                    AdminFaqHandler.do_POST(self)
+                else:
+                    AdminFaqHandler.do_OPTIONS(self)
+
+            elif action == 'chat_search':
+                from lib.handlers.public_chat import handler as PublicChatHandler
+                if self.command == 'POST':
+                    PublicChatHandler.do_POST(self)
+                else:
+                    PublicChatHandler.do_OPTIONS(self)
                     
             else:
                 # Default response for unknown actions
