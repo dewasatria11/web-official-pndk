@@ -262,6 +262,15 @@ class handler(BaseHTTPRequestHandler):
                 else:
                     PublicChatHandler.do_OPTIONS(self)
 
+            elif action == 'payment_settings':
+                from lib.handlers.payment_settings import handler as PaymentSettingsHandler
+                if self.command == 'GET':
+                    PaymentSettingsHandler.do_GET(self)
+                elif self.command == 'POST':
+                    PaymentSettingsHandler.do_POST(self)
+                else:
+                    PaymentSettingsHandler.do_OPTIONS(self)
+
 
 
                     

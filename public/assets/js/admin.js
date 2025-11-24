@@ -420,6 +420,8 @@
       loadMaintenanceStatus();
     } else if (tab === "berita") {
       loadBeritaItems(true);
+    } else if (tab === "payment-settings") {
+      loadPaymentSettings();
     }
 
     // Tutup sidebar di mobile
@@ -5927,6 +5929,99 @@ Jazakumullahu khairan,
   window.editBeritaItem = editBeritaItem;
   window.deleteBeritaItem = deleteBeritaItem;
   window.moveBeritaItem = moveBeritaItem;
+
+  /* =========================
+     15) PAYMENT SETTINGS
+     ========================= */
+  async function loadPaymentSettings() {
+    try {
+      const result = await jsonRequest("/api/payment_settings");
+      if (result.ok && result.data) {
+        const d = result.data;
+        const bankNameEl = $("#payment-bank-name");
+        if (bankNameEl) bankNameEl.value = d.bank_name || "";
+
+        const bankAccEl = $("#payment-bank-account");
+        if (bankAccEl) bankAccEl.value = d.bank_account || "";
+
+        const bankHolderEl = $("#payment-bank-holder");
+        if (bankHolderEl) bankHolderEl.value = d.bank_holder || "";
+
+        const nominalEl = $("#payment-nominal");
+        if (nominalEl) nominalEl.value = d.nominal || "";
+
+        const qrisNominalEl = $("#payment-qris-nominal");
+        if (qrisNominalEl) qrisNominalEl.value = d.qris_nominal || "";
+
+        const preview = $("#payment-qris-preview");
+        const noneMsg = $("#payment-qris-none");
+
+        if (preview && noneMsg) {
+          if (d.qris_image_url) {
+            preview.src = d.qris_image_url;
+            preview.style.display = "block";
+            noneMsg.style.display = "none";
+          } else {
+            preview.style.display = "none";
+            noneMsg.style.display = "block";
+          }
+        }
+      }
+    } catch (e) {
+      console.error("Error loading payment settings:", e);
+      safeToastr.error("Gagal memuat pengaturan pembayaran");
+    }
+  }
+
+  async function savePaymentSettings() {
+    const btn = document.querySelector("button[onclick='savePaymentSettings()']");
+    setButtonLoading(btn, true);
+
+    try {
+      const payload = {
+        bank_name: $("#payment-bank-name")?.value,
+        bank_account: $("#payment-bank-account")?.value,
+        bank_holder: $("#payment-bank-holder")?.value,
+        nominal: toInteger($("#payment-nominal")?.value),
+        qris_nominal: toInteger($("#payment-qris-nominal")?.value),
+      };
+
+      // Handle QRIS upload if file selected
+      const fileInput = $("#payment-qris-file");
+      if (fileInput && fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        // Convert to base64 for simplicity (assuming small image)
+        const base64 = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+        payload.qris_image_url = base64;
+      }
+
+      const result = await jsonRequest("/api/payment_settings", {
+        method: "POST",
+        body: payload
+      });
+
+      if (result.ok) {
+        safeToastr.success("Pengaturan pembayaran berhasil disimpan");
+        loadPaymentSettings(); // Reload to show updated data/image
+        // Clear file input
+        if (fileInput) fileInput.value = "";
+      }
+    } catch (e) {
+      console.error("Error saving payment settings:", e);
+      safeToastr.error("Gagal menyimpan pengaturan: " + e.message);
+    } finally {
+      setButtonLoading(btn, false, "Simpan Perubahan");
+    }
+  }
+
+  // Expose functions
+  window.loadPaymentSettings = loadPaymentSettings;
+  window.savePaymentSettings = savePaymentSettings;
 
   /* =========================
      9) INIT

@@ -22,6 +22,7 @@ class handler(BaseHTTPRequestHandler):
             result = (
                 supa.table("pendaftar")
                 .select("""
+                    gelombang,
                     nisn,
                     namalengkap,
                     tanggallahir,
@@ -79,6 +80,7 @@ class handler(BaseHTTPRequestHandler):
                 has_file_bpjs = has_file(item.get('file_bpjs'))
                 
                 rows.append({
+                    'gelombang': item.get('gelombang', ''),
                     'nisn': item.get('nisn', ''),
                     'nama': item.get('namalengkap', ''),
                     'tanggal_lahir': item.get('tanggallahir', ''),
@@ -105,6 +107,7 @@ class handler(BaseHTTPRequestHandler):
 
             # Define headers (EXACT ORDER)
             headers = [
+                'gelombang',
                 'nisn',
                 'nama',
                 'tanggal_lahir',
