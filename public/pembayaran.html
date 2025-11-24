@@ -518,19 +518,7 @@
                 </div>
               </div>
 
-              <!-- Informasi Pembayaran -->
-              <div class="alert alert-info">
-                <h6><i class="bi bi-info-circle"></i> Informasi Pembayaran</h6>
-                <ul class="mb-0">
-                  <li>Rencana Program: <strong id="rencanaProgram">-</strong></li>
-                  <li id="rencanaTingkatInfo" style="display: none;">Rencana Tingkat: <strong
-                      id="rencanaTingkat">-</strong></li>
-                  <li>Biaya pendaftaran: <strong id="biayaPendaftaran">Rp 500.000,-</strong></li>
-                  <li>Pembayaran dilakukan melalui transfer bank</li>
-                  <li>Upload bukti transfer setelah melakukan pembayaran</li>
-                  <li>Verifikasi pembayaran maksimal 2x24 jam</li>
-                </ul>
-              </div>
+
 
               <!-- Payment Methods -->
               <ul class="nav nav-pills nav-fill mb-3 gap-2" id="pills-tab" role="tablist">
@@ -977,34 +965,22 @@
 
             console.log("Biaya yang dihitung:", biaya);
 
-            document.getElementById("rencanaProgram").textContent = rencanaProgram;
-            document.getElementById("biayaPendaftaran").textContent = formatRupiah(biaya);
-            document.getElementById("jumlahTransfer").textContent = formatRupiah(biaya).replace(',-', ''); // Update jumlah transfer tanpa ",-"
+            console.log("Biaya yang dihitung:", biaya);
 
-            // Tampilkan rencana tingkat jika program adalah "Hanya Sekolah"
-            if (rencanaProgram === "Hanya Sekolah") {
-              document.getElementById("rencanaTingkatInfo").style.display = "list-item";
-              document.getElementById("rencanaTingkat").textContent = rencanaTingkat;
-            }
+            document.getElementById("jumlahTransfer").textContent = formatRupiah(biaya).replace(',-', ''); // Update jumlah transfer tanpa ",-"
           } else {
             console.error("Pendaftar tidak ditemukan dengan NISN:", nisn);
             console.log("Semua NISN yang ada:", dataArray.map(p => p.nisn || p.nikcalon || p.nik));
             // Set default values
-            document.getElementById("rencanaProgram").textContent = "SMP Reguler";
-            document.getElementById("biayaPendaftaran").textContent = "Rp 500.000,-";
           }
         } else {
           console.error("Data tidak valid atau bukan array:", dataArray);
           console.log("Type of data:", typeof dataArray);
           // Set default values
-          document.getElementById("rencanaProgram").textContent = "Pondok Putra Induk";
-          document.getElementById("biayaPendaftaran").textContent = "Rp 500.000,-";
         }
       } catch (error) {
         console.error("Error loading pendaftar data:", error);
         // Set default values on error
-        document.getElementById("rencanaProgram").textContent = "Pondok Putra Induk";
-        document.getElementById("biayaPendaftaran").textContent = "Rp 500.000,-";
       }
     }
 
@@ -1116,7 +1092,6 @@
           if (d.nominal) {
             const fmt = "Rp " + parseInt(d.nominal).toLocaleString("id-ID");
             document.getElementById("jumlahTransfer").textContent = fmt;
-            document.getElementById("biayaPendaftaran").textContent = fmt;
           }
 
           // QRIS

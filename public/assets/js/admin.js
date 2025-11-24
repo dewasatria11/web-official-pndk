@@ -6022,6 +6022,7 @@ Jazakumullahu khairan,
   // Expose functions
   window.loadPaymentSettings = loadPaymentSettings;
   window.savePaymentSettings = savePaymentSettings;
+  console.log("[ADMIN] Payment settings functions registered");
 
   /* =========================
      9) INIT
