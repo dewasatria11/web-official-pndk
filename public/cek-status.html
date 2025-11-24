@@ -1,307 +1,341 @@
 <!DOCTYPE html>
 <html lang="id">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Cek status pendaftaran santri Pondok Pesantren Al Ikhsan Beji dengan memasukkan NISN. Lihat informasi verifikasi, catatan admin, dan status pembayaran terbaru." data-i18n="cekStatus.meta.description" data-i18n-attr="content" data-i18n-skip-text />
-    <meta name="theme-color" content="#14532d" />
-    <title data-i18n="cekStatus.meta.title">Cek Status Pendaftaran - PPDSB Pondok Pesantren Al Ikhsan Beji</title>
 
-    <link rel="stylesheet" href="/assets/css/tailwind.css" />
-    <script src="/i18n.js" defer></script>
-    <link rel="icon" href="/favicon.ico" sizes="any" />
-    <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
-    <link rel="manifest" href="/manifest.webmanifest" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Cek status pendaftaran santri Pondok Pesantren Al Ikhsan Beji dengan memasukkan NISN. Lihat informasi verifikasi, catatan admin, dan status pembayaran terbaru."
+    data-i18n="cekStatus.meta.description" data-i18n-attr="content" data-i18n-skip-text />
+  <meta name="theme-color" content="#14532d" />
+  <title data-i18n="cekStatus.meta.title">Cek Status Pendaftaran - PPDSB Pondok Pesantren Al Ikhsan Beji</title>
 
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <link rel="stylesheet" href="/assets/css/tailwind.css" />
+  <script src="/i18n.js" defer></script>
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+  <link rel="manifest" href="/manifest.webmanifest" />
 
-    <!-- Toastify (for toastr shim) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
 
-    <!-- Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <!-- Toastify (for toastr shim) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
 
-    <style>
-      :root {
-        --tw-font-sans: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif;
-      }
-      html, body { font-family: var(--tw-font-sans); }
-            /* Force hide modals initially, then show via JS */
-      .modal-hidden { display: none !important; }
-      .modal-visible { display: flex !important; }
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
 
-      /* Responsive typography */
-      @media (max-width: 640px) {
-        h1 { font-size: 1.875rem !important; line-height: 2.25rem !important; }
-        h2 { font-size: 1.5rem !important; line-height: 2rem !important; }
-        h3 { font-size: 1.25rem !important; line-height: 1.75rem !important; }
-        .text-lg { font-size: 1rem !important; line-height: 1.5rem !important; }
-        .text-xl { font-size: 1.125rem !important; line-height: 1.75rem !important; }
-      }
+  <style>
+    :root {
+      --tw-font-sans: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif;
+    }
 
-      /* Navbar mobile fixes - Simple and working */
-      @media (max-width: 767px) {
-        /* Navbar container */
-        nav.sticky {
-          position: sticky !important;
-          top: 0 !important;
-          z-index: 50 !important;
-        }
-        
-        /* Navbar inner container */
-        nav .max-w-7xl {
-          padding-left: 1rem !important;
-          padding-right: 1rem !important;
-        }
-        
-        /* Logo responsive */
-        nav img.h-16,
-        nav img[alt*="Logo"] {
-          max-height: 64px !important;
-          height: 64px !important;
-          width: auto !important;
-        }
-        
-        /* Navbar row */
-        nav > div > div.flex {
-          min-height: 64px !important;
-          height: auto !important;
-        }
-        
-        /* Mobile menu button - ensure it's visible and clickable */
-        nav button[type="button"]:not([aria-label="Close menu"]) {
-          min-width: 44px !important;
-          min-height: 44px !important;
-          width: 44px !important;
-          height: 44px !important;
-          display: inline-flex !important;
-          align-items: center !important;
-          justify-content: center !important;
-          padding: 0.5rem !important;
-        }
-        
-        /* Hide desktop nav */
-        nav .hidden.md\:block {
-          display: none !important;
-        }
-        
-        /* Show mobile button */
-        nav .md\:hidden {
-          display: flex !important;
-        }
-      }
-      
-      @media (max-width: 640px) {
-        /* Smaller logo on very small screens */
-        nav img.h-16,
-        nav img[alt*="Logo"] {
-          max-height: 64px !important;
-          height: 64px !important;
-        }
+    html,
+    body {
+      font-family: var(--tw-font-sans);
+    }
+
+    /* Force hide modals initially, then show via JS */
+    .modal-hidden {
+      display: none !important;
+    }
+
+    .modal-visible {
+      display: flex !important;
+    }
+
+    /* Responsive typography */
+    @media (max-width: 640px) {
+      h1 {
+        font-size: 1.875rem !important;
+        line-height: 2.25rem !important;
       }
 
-      /* Mobile menu - Simple and working */
-      @media (max-width: 767px) {
-        /* Mobile menu panel */
-        .mobile-menu {
-          width: 100vw !important;
-          max-width: 100vw !important;
-        }
-        
-        /* Mobile menu logo */
-        .mobile-menu img {
-          max-height: 64px !important;
-          height: 64px !important;
-        }
-        
-        /* Mobile menu links - ensure touch targets */
-        .mobile-menu a {
-          min-height: 44px !important;
-          display: flex !important;
-          align-items: center !important;
-        }
-        
-        /* Mobile menu summary */
-        .mobile-menu summary {
-          min-height: 44px !important;
-          display: flex !important;
-          align-items: center !important;
-          justify-content: space-between !important;
-          cursor: pointer !important;
-          list-style: none !important;
-        }
-        
-        .mobile-menu summary::-webkit-details-marker {
-          display: none !important;
-        }
-        
-        .mobile-menu summary::marker {
-          display: none !important;
-        }
-        
-        /* Mobile menu sub-items */
-        .mobile-menu details > div {
-          padding-left: 1rem !important;
-          border-left: 2px solid #e5e7eb !important;
-        }
-        
-        .mobile-menu details a {
-          font-size: 0.875rem !important;
-          min-height: 64px !important;
-        }
-        
-        /* Details arrow rotation */
-        .mobile-menu details[open] summary i {
-          transform: rotate(180deg) !important;
-        }
-      }
-      
-      @media (max-width: 640px) {
-        .mobile-menu {
-          width: 100vw !important;
-          max-width: 100vw !important;
-        }
-        
-        .mobile-menu a,
-        .mobile-menu summary {
-          font-size: 0.9rem !important;
-          padding: 0.625rem 0.875rem !important;
-        }
+      h2 {
+        font-size: 1.5rem !important;
+        line-height: 2rem !important;
       }
 
-      /* Improve button touch targets on mobile */
-      @media (max-width: 640px) {
-        a, button {
-          min-height: 44px;
-          min-width: 44px;
-        }
+      h3 {
+        font-size: 1.25rem !important;
+        line-height: 1.75rem !important;
       }
 
-      /* Container responsive padding */
-      @media (max-width: 640px) {
-        .container {
-          padding-left: 1rem !important;
-          padding-right: 1rem !important;
-        }
+      .text-lg {
+        font-size: 1rem !important;
+        line-height: 1.5rem !important;
       }
 
+      .text-xl {
+        font-size: 1.125rem !important;
+        line-height: 1.75rem !important;
+      }
+    }
+
+    /* Navbar mobile fixes - Simple and working */
+    @media (max-width: 767px) {
+
+      /* Navbar container */
+      nav.sticky {
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 50 !important;
+      }
+
+      /* Navbar inner container */
+      nav .max-w-7xl {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+      }
+
+      /* Logo responsive */
+      nav img.h-16,
+      nav img[alt*="Logo"] {
+        max-height: 64px !important;
+        height: 64px !important;
+        width: auto !important;
+      }
+
+      /* Navbar row */
+      nav>div>div.flex {
+        min-height: 64px !important;
+        height: auto !important;
+      }
+
+      /* Mobile menu button - ensure it's visible and clickable */
+      nav button[type="button"]:not([aria-label="Close menu"]) {
+        min-width: 44px !important;
+        min-height: 44px !important;
+        width: 44px !important;
+        height: 44px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 0.5rem !important;
+      }
+
+      /* Hide desktop nav */
+      nav .hidden.md\:block {
+        display: none !important;
+      }
+
+      /* Show mobile button */
+      nav .md\:hidden {
+        display: flex !important;
+      }
+    }
+
+    @media (max-width: 640px) {
+
+      /* Smaller logo on very small screens */
+      nav img.h-16,
+      nav img[alt*="Logo"] {
+        max-height: 64px !important;
+        height: 64px !important;
+      }
+    }
+
+    /* Mobile menu - Simple and working */
+    @media (max-width: 767px) {
+
+      /* Mobile menu panel */
+      .mobile-menu {
+        width: 100vw !important;
+        max-width: 100vw !important;
+      }
+
+      /* Mobile menu logo */
+      .mobile-menu img {
+        max-height: 64px !important;
+        height: 64px !important;
+      }
+
+      /* Mobile menu links - ensure touch targets */
+      .mobile-menu a {
+        min-height: 44px !important;
+        display: flex !important;
+        align-items: center !important;
+      }
+
+      /* Mobile menu summary */
+      .mobile-menu summary {
+        min-height: 44px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        cursor: pointer !important;
+        list-style: none !important;
+      }
+
+      .mobile-menu summary::-webkit-details-marker {
+        display: none !important;
+      }
+
+      .mobile-menu summary::marker {
+        display: none !important;
+      }
+
+      /* Mobile menu sub-items */
+      .mobile-menu details>div {
+        padding-left: 1rem !important;
+        border-left: 2px solid #e5e7eb !important;
+      }
+
+      .mobile-menu details a {
+        font-size: 0.875rem !important;
+        min-height: 64px !important;
+      }
+
+      /* Details arrow rotation */
+      .mobile-menu details[open] summary i {
+        transform: rotate(180deg) !important;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .mobile-menu {
+        width: 100vw !important;
+        max-width: 100vw !important;
+      }
+
+      .mobile-menu a,
+      .mobile-menu summary {
+        font-size: 0.9rem !important;
+        padding: 0.625rem 0.875rem !important;
+      }
+    }
+
+    /* Improve button touch targets on mobile */
+    @media (max-width: 640px) {
+
+      a,
+      button {
+        min-height: 44px;
+        min-width: 44px;
+      }
+    }
+
+    /* Container responsive padding */
+    @media (max-width: 640px) {
+      .container {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+      }
+    }
+
+    .hero-ppdb {
+      position: relative;
+      text-align: center;
+      padding: 70px 16px 80px;
+      background: linear-gradient(180deg, #047857 0%, #10b981 100%);
+      overflow: hidden;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 0 auto;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      align-items: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 10px 32px;
+      border-radius: 999px;
+      background: #ffffff;
+      color: #047857;
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .hero-title {
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 600;
+      margin-bottom: 8px;
+      text-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+    }
+
+    .hero-desc {
+      font-size: 16px;
+      line-height: 1.7;
+      max-width: 780px;
+      margin: 0 auto 24px;
+      color: rgba(255, 255, 255, 0.92);
+    }
+
+    .hero-wave {
+      position: absolute;
+      left: 0;
+      bottom: -1px;
+      width: 100%;
+      height: auto;
+    }
+
+    @media (max-width: 640px) {
       .hero-ppdb {
-        position: relative;
-        text-align: center;
-        padding: 70px 16px 80px;
-        background: linear-gradient(180deg, #047857 0%, #10b981 100%);
-        overflow: hidden;
-      }
-      .hero-inner {
-        position: relative;
-        z-index: 1;
-        max-width: 900px;
-        margin: 0 auto;
-        color: #ffffff;
-        display: flex;
-        flex-direction: column;
-        gap: 1.25rem;
-        align-items: center;
-      }
-      .hero-badge {
-        display: inline-flex;
-        align-items: center;
-        padding: 10px 32px;
-        border-radius: 999px;
-        background: #ffffff;
-        color: #047857;
-        font-size: 14px;
-        font-weight: 600;
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
-      }
-      .hero-title {
-        font-size: clamp(32px, 5vw, 56px);
-        font-weight: 600;
-        margin-bottom: 8px;
-        text-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
-      }
-      .hero-desc {
-        font-size: 16px;
-        line-height: 1.7;
-        max-width: 780px;
-        margin: 0 auto 24px;
-        color: rgba(255, 255, 255, 0.92);
-      }
-      .hero-wave {
-        position: absolute;
-        left: 0;
-        bottom: -1px;
-        width: 100%;
-        height: auto;
-      }
-      @media (max-width: 640px) {
-        .hero-ppdb {
-          padding-top: 90px;
-          padding-bottom: 50px;
-        }
-        .btn-primary,
-        .btn-secondary {
-          width: 100%;
-          max-width: 260px;
-        }
+        padding-top: 90px;
+        padding-bottom: 50px;
       }
 
-      /* Payment Notification Animation - Subtle Pulse */
-      @keyframes payment-pulse {
-        0%, 100% { 
-          transform: scale(1);
-          box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
-        }
-        50% { 
-          transform: scale(1.02);
-          box-shadow: 0 8px 25px rgba(34, 197, 94, 0.5);
-        }
+      .btn-primary,
+      .btn-secondary {
+        width: 100%;
+        max-width: 260px;
       }
-      
-      .payment-notification {
-        animation: payment-pulse 2s ease-in-out 3;
+    }
+
+    /* Payment Notification Animation - Subtle Pulse */
+    @keyframes payment-pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+        box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
       }
-    </style>
-  </head>
-  <body class="min-h-screen flex flex-col bg-gray-100 text-gray-800">
-    <!-- HEADER -->
+
+      50% {
+        transform: scale(1.02);
+        box-shadow: 0 8px 25px rgba(34, 197, 94, 0.5);
+      }
+    }
+
+    .payment-notification {
+      animation: payment-pulse 2s ease-in-out 3;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col bg-gray-100 text-gray-800">
+  <!-- HEADER -->
   <header class="relative z-50">
     <div id="superHeader" class="bg-yellow-300 text-gray-900 text-xs tracking-wide">
       <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3 px-4 sm:px-6 lg:px-8 py-1.5">
-        <button
-          type="button"
+        <button type="button"
           class="inline-flex items-center gap-2 bg-white/40 hover:bg-white/60 text-gray-900 px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-semibold uppercase shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900 transition disabled:opacity-60 disabled:cursor-not-allowed"
           data-install-button
-          data-install-unavailable-text="Install tersedia setelah browser mendukung pemasangan aplikasi."
-        >
+          data-install-unavailable-text="Install tersedia setelah browser mendukung pemasangan aplikasi.">
           <i class="bi bi-cloud-arrow-down-fill text-base" aria-hidden="true"></i>
           <span data-i18n="nav.install">Download App</span>
         </button>
         <div class="flex items-center gap-2 sm:gap-3 text-[11px] sm:text-xs font-semibold uppercase">
-          <button
-            type="button"
-            data-setlang="id"
+          <button type="button" data-setlang="id"
             class="inline-flex items-center gap-1 text-gray-900 hover:text-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900 transition"
-            aria-label="Bahasa Indonesia"
-            data-i18n="nav.language.id"
-            data-i18n-attr="aria-label"
-            data-i18n-skip-text
-          >
+            aria-label="Bahasa Indonesia" data-i18n="nav.language.id" data-i18n-attr="aria-label" data-i18n-skip-text>
             <span aria-hidden="true" class="text-base leading-none">🇮🇩</span>
             <span>ID</span>
           </button>
           <span class="text-gray-600" aria-hidden="true">|</span>
-          <button
-            type="button"
-            data-setlang="en"
+          <button type="button" data-setlang="en"
             class="inline-flex items-center gap-1 text-gray-900 hover:text-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900 transition"
-            aria-label="English"
-            data-i18n="nav.language.en"
-            data-i18n-attr="aria-label"
-            data-i18n-skip-text
-          >
+            aria-label="English" data-i18n="nav.language.en" data-i18n-attr="aria-label" data-i18n-skip-text>
             <span aria-hidden="true" class="text-base leading-none">🇬🇧</span>
             <span>EN</span>
           </button>
@@ -310,7 +344,8 @@
     </div>
   </header>
   <!-- NAVBAR -->
-  <nav class="sticky top-0 z-[130] bg-white/95 backdrop-blur supports-backdrop-blur:bg-white/85 shadow-lg" data-nav-root>
+  <nav class="sticky top-0 z-[130] bg-white/95 backdrop-blur supports-backdrop-blur:bg-white/85 shadow-lg"
+    data-nav-root>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16 min-h-[64px]">
         <!-- Logo -->
@@ -323,47 +358,47 @@
         <!-- Desktop Navigation -->
         <div class="hidden md:block">
           <div class="flex items-baseline space-x-4">
-            <a href="/" class="text-gray-600 hover:text-brand-600 px-3 py-2 rounded-md text-sm font-medium" data-nav-link data-i18n="nav.home">Beranda</a>
+            <a href="/" class="text-gray-600 hover:text-brand-600 px-3 py-2 rounded-md text-sm font-medium"
+              data-nav-link data-i18n="nav.home">Beranda</a>
 
             <!-- Dropdown Informasi -->
             <div class="relative">
-              <button 
-                type="button"
+              <button type="button"
                 class="text-gray-600 hover:text-brand-600 px-3 py-2 rounded-md text-sm font-medium flex items-center transition"
-                data-dropdown-toggle="desktopInfoDropdown"
-                aria-expanded="false"
-                aria-controls="desktopInfoDropdown"
+                data-dropdown-toggle="desktopInfoDropdown" aria-expanded="false" aria-controls="desktopInfoDropdown"
                 aria-haspopup="true">
                 <span data-i18n="nav.info">Informasi</span>
                 <i class="bi bi-caret-down-fill ml-1 text-xs transition-transform duration-200" data-dropdown-caret></i>
               </button>
-              <div
-                id="desktopInfoDropdown"
+              <div id="desktopInfoDropdown"
                 class="absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg py-2 z-50 border border-gray-100 hidden"
                 role="menu">
-                <a href="/alur-pendaftaran.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" data-nav-link data-i18n="nav.flow">Alur Pendaftaran</a>
-                <a href="/syarat-pendaftaran.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" data-nav-link data-i18n="nav.requirements">Syarat Pendaftaran</a>
-                <a href="/biaya.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" data-nav-link data-i18n="nav.fees">Biaya</a>
+                <a href="/alur-pendaftaran.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                  data-nav-link data-i18n="nav.flow">Alur Pendaftaran</a>
+                <a href="/syarat-pendaftaran.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                  data-nav-link data-i18n="nav.requirements">Syarat Pendaftaran</a>
+                <a href="/biaya.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" data-nav-link
+                  data-i18n="nav.fees">Biaya</a>
               </div>
             </div>
 
-            <a href="/brosur.html" class="text-gray-600 hover:text-brand-600 px-3 py-2 rounded-md text-sm font-medium" data-nav-link data-i18n="nav.brochure">Brosur</a>
-            <a href="/kontak.html" class="text-gray-600 hover:text-brand-600 px-3 py-2 rounded-md text-sm font-medium" data-nav-link data-i18n="nav.contact">Kontak</a>
+            <a href="/brosur.html" class="text-gray-600 hover:text-brand-600 px-3 py-2 rounded-md text-sm font-medium"
+              data-nav-link data-i18n="nav.brochure">Brosur</a>
+            <a href="/kontak.html" class="text-gray-600 hover:text-brand-600 px-3 py-2 rounded-md text-sm font-medium"
+              data-nav-link data-i18n="nav.contact">Kontak</a>
           </div>
         </div>
 
         <!-- CTA Button Desktop -->
         <div class="hidden md:block">
-          <a href="/login" class="bg-brand-700 hover:bg-brand-800 text-white px-6 py-2 rounded-lg text-sm font-medium shadow-md hover:shadow-lg" data-i18n="nav.admin">Admin</a>
+          <a href="/login"
+            class="bg-brand-700 hover:bg-brand-800 text-white px-6 py-2 rounded-lg text-sm font-medium shadow-md hover:shadow-lg"
+            data-i18n="nav.admin">Admin</a>
         </div>
 
         <!-- Mobile menu button -->
         <div class="md:hidden">
-          <button 
-            type="button"
-            aria-label="Toggle menu"
-            aria-expanded="false"
-            aria-controls="mobileNavMenu"
+          <button type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobileNavMenu"
             class="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-brand-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-brand-500"
             data-mobile-toggle>
             <i class="bi bi-list text-xl" data-mobile-icon="open"></i>
@@ -376,640 +411,653 @@
   </nav>
 
   <!-- MOBILE NAV OVERLAY -->
-  <div
-    id="mobileNavBackdrop"
-    class="md:hidden absolute inset-0 z-[140] bg-black/60 hidden"
-    data-mobile-backdrop></div>
+  <div id="mobileNavBackdrop" class="md:hidden absolute inset-0 z-[140] bg-black/60 hidden" data-mobile-backdrop></div>
 
-  <div
-    id="mobileNavMenu"
+  <div id="mobileNavMenu"
     class="md:hidden absolute inset-y-0 left-0 z-[141] mobile-menu bg-white shadow-2xl border-r border-gray-200 overflow-y-auto hidden"
-    data-mobile-menu
-    role="dialog"
-    aria-modal="true">
+    data-mobile-menu role="dialog" aria-modal="true">
     <div class="flex items-center justify-between p-4 border-b border-gray-200 bg-white">
       <div class="flex items-center">
         <img src="/assets/img/logo-alikhsan.png" alt="Logo Al Ikhsan" class="h-12 w-auto" />
       </div>
-      <button 
-        type="button"
-        aria-label="Close menu"
-        class="p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100"
-        data-close-mobile>
+      <button type="button" aria-label="Close menu"
+        class="p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100" data-close-mobile>
         <i class="bi bi-x-lg text-xl"></i>
       </button>
     </div>
 
     <div class="px-2 pt-4 pb-6 space-y-1">
-      <a 
-        href="/" 
-        class="block px-4 py-3 rounded-md text-base font-medium text-gray-700 hover:text-brand-700 hover:bg-gray-50" 
-        data-nav-link data-i18n="nav.home"
-        data-close-mobile>Beranda</a>
+      <a href="/"
+        class="block px-4 py-3 rounded-md text-base font-medium text-gray-700 hover:text-brand-700 hover:bg-gray-50"
+        data-nav-link data-i18n="nav.home" data-close-mobile>Beranda</a>
 
       <details class="px-1">
-        <summary class="cursor-pointer text-gray-700 hover:text-brand-700 hover:bg-gray-50 px-4 py-3 rounded-md text-base font-medium flex items-center justify-between" data-i18n="nav.info">
+        <summary
+          class="cursor-pointer text-gray-700 hover:text-brand-700 hover:bg-gray-50 px-4 py-3 rounded-md text-base font-medium flex items-center justify-between"
+          data-i18n="nav.info">
           <span>Informasi</span>
           <i class="bi bi-chevron-down text-xs"></i>
         </summary>
         <div class="pl-4 space-y-1 mt-1">
-          <a 
-            href="/alur-pendaftaran.html" 
-            class="block px-4 py-2 text-sm rounded-md hover:bg-gray-50" 
-            data-nav-link data-i18n="nav.flow"
-            data-close-mobile>Alur Pendaftaran</a>
-          <a 
-            href="/syarat-pendaftaran.html" 
-            class="block px-4 py-2 text-sm rounded-md hover:bg-gray-50" 
-            data-nav-link data-i18n="nav.requirements"
-            data-close-mobile>Syarat Pendaftaran</a>
-          <a 
-            href="/biaya.html" 
-            class="block px-4 py-2 text-sm rounded-md hover:bg-gray-50" 
-            data-nav-link data-i18n="nav.fees"
-            data-close-mobile>Biaya</a>
+          <a href="/alur-pendaftaran.html" class="block px-4 py-2 text-sm rounded-md hover:bg-gray-50" data-nav-link
+            data-i18n="nav.flow" data-close-mobile>Alur Pendaftaran</a>
+          <a href="/syarat-pendaftaran.html" class="block px-4 py-2 text-sm rounded-md hover:bg-gray-50" data-nav-link
+            data-i18n="nav.requirements" data-close-mobile>Syarat Pendaftaran</a>
+          <a href="/biaya.html" class="block px-4 py-2 text-sm rounded-md hover:bg-gray-50" data-nav-link
+            data-i18n="nav.fees" data-close-mobile>Biaya</a>
         </div>
       </details>
 
-      <a 
-        href="/brosur.html" 
-        class="block px-4 py-3 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50" 
-        data-nav-link data-i18n="nav.brochure"
-        data-close-mobile>Brosur</a>
-      <a 
-        href="/kontak.html" 
-        class="block px-4 py-3 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50" 
-        data-nav-link data-i18n="nav.contact"
-        data-close-mobile>Kontak</a>
+      <a href="/brosur.html" class="block px-4 py-3 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50"
+        data-nav-link data-i18n="nav.brochure" data-close-mobile>Brosur</a>
+      <a href="/kontak.html" class="block px-4 py-3 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50"
+        data-nav-link data-i18n="nav.contact" data-close-mobile>Kontak</a>
 
       <div class="pt-4 pb-2 px-2 border-t border-gray-200 mt-4">
-        <a 
-          href="/login.html" 
-          class="w-full bg-brand-700 hover:bg-brand-800 text-white px-4 py-3 rounded-lg text-base font-medium shadow-md hover:shadow-lg block text-center" 
-          data-i18n="nav.admin"
-          data-close-mobile>Admin</a>
+        <a href="/login.html"
+          class="w-full bg-brand-700 hover:bg-brand-800 text-white px-4 py-3 rounded-lg text-base font-medium shadow-md hover:shadow-lg block text-center"
+          data-i18n="nav.admin" data-close-mobile>Admin</a>
       </div>
     </div>
   </div>
   <!-- END MOBILE NAV OVERLAY -->
-    <!-- Hero Section -->
-    <section class="hero-ppdb">
-      <div class="hero-inner">
-        <div class="hero-badge">
-          <i class="bi bi-search mr-2"></i>
-          <span data-i18n="cekStatus.hero.badge">Layanan Status Pendaftaran</span>
-        </div>
-        <h1 class="hero-title" data-i18n="cekStatus.hero.title">
-          Cek Status Pendaftaran Santri
-        </h1>
-        <p class="hero-desc" data-i18n="cekStatus.hero.subtitle">
-          Masukkan NISN Anda untuk melihat status terbaru pendaftaran Pondok Pesantren Al Ikhsan Beji.
-        </p>
+  <!-- Hero Section -->
+  <section class="hero-ppdb">
+    <div class="hero-inner">
+      <div class="hero-badge">
+        <i class="bi bi-search mr-2"></i>
+        <span data-i18n="cekStatus.hero.badge">Layanan Status Pendaftaran</span>
       </div>
-      <svg class="hero-wave" viewBox="0 0 1440 320" aria-hidden="true" preserveAspectRatio="none">
-        <path fill="#ffffff" fill-opacity="1" d="M0,224L48,213.3C96,203,192,181,288,176C384,171,480,181,576,192C672,203,768,213,864,202.7C960,192,1056,160,1152,160C1248,160,1344,192,1392,208L1440,224L1440,320L0,320Z"></path>
-      </svg>
-    </section>
+      <h1 class="hero-title" data-i18n="cekStatus.hero.title">
+        Cek Status Pendaftaran Santri
+      </h1>
+      <p class="hero-desc" data-i18n="cekStatus.hero.subtitle">
+        Masukkan NISN Anda untuk melihat status terbaru pendaftaran Pondok Pesantren Al Ikhsan Beji.
+      </p>
+    </div>
+    <svg class="hero-wave" viewBox="0 0 1440 320" aria-hidden="true" preserveAspectRatio="none">
+      <path fill="#ffffff" fill-opacity="1"
+        d="M0,224L48,213.3C96,203,192,181,288,176C384,171,480,181,576,192C672,203,768,213,864,202.7C960,192,1056,160,1152,160C1248,160,1344,192,1392,208L1440,224L1440,320L0,320Z">
+      </path>
+    </svg>
+  </section>
 
-    <!-- Main Content -->
-    <main class="flex-1 container mx-auto px-4 py-8" id="cek-status-form">
-      <div class="max-w-xl mx-auto">
-          <!-- Form Cek Status -->
-        <div class="bg-white rounded-xl shadow-lg border border-gray-100">
-          <div class="p-6">
-            <h2 class="text-xl font-semibold mb-4 text-gray-800 flex items-center gap-2">
-              <i class="bi bi-card-text text-brand-600"></i>
-              <span data-i18n="cekStatus.form.title">Cek Status Anda</span>
-            </h2>
-
-            <form id="cekStatusForm" class="space-y-4">
-              <div>
-                <label for="nisnInput" class="block text-sm font-medium text-gray-700 mb-1" data-i18n="cekStatus.form.label">NISN (Nomor Induk Siswa Nasional)</label>
-                  <input
-                    type="text"
-                    id="nisnInput"
-                    placeholder="Masukkan NISN (10 digit)"
-                    required
-                    pattern="^\d{10}$"
-                    title="NISN harus 10 digit angka"
-                    maxlength="10"
-                  data-i18n="cekStatus.form.input"
-                  data-i18n-attr="placeholder,title"
-                  class="block w-full rounded-lg border border-gray-300 focus:border-brand-500 focus:ring-brand-500 px-4 py-3 text-gray-900 placeholder-gray-400"
-                  />
-                <p class="mt-2 text-sm text-gray-500" data-i18n-html="cekStatus.form.helper">
-                    Masukkan NISN Anda (contoh: 1234567890).
-                </p>
-                </div>
-
-              <button type="button" id="btnCekStatus" class="w-full inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold px-6 py-3 rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2">
-                <i class="bi bi-search"></i>
-                <span data-i18n="cekStatus.form.button">Cek Status</span>
-                </button>
-              </form>
-          </div>
-        </div>
-      </div>
-    </main>
-
-    <!-- Modal: Hasil Cek Status -->
-    <div id="modalCekStatus" class="modal-hidden fixed inset-0 z-50 flex items-center justify-center">
-      <div class="absolute inset-0 bg-black/50" onclick="document.getElementById('modalCekStatus').classList.remove('modal-visible'); document.getElementById('modalCekStatus').classList.add('modal-hidden');"></div>
-      <div class="relative bg-white rounded-2xl shadow-2xl max-w-3xl w-[92vw] max-h-[85vh] overflow-y-auto">
-        <div class="px-6 py-4 bg-gradient-to-br from-brand-700 to-brand-800 text-white rounded-t-2xl flex items-center justify-between">
-          <h5 class="font-semibold"><i class="bi bi-clipboard-check"></i> <span data-i18n="cekStatus.modal.title">Hasil Cek Status Pendaftaran</span></h5>
-          <button class="text-white/90 hover:text-white" onclick="document.getElementById('modalCekStatus').classList.remove('modal-visible'); document.getElementById('modalCekStatus').classList.add('modal-hidden');"><i class="bi bi-x-lg"></i></button>
-        </div>
+  <!-- Main Content -->
+  <main class="flex-1 container mx-auto px-4 py-8" id="cek-status-form">
+    <div class="max-w-xl mx-auto">
+      <!-- Form Cek Status -->
+      <div class="bg-white rounded-xl shadow-lg border border-gray-100">
         <div class="p-6">
-          <!-- Loading state -->
-          <div id="statusLoading" class="text-center py-6">
-            <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-brand-500 border-t-transparent"></div>
-            <p class="mt-4 text-gray-600 font-semibold" data-i18n="cekStatus.modal.loading">Mengambil data status Anda...</p>
-          </div>
+          <h2 class="text-xl font-semibold mb-4 text-gray-800 flex items-center gap-2">
+            <i class="bi bi-card-text text-brand-600"></i>
+            <span data-i18n="cekStatus.form.title">Cek Status Anda</span>
+          </h2>
 
-          <!-- Hasil sukses -->
-          <div id="statusResult" class="hidden">
-            <div class="text-center mb-4">
-              <i id="statusIcon" class="bi bi-hourglass-split text-yellow-600" style="font-size: 3rem;"></i>
-            </div>
-            <div class="flex justify-center mb-4">
-              <span id="statusBadge" class="px-4 py-2 rounded-full bg-yellow-500 text-white">-</span>
-              </div>
-            <div class="bg-white rounded-xl border border-gray-200 shadow-sm mb-3">
-              <div class="px-4 py-3 border-b border-gray-100 font-semibold"><i class="bi bi-person-badge"></i> <span data-i18n="cekStatus.modal.sections.info">Informasi Pendaftar</span></div>
-              <div class="divide-y divide-gray-100">
-                <div class="px-4 py-3 flex justify-between text-sm"><span class="text-gray-500" data-i18n="cekStatus.modal.fields.nisn">NISN</span><strong id="f_nisn">-</strong></div>
-                <div class="px-4 py-3 flex justify-between text-sm"><span class="text-gray-500" data-i18n="cekStatus.modal.fields.name">Nama Lengkap</span><strong id="f_nama">-</strong></div>
-                <div class="px-4 py-3 flex justify-between text-sm"><span class="text-gray-500" data-i18n="cekStatus.modal.fields.birthPlace">Tempat Lahir</span><span id="f_tempat_lahir">-</span></div>
-                <div class="px-4 py-3 flex justify-between text-sm"><span class="text-gray-500" data-i18n="cekStatus.modal.fields.birthDate">Tanggal Lahir</span><span id="f_tanggal_lahir">-</span></div>
-                <div class="px-4 py-3 flex justify-between text-sm"><span class="text-gray-500" data-i18n="cekStatus.modal.fields.submittedAt">Tanggal Daftar</span><span id="f_tanggal_daftar">-</span></div>
-              </div>
-                </div>
-            <div class="bg-white rounded-xl border border-gray-200 shadow-sm" id="statusCatatanSection">
-              <div class="px-4 py-3 border-b border-gray-100 font-semibold"><i class="bi bi-clipboard-data"></i> <span data-i18n="cekStatus.modal.sections.status">Status & Catatan</span></div>
-              <div class="px-4 py-3 space-y-3">
-                <div>
-                  <span class="text-gray-500 block mb-1 text-sm" data-i18n="cekStatus.modal.fields.verificationStatus">Status Verifikasi</span>
-                  <span id="f_status_text" class="inline-block px-3 py-1 rounded bg-yellow-500 text-white text-sm">-</span>
-                </div>
-                <div id="catatanContainer">
-                  <span class="text-gray-500 block mb-1 text-sm" data-i18n="cekStatus.modal.fields.adminNote">Catatan Admin</span>
-                  <p id="f_catatan" class="mb-0 text-gray-800">-</p>
-                </div>
-              </div>
-            </div>
+          <form id="cekStatusForm" class="space-y-4">
+            <div>
+              <label for="nisnInput" class="block text-sm font-medium text-gray-700 mb-1"
+                data-i18n="cekStatus.form.label">NISN (Nomor Induk Siswa Nasional)</label>
+              <input type="text" id="nisnInput" placeholder="Masukkan NISN (10 digit)" required pattern="^\d{10}$"
+                title="NISN harus 10 digit angka" maxlength="10" data-i18n="cekStatus.form.input"
+                data-i18n-attr="placeholder,title"
+                class="block w-full rounded-lg border border-gray-300 focus:border-brand-500 focus:ring-brand-500 px-4 py-3 text-gray-900 placeholder-gray-400" />
+              <p class="mt-2 text-sm text-gray-500" data-i18n-html="cekStatus.form.helper">
+                Masukkan NISN Anda (contoh: 1234567890).
+              </p>
             </div>
 
-            <!-- Error -->
-          <div id="statusError" class="hidden rounded-lg bg-yellow-50 border border-yellow-200 text-yellow-900 px-4 py-3" role="alert">
-            <div class="flex items-start gap-2">
-              <i class="bi bi-exclamation-triangle"></i>
-              <div>
-              <strong data-i18n="cekStatus.modal.error.title">Perhatian!</strong>
-                <p class="mb-0 mt-1" id="statusErrorMsg" data-i18n="cekStatus.modal.error.generic">Terjadi kesalahan.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="px-6 py-4 border-t border-gray-100 rounded-b-2xl flex justify-end">
-          <button type="button" class="inline-flex items-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-800 px-5 py-3 rounded-lg" onclick="document.getElementById('modalCekStatus').classList.remove('modal-visible'); document.getElementById('modalCekStatus').classList.add('modal-hidden');">
-              <i class="bi bi-x-circle"></i> <span data-i18n="cekStatus.modal.close">Tutup</span>
+            <button type="button" id="btnCekStatus"
+              class="w-full inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold px-6 py-3 rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2">
+              <i class="bi bi-search"></i>
+              <span data-i18n="cekStatus.form.button">Cek Status</span>
             </button>
+          </form>
         </div>
       </div>
     </div>
+  </main>
 
-    <!-- Modal: Bukti Pembayaran -->
-    <div id="paymentProofModal" class="modal-hidden fixed inset-0 z-50 flex items-center justify-center">
-      <div class="absolute inset-0 bg-black/60" data-close-payment-modal></div>
-      <div class="relative bg-white w-full max-w-5xl mx-4 rounded-2xl shadow-2xl overflow-hidden">
-        <div class="flex items-center justify-between px-6 py-4 bg-emerald-700 text-white">
-          <div>
-            <h5 class="font-semibold text-lg" data-i18n="cekStatus.payment.modal.title">Detail Bukti Pembayaran</h5>
-            <p class="text-white/80 text-sm" data-i18n="cekStatus.payment.modal.subtitle">Bukti pembayaran yang Anda unggah tersimpan aman dan diperiksa oleh admin.</p>
+  <!-- Modal: Hasil Cek Status -->
+  <div id="modalCekStatus" class="modal-hidden fixed inset-0 z-[150] flex items-center justify-center">
+    <div class="absolute inset-0 bg-black/50"
+      onclick="document.getElementById('modalCekStatus').classList.remove('modal-visible'); document.getElementById('modalCekStatus').classList.add('modal-hidden');">
+    </div>
+    <div class="relative bg-white rounded-2xl shadow-2xl max-w-3xl w-[92vw] max-h-[85vh] overflow-y-auto">
+      <div
+        class="px-6 py-4 bg-gradient-to-br from-brand-700 to-brand-800 text-white rounded-t-2xl flex items-center justify-between">
+        <h5 class="font-semibold"><i class="bi bi-clipboard-check"></i> <span data-i18n="cekStatus.modal.title">Hasil
+            Cek Status Pendaftaran</span></h5>
+        <button class="text-white/90 hover:text-white"
+          onclick="document.getElementById('modalCekStatus').classList.remove('modal-visible'); document.getElementById('modalCekStatus').classList.add('modal-hidden');"><i
+            class="bi bi-x-lg"></i></button>
+      </div>
+      <div class="p-6">
+        <!-- Loading state -->
+        <div id="statusLoading" class="text-center py-6">
+          <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-brand-500 border-t-transparent">
           </div>
-          <button type="button" class="text-white/80 hover:text-white text-xl" data-close-payment-modal aria-label="Tutup">
-            <i class="bi bi-x-lg"></i>
+          <p class="mt-4 text-gray-600 font-semibold" data-i18n="cekStatus.modal.loading">Mengambil data status Anda...
+          </p>
+        </div>
+
+        <!-- Hasil sukses -->
+        <div id="statusResult" class="hidden">
+          <div class="text-center mb-4">
+            <i id="statusIcon" class="bi bi-hourglass-split text-yellow-600" style="font-size: 3rem;"></i>
+          </div>
+          <div class="flex justify-center mb-4">
+            <span id="statusBadge" class="px-4 py-2 rounded-full bg-yellow-500 text-white">-</span>
+          </div>
+          <div class="bg-white rounded-xl border border-gray-200 shadow-sm mb-3">
+            <div class="px-4 py-3 border-b border-gray-100 font-semibold"><i class="bi bi-person-badge"></i> <span
+                data-i18n="cekStatus.modal.sections.info">Informasi Pendaftar</span></div>
+            <div class="divide-y divide-gray-100">
+              <div class="px-4 py-3 flex justify-between text-sm"><span class="text-gray-500"
+                  data-i18n="cekStatus.modal.fields.nisn">NISN</span><strong id="f_nisn">-</strong></div>
+              <div class="px-4 py-3 flex justify-between text-sm"><span class="text-gray-500"
+                  data-i18n="cekStatus.modal.fields.name">Nama Lengkap</span><strong id="f_nama">-</strong></div>
+              <div class="px-4 py-3 flex justify-between text-sm"><span class="text-gray-500"
+                  data-i18n="cekStatus.modal.fields.birthPlace">Tempat Lahir</span><span id="f_tempat_lahir">-</span>
+              </div>
+              <div class="px-4 py-3 flex justify-between text-sm"><span class="text-gray-500"
+                  data-i18n="cekStatus.modal.fields.birthDate">Tanggal Lahir</span><span id="f_tanggal_lahir">-</span>
+              </div>
+              <div class="px-4 py-3 flex justify-between text-sm"><span class="text-gray-500"
+                  data-i18n="cekStatus.modal.fields.submittedAt">Tanggal Daftar</span><span
+                  id="f_tanggal_daftar">-</span></div>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl border border-gray-200 shadow-sm" id="statusCatatanSection">
+            <div class="px-4 py-3 border-b border-gray-100 font-semibold"><i class="bi bi-clipboard-data"></i> <span
+                data-i18n="cekStatus.modal.sections.status">Status & Catatan</span></div>
+            <div class="px-4 py-3 space-y-3">
+              <div>
+                <span class="text-gray-500 block mb-1 text-sm"
+                  data-i18n="cekStatus.modal.fields.verificationStatus">Status Verifikasi</span>
+                <span id="f_status_text"
+                  class="inline-block px-3 py-1 rounded bg-yellow-500 text-white text-sm">-</span>
+              </div>
+              <div id="catatanContainer">
+                <span class="text-gray-500 block mb-1 text-sm" data-i18n="cekStatus.modal.fields.adminNote">Catatan
+                  Admin</span>
+                <p id="f_catatan" class="mb-0 text-gray-800">-</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Error -->
+        <div id="statusError" class="hidden rounded-lg bg-yellow-50 border border-yellow-200 text-yellow-900 px-4 py-3"
+          role="alert">
+          <div class="flex items-start gap-2">
+            <i class="bi bi-exclamation-triangle"></i>
+            <div>
+              <strong data-i18n="cekStatus.modal.error.title">Perhatian!</strong>
+              <p class="mb-0 mt-1" id="statusErrorMsg" data-i18n="cekStatus.modal.error.generic">Terjadi kesalahan.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="px-6 py-4 border-t border-gray-100 rounded-b-2xl flex justify-end">
+        <button type="button"
+          class="inline-flex items-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-800 px-5 py-3 rounded-lg"
+          onclick="document.getElementById('modalCekStatus').classList.remove('modal-visible'); document.getElementById('modalCekStatus').classList.add('modal-hidden');">
+          <i class="bi bi-x-circle"></i> <span data-i18n="cekStatus.modal.close">Tutup</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Bukti Pembayaran -->
+  <div id="paymentProofModal" class="modal-hidden fixed inset-0 z-[150] flex items-center justify-center">
+    <div class="absolute inset-0 bg-black/60" data-close-payment-modal></div>
+    <div class="relative bg-white w-full max-w-5xl mx-4 rounded-2xl shadow-2xl overflow-hidden">
+      <div class="flex items-center justify-between px-6 py-4 bg-emerald-700 text-white">
+        <div>
+          <h5 class="font-semibold text-lg" data-i18n="cekStatus.payment.modal.title">Detail Bukti Pembayaran</h5>
+          <p class="text-white/80 text-sm" data-i18n="cekStatus.payment.modal.subtitle">Bukti pembayaran yang Anda
+            unggah tersimpan aman dan diperiksa oleh admin.</p>
+        </div>
+        <button type="button" class="text-white/80 hover:text-white text-xl" data-close-payment-modal
+          aria-label="Tutup">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+      <div class="px-6 py-6 bg-slate-50">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="bg-white rounded-xl shadow-inner p-4 border border-emerald-100 flex flex-col">
+            <div class="flex items-center justify-between mb-4">
+              <h6 class="font-semibold text-emerald-900" data-i18n="cekStatus.payment.modal.proofTitle">Bukti Transfer
+              </h6>
+              <button type="button" id="paymentProofOpenImage"
+                class="inline-flex items-center gap-2 text-sm text-emerald-600 hover:text-emerald-700 font-semibold disabled:opacity-40"
+                disabled>
+                <i class="bi bi-box-arrow-up-right"></i>
+                <span data-i18n="cekStatus.payment.modal.openImage">Buka di Tab Baru</span>
+              </button>
+            </div>
+            <div class="flex-1 flex items-center justify-center min-h-[260px]">
+              <img id="paymentProofImage" src="" alt="Bukti Pembayaran"
+                class="max-h-[420px] max-w-full rounded-xl shadow-md hidden" loading="lazy" />
+              <div id="paymentProofImageEmpty"
+                class="text-center text-gray-500 border-2 border-dashed border-gray-200 rounded-xl p-8 w-full">
+                <i class="bi bi-image text-3xl mb-3 block text-gray-400"></i>
+                <p class="font-semibold" data-i18n="cekStatus.payment.modal.noImage">Bukti pembayaran belum tersedia.
+                </p>
+                <p class="text-sm text-gray-500" data-i18n="cekStatus.payment.modal.noImageDesc">Silakan hubungi admin
+                  jika Anda sudah mengunggah bukti tapi belum terlihat.</p>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl shadow-inner p-5 border border-slate-200 space-y-4">
+            <div>
+              <p class="text-xs uppercase text-slate-500 font-semibold" data-i18n="cekStatus.payment.modal.studentInfo">
+                Pendaftar</p>
+              <p class="text-lg font-bold text-slate-900" id="paymentProofName">-</p>
+              <p class="text-sm text-slate-500" id="paymentProofNisn">-</p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="p-3 rounded-lg bg-slate-50 border border-slate-100">
+                <p class="text-xs text-slate-500 font-semibold" data-i18n="cekStatus.payment.modal.amountLabel">Jumlah
+                  Pembayaran</p>
+                <p class="text-lg font-bold text-emerald-700" id="paymentProofAmount">-</p>
+              </div>
+              <div class="p-3 rounded-lg bg-slate-50 border border-slate-100">
+                <p class="text-xs text-slate-500 font-semibold" data-i18n="cekStatus.payment.modal.methodLabel">Metode
+                </p>
+                <p class="text-base font-semibold text-slate-800" id="paymentProofMethod">-</p>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="p-3 rounded-lg bg-slate-50 border border-slate-100">
+                <p class="text-xs text-slate-500 font-semibold" data-i18n="cekStatus.payment.modal.uploadedLabel">
+                  Diunggah</p>
+                <p class="text-sm font-semibold text-slate-800" id="paymentProofUploadedAt">-</p>
+              </div>
+              <div class="p-3 rounded-lg bg-slate-50 border border-slate-100">
+                <p class="text-xs text-slate-500 font-semibold" data-i18n="cekStatus.payment.modal.verifiedLabel">
+                  Diverifikasi</p>
+                <p class="text-sm font-semibold text-slate-800" id="paymentProofVerifiedAt">-</p>
+              </div>
+            </div>
+            <div>
+              <p class="text-xs uppercase text-slate-500 font-semibold mb-2"
+                data-i18n="cekStatus.payment.modal.statusLabel">Status Pembayaran</p>
+              <span id="paymentProofStatusChip"
+                class="inline-flex items-center gap-2 text-sm font-semibold px-3 py-1 rounded-full bg-slate-200 text-slate-700">
+                <i class="bi bi-info-circle"></i>
+                <span id="paymentProofStatusText">-</span>
+              </span>
+            </div>
+            <div>
+              <p class="text-xs uppercase text-slate-500 font-semibold mb-2"
+                data-i18n="cekStatus.payment.modal.noteLabel">Catatan Admin</p>
+              <div class="p-3 rounded-lg bg-slate-50 border border-slate-100 min-h-[80px]">
+                <p id="paymentProofNote" class="text-sm text-slate-700">-</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-6 flex justify-end">
+          <button type="button"
+            class="inline-flex items-center gap-2 bg-slate-200 hover:bg-slate-300 text-slate-800 px-5 py-3 rounded-lg font-semibold"
+            data-close-payment-modal>
+            <i class="bi bi-x-circle"></i>
+            <span data-i18n="cekStatus.payment.modal.close">Tutup</span>
           </button>
         </div>
-        <div class="px-6 py-6 bg-slate-50">
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div class="bg-white rounded-xl shadow-inner p-4 border border-emerald-100 flex flex-col">
-              <div class="flex items-center justify-between mb-4">
-                <h6 class="font-semibold text-emerald-900" data-i18n="cekStatus.payment.modal.proofTitle">Bukti Transfer</h6>
-                <button type="button" id="paymentProofOpenImage" class="inline-flex items-center gap-2 text-sm text-emerald-600 hover:text-emerald-700 font-semibold disabled:opacity-40" disabled>
-                  <i class="bi bi-box-arrow-up-right"></i>
-                  <span data-i18n="cekStatus.payment.modal.openImage">Buka di Tab Baru</span>
-                </button>
-              </div>
-              <div class="flex-1 flex items-center justify-center min-h-[260px]">
-                <img id="paymentProofImage" src="" alt="Bukti Pembayaran" class="max-h-[420px] max-w-full rounded-xl shadow-md hidden" loading="lazy" />
-                <div id="paymentProofImageEmpty" class="text-center text-gray-500 border-2 border-dashed border-gray-200 rounded-xl p-8 w-full">
-                  <i class="bi bi-image text-3xl mb-3 block text-gray-400"></i>
-                  <p class="font-semibold" data-i18n="cekStatus.payment.modal.noImage">Bukti pembayaran belum tersedia.</p>
-                  <p class="text-sm text-gray-500" data-i18n="cekStatus.payment.modal.noImageDesc">Silakan hubungi admin jika Anda sudah mengunggah bukti tapi belum terlihat.</p>
-                </div>
-              </div>
-            </div>
-            <div class="bg-white rounded-xl shadow-inner p-5 border border-slate-200 space-y-4">
-              <div>
-                <p class="text-xs uppercase text-slate-500 font-semibold" data-i18n="cekStatus.payment.modal.studentInfo">Pendaftar</p>
-                <p class="text-lg font-bold text-slate-900" id="paymentProofName">-</p>
-                <p class="text-sm text-slate-500" id="paymentProofNisn">-</p>
-              </div>
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div class="p-3 rounded-lg bg-slate-50 border border-slate-100">
-                  <p class="text-xs text-slate-500 font-semibold" data-i18n="cekStatus.payment.modal.amountLabel">Jumlah Pembayaran</p>
-                  <p class="text-lg font-bold text-emerald-700" id="paymentProofAmount">-</p>
-                </div>
-                <div class="p-3 rounded-lg bg-slate-50 border border-slate-100">
-                  <p class="text-xs text-slate-500 font-semibold" data-i18n="cekStatus.payment.modal.methodLabel">Metode</p>
-                  <p class="text-base font-semibold text-slate-800" id="paymentProofMethod">-</p>
-                </div>
-              </div>
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div class="p-3 rounded-lg bg-slate-50 border border-slate-100">
-                  <p class="text-xs text-slate-500 font-semibold" data-i18n="cekStatus.payment.modal.uploadedLabel">Diunggah</p>
-                  <p class="text-sm font-semibold text-slate-800" id="paymentProofUploadedAt">-</p>
-                </div>
-                <div class="p-3 rounded-lg bg-slate-50 border border-slate-100">
-                  <p class="text-xs text-slate-500 font-semibold" data-i18n="cekStatus.payment.modal.verifiedLabel">Diverifikasi</p>
-                  <p class="text-sm font-semibold text-slate-800" id="paymentProofVerifiedAt">-</p>
-                </div>
-              </div>
-              <div>
-                <p class="text-xs uppercase text-slate-500 font-semibold mb-2" data-i18n="cekStatus.payment.modal.statusLabel">Status Pembayaran</p>
-                <span id="paymentProofStatusChip" class="inline-flex items-center gap-2 text-sm font-semibold px-3 py-1 rounded-full bg-slate-200 text-slate-700">
-                  <i class="bi bi-info-circle"></i>
-                  <span id="paymentProofStatusText">-</span>
-                </span>
-              </div>
-              <div>
-                <p class="text-xs uppercase text-slate-500 font-semibold mb-2" data-i18n="cekStatus.payment.modal.noteLabel">Catatan Admin</p>
-                <div class="p-3 rounded-lg bg-slate-50 border border-slate-100 min-h-[80px]">
-                  <p id="paymentProofNote" class="text-sm text-slate-700">-</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="mt-6 flex justify-end">
-            <button type="button" class="inline-flex items-center gap-2 bg-slate-200 hover:bg-slate-300 text-slate-800 px-5 py-3 rounded-lg font-semibold" data-close-payment-modal>
-              <i class="bi bi-x-circle"></i>
-              <span data-i18n="cekStatus.payment.modal.close">Tutup</span>
-            </button>
-          </div>
-        </div>
       </div>
     </div>
+  </div>
 
-    <script>
-      document.addEventListener('alpine:init', () => {
-        Alpine.store('cek', { 
-          open: false,
-          get isOpen() { 
-            console.log('[ALPINE_STORE] cek.open =', this.open); 
-            return this.open; 
-          }
-        });
-        console.log('[ALPINE] Store initialized:', Alpine.store('cek'));
+  <script>
+    document.addEventListener('alpine:init', () => {
+      Alpine.store('cek', {
+        open: false,
+        get isOpen() {
+          console.log('[ALPINE_STORE] cek.open =', this.open);
+          return this.open;
+        }
       });
-            document.addEventListener('DOMContentLoaded', () => {
-        (function(){
-          const s = document.createElement('script');
-          s.src = 'https://cdn.jsdelivr.net/npm/toastify-js';
-          s.onload = function(){
-            window.toastr = {
-              success(msg){ Toastify({ text: msg, duration: 4000, close: true, gravity: 'top', position: 'right', style: { background: '#10b981', color: '#fff' }}).showToast(); },
-              error(msg){ Toastify({ text: msg, duration: 4000, close: true, gravity: 'top', position: 'right', style: { background: '#ef4444', color: '#fff' }}).showToast(); },
-              warning(msg){ Toastify({ text: msg, duration: 4000, close: true, gravity: 'top', position: 'right', style: { background: '#f59e0b', color: '#fff' }}).showToast(); },
-              info(msg){ Toastify({ text: msg, duration: 4000, close: true, gravity: 'top', position: 'right', style: { background: '#3b82f6', color: '#fff' }}).showToast(); }
-            };
+      console.log('[ALPINE] Store initialized:', Alpine.store('cek'));
+    });
+    document.addEventListener('DOMContentLoaded', () => {
+      (function () {
+        const s = document.createElement('script');
+        s.src = 'https://cdn.jsdelivr.net/npm/toastify-js';
+        s.onload = function () {
+          window.toastr = {
+            success(msg) { Toastify({ text: msg, duration: 4000, close: true, gravity: 'top', position: 'right', style: { background: '#10b981', color: '#fff' } }).showToast(); },
+            error(msg) { Toastify({ text: msg, duration: 4000, close: true, gravity: 'top', position: 'right', style: { background: '#ef4444', color: '#fff' } }).showToast(); },
+            warning(msg) { Toastify({ text: msg, duration: 4000, close: true, gravity: 'top', position: 'right', style: { background: '#f59e0b', color: '#fff' } }).showToast(); },
+            info(msg) { Toastify({ text: msg, duration: 4000, close: true, gravity: 'top', position: 'right', style: { background: '#3b82f6', color: '#fff' } }).showToast(); }
           };
-          document.head.appendChild(s);
-        })();
-
-        const btn = document.getElementById('btnCekStatus');
-        const input = document.getElementById('nisnInput');
-        const modalEl = document.getElementById('modalCekStatus');
-        const statusLoadingEl = document.getElementById('statusLoading');
-        const statusResultEl = document.getElementById('statusResult');
-        const statusErrorEl = document.getElementById('statusError');
-        const statusErrorMsgEl = document.getElementById('statusErrorMsg');
-        const statusResultContainer = document.getElementById('statusResult');
-        const statusCatatanSection = document.getElementById('statusCatatanSection');
-        const catatanContainer = document.getElementById('catatanContainer');
-        const catatanEl = document.getElementById('f_catatan');
-        const statusIconEl = document.getElementById('statusIcon');
-        const statusBadgeEl = document.getElementById('statusBadge');
-        const statusTextEl = document.getElementById('f_status_text');
-        const fieldNisnEl = document.getElementById('f_nisn');
-        const fieldNamaEl = document.getElementById('f_nama');
-        const fieldTempatLahirEl = document.getElementById('f_tempat_lahir');
-        const fieldTanggalLahirEl = document.getElementById('f_tanggal_lahir');
-        const fieldTanggalDaftarEl = document.getElementById('f_tanggal_daftar');
-        const paymentProofModal = document.getElementById('paymentProofModal');
-        const paymentProofImage = document.getElementById('paymentProofImage');
-        const paymentProofImageEmpty = document.getElementById('paymentProofImageEmpty');
-        const paymentProofOpenImage = document.getElementById('paymentProofOpenImage');
-        const paymentProofNameEl = document.getElementById('paymentProofName');
-        const paymentProofNisnEl = document.getElementById('paymentProofNisn');
-        const paymentProofAmountEl = document.getElementById('paymentProofAmount');
-        const paymentProofMethodEl = document.getElementById('paymentProofMethod');
-        const paymentProofUploadedEl = document.getElementById('paymentProofUploadedAt');
-        const paymentProofVerifiedEl = document.getElementById('paymentProofVerifiedAt');
-        const paymentProofStatusChip = document.getElementById('paymentProofStatusChip');
-        const paymentProofStatusText = document.getElementById('paymentProofStatusText');
-        const paymentProofNoteEl = document.getElementById('paymentProofNote');
-
-        const T = (key, replacements) => (typeof window.__ === 'function' ? window.__(key, replacements) : key);
-        const applyTranslations = (root) => {
-          if (typeof window.__applyTranslations === 'function') {
-            window.__applyTranslations(root || document);
-          }
         };
-        const getLocale = () => {
-          const lang = typeof window.__lang === 'function' ? window.__lang() : (document.documentElement.getAttribute('lang') || 'id');
-          return lang.toLowerCase().startsWith('en') ? 'en-US' : 'id-ID';
-        };
-        const formatDate = (value) => {
-          if (!value) return '-';
-          try {
-            return new Intl.DateTimeFormat(getLocale(), { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(value));
-          } catch {
-            return value;
-          }
-        };
-        const formatDateTime = (value) => {
-          if (!value) return '-';
-          try {
-            return new Intl.DateTimeFormat(getLocale(), { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }).format(new Date(value));
-          } catch {
-            return value;
-          }
-        };
-        const formatCurrency = (value) => {
-          if (value === null || value === undefined || value === '') return '-';
-          const numeric = Number(value);
-          const amount = Number.isFinite(numeric) ? numeric : Number(String(value).replace(/[^\d]/g, ''));
-          if (!Number.isFinite(amount)) return String(value);
-          try {
-            return new Intl.NumberFormat(getLocale(), { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(amount);
-          } catch (error) {
-            return 'Rp ' + amount.toLocaleString('id-ID');
-          }
-        };
+        document.head.appendChild(s);
+      })();
 
-        const normalizeStatus = (value) => {
-          if (value === null || value === undefined) return '';
-          try {
-            return value.toString().trim().toUpperCase().replace(/[\s_-]+/g, '');
-          } catch {
-            return '';
-          }
-        };
+      const btn = document.getElementById('btnCekStatus');
+      const input = document.getElementById('nisnInput');
+      const modalEl = document.getElementById('modalCekStatus');
+      const statusLoadingEl = document.getElementById('statusLoading');
+      const statusResultEl = document.getElementById('statusResult');
+      const statusErrorEl = document.getElementById('statusError');
+      const statusErrorMsgEl = document.getElementById('statusErrorMsg');
+      const statusResultContainer = document.getElementById('statusResult');
+      const statusCatatanSection = document.getElementById('statusCatatanSection');
+      const catatanContainer = document.getElementById('catatanContainer');
+      const catatanEl = document.getElementById('f_catatan');
+      const statusIconEl = document.getElementById('statusIcon');
+      const statusBadgeEl = document.getElementById('statusBadge');
+      const statusTextEl = document.getElementById('f_status_text');
+      const fieldNisnEl = document.getElementById('f_nisn');
+      const fieldNamaEl = document.getElementById('f_nama');
+      const fieldTempatLahirEl = document.getElementById('f_tempat_lahir');
+      const fieldTanggalLahirEl = document.getElementById('f_tanggal_lahir');
+      const fieldTanggalDaftarEl = document.getElementById('f_tanggal_daftar');
+      const paymentProofModal = document.getElementById('paymentProofModal');
+      const paymentProofImage = document.getElementById('paymentProofImage');
+      const paymentProofImageEmpty = document.getElementById('paymentProofImageEmpty');
+      const paymentProofOpenImage = document.getElementById('paymentProofOpenImage');
+      const paymentProofNameEl = document.getElementById('paymentProofName');
+      const paymentProofNisnEl = document.getElementById('paymentProofNisn');
+      const paymentProofAmountEl = document.getElementById('paymentProofAmount');
+      const paymentProofMethodEl = document.getElementById('paymentProofMethod');
+      const paymentProofUploadedEl = document.getElementById('paymentProofUploadedAt');
+      const paymentProofVerifiedEl = document.getElementById('paymentProofVerifiedAt');
+      const paymentProofStatusChip = document.getElementById('paymentProofStatusChip');
+      const paymentProofStatusText = document.getElementById('paymentProofStatusText');
+      const paymentProofNoteEl = document.getElementById('paymentProofNote');
 
-        const getStatusConfig = () => ({
-          PENDING: {
-            label: T('cekStatus.status.labels.pending'),
-            icon: 'bi-hourglass-split',
-            badgeClass: 'bg-yellow-500',
-            textClass: 'text-yellow-500'
-          },
-          DIPROSES: {
-            label: T('cekStatus.status.labels.processing'),
-            icon: 'bi-clock-fill',
-            badgeClass: 'bg-blue-600',
-            textClass: 'text-blue-600'
-          },
-          PROCESSING: {
-            label: T('cekStatus.status.labels.processing'),
-            icon: 'bi-clock-fill',
-            badgeClass: 'bg-blue-600',
-            textClass: 'text-blue-600'
-          },
-          REVISI: {
-            label: T('cekStatus.status.labels.revision'),
-            icon: 'bi-exclamation-triangle-fill',
-            badgeClass: 'bg-orange-600',
-            textClass: 'text-orange-600'
-          },
-          DITERIMA: {
-            label: T('cekStatus.status.labels.accepted'),
-            icon: 'bi-check-circle-fill',
-            badgeClass: 'bg-green-600',
-            textClass: 'text-green-600'
-          },
-          TERVERIFIKASI: {
-            label: T('cekStatus.status.labels.accepted'),
-            icon: 'bi-check-circle-fill',
-            badgeClass: 'bg-green-600',
-            textClass: 'text-green-600'
-          },
-          VERIFIED: {
-            label: T('cekStatus.status.labels.accepted'),
-            icon: 'bi-check-circle-fill',
-            badgeClass: 'bg-green-600',
-            textClass: 'text-green-600'
-          },
-          PAYMENT_PENDING: {
-            label: T('cekStatus.status.labels.paymentPending'),
-            icon: 'bi-cash-coin',
-            badgeClass: 'bg-amber-500',
-            textClass: 'text-amber-600'
-          },
-          AWAITING_PAYMENT: {
-            label: T('cekStatus.status.labels.awaitingPayment'),
-            icon: 'bi-cash-stack',
-            badgeClass: 'bg-amber-500',
-            textClass: 'text-amber-600'
-          },
-          PAYMENT_REJECTED: {
-            label: T('cekStatus.status.labels.paymentRejected'),
-            icon: 'bi-x-octagon-fill',
-            badgeClass: 'bg-red-600',
-            textClass: 'text-red-600'
-          },
-          DITOLAK: {
-            label: T('cekStatus.status.labels.rejected'),
-            icon: 'bi-x-circle-fill',
-            badgeClass: 'bg-red-600',
-            textClass: 'text-red-600'
-          },
-          REJECTED: {
-            label: T('cekStatus.status.labels.rejected'),
-            icon: 'bi-x-circle-fill',
-            badgeClass: 'bg-red-600',
-            textClass: 'text-red-600'
-          }
-        });
+      const T = (key, replacements) => (typeof window.__ === 'function' ? window.__(key, replacements) : key);
+      const applyTranslations = (root) => {
+        if (typeof window.__applyTranslations === 'function') {
+          window.__applyTranslations(root || document);
+        }
+      };
+      const getLocale = () => {
+        const lang = typeof window.__lang === 'function' ? window.__lang() : (document.documentElement.getAttribute('lang') || 'id');
+        return lang.toLowerCase().startsWith('en') ? 'en-US' : 'id-ID';
+      };
+      const formatDate = (value) => {
+        if (!value) return '-';
+        try {
+          return new Intl.DateTimeFormat(getLocale(), { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(value));
+        } catch {
+          return value;
+        }
+      };
+      const formatDateTime = (value) => {
+        if (!value) return '-';
+        try {
+          return new Intl.DateTimeFormat(getLocale(), { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }).format(new Date(value));
+        } catch {
+          return value;
+        }
+      };
+      const formatCurrency = (value) => {
+        if (value === null || value === undefined || value === '') return '-';
+        const numeric = Number(value);
+        const amount = Number.isFinite(numeric) ? numeric : Number(String(value).replace(/[^\d]/g, ''));
+        if (!Number.isFinite(amount)) return String(value);
+        try {
+          return new Intl.NumberFormat(getLocale(), { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(amount);
+        } catch (error) {
+          return 'Rp ' + amount.toLocaleString('id-ID');
+        }
+      };
 
-        let latestPaymentData = null;
-        let latestPaymentOwner = null;
-        let latestPaymentImageUrl = '';
+      const normalizeStatus = (value) => {
+        if (value === null || value === undefined) return '';
+        try {
+          return value.toString().trim().toUpperCase().replace(/[\s_-]+/g, '');
+        } catch {
+          return '';
+        }
+      };
 
-        const toast = (type, message) => {
-          try {
-            if (window.toastr && typeof window.toastr[type] === 'function') {
-              window.toastr[type](message);
-              return;
-            }
-          } catch {}
-          alert(message);
-        };
+      const getStatusConfig = () => ({
+        PENDING: {
+          label: T('cekStatus.status.labels.pending'),
+          icon: 'bi-hourglass-split',
+          badgeClass: 'bg-yellow-500',
+          textClass: 'text-yellow-500'
+        },
+        DIPROSES: {
+          label: T('cekStatus.status.labels.processing'),
+          icon: 'bi-clock-fill',
+          badgeClass: 'bg-blue-600',
+          textClass: 'text-blue-600'
+        },
+        PROCESSING: {
+          label: T('cekStatus.status.labels.processing'),
+          icon: 'bi-clock-fill',
+          badgeClass: 'bg-blue-600',
+          textClass: 'text-blue-600'
+        },
+        REVISI: {
+          label: T('cekStatus.status.labels.revision'),
+          icon: 'bi-exclamation-triangle-fill',
+          badgeClass: 'bg-orange-600',
+          textClass: 'text-orange-600'
+        },
+        DITERIMA: {
+          label: T('cekStatus.status.labels.accepted'),
+          icon: 'bi-check-circle-fill',
+          badgeClass: 'bg-green-600',
+          textClass: 'text-green-600'
+        },
+        TERVERIFIKASI: {
+          label: T('cekStatus.status.labels.accepted'),
+          icon: 'bi-check-circle-fill',
+          badgeClass: 'bg-green-600',
+          textClass: 'text-green-600'
+        },
+        VERIFIED: {
+          label: T('cekStatus.status.labels.accepted'),
+          icon: 'bi-check-circle-fill',
+          badgeClass: 'bg-green-600',
+          textClass: 'text-green-600'
+        },
+        PAYMENT_PENDING: {
+          label: T('cekStatus.status.labels.paymentPending'),
+          icon: 'bi-cash-coin',
+          badgeClass: 'bg-amber-500',
+          textClass: 'text-amber-600'
+        },
+        AWAITING_PAYMENT: {
+          label: T('cekStatus.status.labels.awaitingPayment'),
+          icon: 'bi-cash-stack',
+          badgeClass: 'bg-amber-500',
+          textClass: 'text-amber-600'
+        },
+        PAYMENT_REJECTED: {
+          label: T('cekStatus.status.labels.paymentRejected'),
+          icon: 'bi-x-octagon-fill',
+          badgeClass: 'bg-red-600',
+          textClass: 'text-red-600'
+        },
+        DITOLAK: {
+          label: T('cekStatus.status.labels.rejected'),
+          icon: 'bi-x-circle-fill',
+          badgeClass: 'bg-red-600',
+          textClass: 'text-red-600'
+        },
+        REJECTED: {
+          label: T('cekStatus.status.labels.rejected'),
+          icon: 'bi-x-circle-fill',
+          badgeClass: 'bg-red-600',
+          textClass: 'text-red-600'
+        }
+      });
 
-        const getPaymentStatusDisplay = (statusValue) => {
-          const normalized = normalizeStatus(statusValue);
-          if (['VERIFIED', 'APPROVED', 'PAID', 'SUCCESS', 'COMPLETED', 'TERVERIFIKASI'].includes(normalized)) {
-            return {
-              label: T('cekStatus.status.labels.accepted'),
-              chipClass: 'bg-emerald-100 text-emerald-700 border border-emerald-200',
-              icon: 'bi-check-circle-fill'
-            };
+      let latestPaymentData = null;
+      let latestPaymentOwner = null;
+      let latestPaymentImageUrl = '';
+
+      const toast = (type, message) => {
+        try {
+          if (window.toastr && typeof window.toastr[type] === 'function') {
+            window.toastr[type](message);
+            return;
           }
-          if (['REJECTED', 'FAILED', 'DITOLAK', 'BATAL'].includes(normalized)) {
-            return {
-              label: T('cekStatus.status.labels.paymentRejected'),
-              chipClass: 'bg-rose-100 text-rose-700 border border-rose-200',
-              icon: 'bi-x-octagon-fill'
-            };
-          }
-          if (['PENDING', 'MENUNGGU', 'WAITING', 'PROCESSING', 'DIPROSES', 'MENUNGGU_VERIFIKASI'].includes(normalized)) {
-            return {
-              label: T('cekStatus.status.labels.paymentPending'),
-              chipClass: 'bg-amber-100 text-amber-700 border border-amber-200',
-              icon: 'bi-hourglass-split'
-            };
-          }
+        } catch { }
+        alert(message);
+      };
+
+      const getPaymentStatusDisplay = (statusValue) => {
+        const normalized = normalizeStatus(statusValue);
+        if (['VERIFIED', 'APPROVED', 'PAID', 'SUCCESS', 'COMPLETED', 'TERVERIFIKASI'].includes(normalized)) {
           return {
-            label: T('cekStatus.status.labels.awaitingPayment'),
-            chipClass: 'bg-slate-100 text-slate-700 border border-slate-200',
-            icon: 'bi-info-circle'
+            label: T('cekStatus.status.labels.accepted'),
+            chipClass: 'bg-emerald-100 text-emerald-700 border border-emerald-200',
+            icon: 'bi-check-circle-fill'
           };
+        }
+        if (['REJECTED', 'FAILED', 'DITOLAK', 'BATAL'].includes(normalized)) {
+          return {
+            label: T('cekStatus.status.labels.paymentRejected'),
+            chipClass: 'bg-rose-100 text-rose-700 border border-rose-200',
+            icon: 'bi-x-octagon-fill'
+          };
+        }
+        if (['PENDING', 'MENUNGGU', 'WAITING', 'PROCESSING', 'DIPROSES', 'MENUNGGU_VERIFIKASI'].includes(normalized)) {
+          return {
+            label: T('cekStatus.status.labels.paymentPending'),
+            chipClass: 'bg-amber-100 text-amber-700 border border-amber-200',
+            icon: 'bi-hourglass-split'
+          };
+        }
+        return {
+          label: T('cekStatus.status.labels.awaitingPayment'),
+          chipClass: 'bg-slate-100 text-slate-700 border border-slate-200',
+          icon: 'bi-info-circle'
         };
+      };
 
-        const hidePaymentProofModal = () => {
-          if (!paymentProofModal) return;
-          paymentProofModal.classList.remove('modal-visible');
-          paymentProofModal.classList.add('modal-hidden');
-        };
+      const hidePaymentProofModal = () => {
+        if (!paymentProofModal) return;
+        paymentProofModal.classList.remove('modal-visible');
+        paymentProofModal.classList.add('modal-hidden');
+      };
 
-        const updatePaymentContext = (owner, payment) => {
-          latestPaymentOwner = owner || null;
-          latestPaymentData = payment || null;
-          latestPaymentImageUrl = payment ? (payment.bukti_pembayaran || payment.bukti_bayar_url || '') : '';
-          if (!payment && paymentProofModal?.classList.contains('modal-visible')) {
-            hidePaymentProofModal();
-          }
-        };
+      const updatePaymentContext = (owner, payment) => {
+        latestPaymentOwner = owner || null;
+        latestPaymentData = payment || null;
+        latestPaymentImageUrl = payment ? (payment.bukti_pembayaran || payment.bukti_bayar_url || '') : '';
+        if (!payment && paymentProofModal?.classList.contains('modal-visible')) {
+          hidePaymentProofModal();
+        }
+      };
 
-        const showPaymentProofModal = () => {
-          if (!paymentProofModal) return;
-          if (!latestPaymentData) {
-            toast('info', T('cekStatus.payment.modal.toastNoData'));
-            return;
-          }
+      const showPaymentProofModal = () => {
+        if (!paymentProofModal) return;
+        if (!latestPaymentData) {
+          toast('info', T('cekStatus.payment.modal.toastNoData'));
+          return;
+        }
 
-          const ownerName = latestPaymentOwner?.nama || latestPaymentData.nama_lengkap || '-';
-          const ownerNisn = latestPaymentOwner?.nisn || latestPaymentData.nisn || latestPaymentData.nik || latestPaymentData.nikcalon || '-';
-          const amount = latestPaymentData.jumlah ? formatCurrency(latestPaymentData.jumlah) : '-';
-          const method = latestPaymentData.metode_pembayaran || T('cekStatus.payment.modal.methodFallback');
-          const uploadedAt = latestPaymentData.created_at || latestPaymentData.tanggal_upload || '';
-          const verifiedAt = latestPaymentData.verified_at || latestPaymentData.tanggal_verifikasi || '';
-          const note = latestPaymentData.catatan_admin && latestPaymentData.catatan_admin.trim().length
-            ? latestPaymentData.catatan_admin
-            : T('cekStatus.payment.modal.noteEmpty');
-          const statusDisplay = getPaymentStatusDisplay(latestPaymentData.status_pembayaran || latestPaymentData.status);
+        const ownerName = latestPaymentOwner?.nama || latestPaymentData.nama_lengkap || '-';
+        const ownerNisn = latestPaymentOwner?.nisn || latestPaymentData.nisn || latestPaymentData.nik || latestPaymentData.nikcalon || '-';
+        const amount = latestPaymentData.jumlah ? formatCurrency(latestPaymentData.jumlah) : '-';
+        const method = latestPaymentData.metode_pembayaran || T('cekStatus.payment.modal.methodFallback');
+        const uploadedAt = latestPaymentData.created_at || latestPaymentData.tanggal_upload || '';
+        const verifiedAt = latestPaymentData.verified_at || latestPaymentData.tanggal_verifikasi || '';
+        const note = latestPaymentData.catatan_admin && latestPaymentData.catatan_admin.trim().length
+          ? latestPaymentData.catatan_admin
+          : T('cekStatus.payment.modal.noteEmpty');
+        const statusDisplay = getPaymentStatusDisplay(latestPaymentData.status_pembayaran || latestPaymentData.status);
 
-          if (paymentProofNameEl) paymentProofNameEl.textContent = ownerName;
-          if (paymentProofNisnEl) paymentProofNisnEl.textContent = ownerNisn;
-          if (paymentProofAmountEl) paymentProofAmountEl.textContent = amount;
-          if (paymentProofMethodEl) paymentProofMethodEl.textContent = method;
-          if (paymentProofUploadedEl) paymentProofUploadedEl.textContent = uploadedAt ? formatDateTime(uploadedAt) : '-';
-          if (paymentProofVerifiedEl) paymentProofVerifiedEl.textContent = verifiedAt ? formatDateTime(verifiedAt) : '-';
-          if (paymentProofNoteEl) paymentProofNoteEl.textContent = note;
+        if (paymentProofNameEl) paymentProofNameEl.textContent = ownerName;
+        if (paymentProofNisnEl) paymentProofNisnEl.textContent = ownerNisn;
+        if (paymentProofAmountEl) paymentProofAmountEl.textContent = amount;
+        if (paymentProofMethodEl) paymentProofMethodEl.textContent = method;
+        if (paymentProofUploadedEl) paymentProofUploadedEl.textContent = uploadedAt ? formatDateTime(uploadedAt) : '-';
+        if (paymentProofVerifiedEl) paymentProofVerifiedEl.textContent = verifiedAt ? formatDateTime(verifiedAt) : '-';
+        if (paymentProofNoteEl) paymentProofNoteEl.textContent = note;
 
-          if (paymentProofStatusChip) {
-            paymentProofStatusChip.className = `inline-flex items-center gap-2 text-sm font-semibold px-3 py-1 rounded-full ${statusDisplay.chipClass}`;
-          }
-          if (paymentProofStatusText) paymentProofStatusText.textContent = statusDisplay.label;
-          if (paymentProofStatusChip) {
-            const iconEl = paymentProofStatusChip.querySelector('i');
-            if (iconEl) iconEl.className = `bi ${statusDisplay.icon}`;
-          }
+        if (paymentProofStatusChip) {
+          paymentProofStatusChip.className = `inline-flex items-center gap-2 text-sm font-semibold px-3 py-1 rounded-full ${statusDisplay.chipClass}`;
+        }
+        if (paymentProofStatusText) paymentProofStatusText.textContent = statusDisplay.label;
+        if (paymentProofStatusChip) {
+          const iconEl = paymentProofStatusChip.querySelector('i');
+          if (iconEl) iconEl.className = `bi ${statusDisplay.icon}`;
+        }
 
-          const hasImage = Boolean(latestPaymentImageUrl);
-          if (paymentProofImage && hasImage) {
-            paymentProofImage.src = latestPaymentImageUrl;
-            paymentProofImage.classList.remove('hidden');
-          }
-          if (paymentProofImage && !hasImage) {
-            paymentProofImage.src = '';
-            paymentProofImage.classList.add('hidden');
-          }
-          if (paymentProofImageEmpty) {
-            paymentProofImageEmpty.classList.toggle('hidden', hasImage);
-          }
-          if (paymentProofOpenImage) {
-            paymentProofOpenImage.disabled = !hasImage;
-          }
+        const hasImage = Boolean(latestPaymentImageUrl);
+        if (paymentProofImage && hasImage) {
+          paymentProofImage.src = latestPaymentImageUrl;
+          paymentProofImage.classList.remove('hidden');
+        }
+        if (paymentProofImage && !hasImage) {
+          paymentProofImage.src = '';
+          paymentProofImage.classList.add('hidden');
+        }
+        if (paymentProofImageEmpty) {
+          paymentProofImageEmpty.classList.toggle('hidden', hasImage);
+        }
+        if (paymentProofOpenImage) {
+          paymentProofOpenImage.disabled = !hasImage;
+        }
 
-          paymentProofModal.classList.remove('modal-hidden');
-          paymentProofModal.classList.add('modal-visible');
-          applyTranslations(paymentProofModal);
-        };
+        paymentProofModal.classList.remove('modal-hidden');
+        paymentProofModal.classList.add('modal-visible');
+        applyTranslations(paymentProofModal);
+      };
 
-        const removeDynamicElements = () => {
-          modalEl?.querySelectorAll('[data-dynamic="true"]').forEach((el) => el.remove());
-        };
+      const removeDynamicElements = () => {
+        modalEl?.querySelectorAll('[data-dynamic="true"]').forEach((el) => el.remove());
+      };
 
-        const insertBeforeInfoCard = (html) => {
-          if (!html || !statusResultContainer) return;
-          const firstCard = statusResultContainer.querySelector('.bg-white.rounded-xl');
-          if (firstCard) {
-            firstCard.insertAdjacentHTML('beforebegin', html);
-          } else {
-            statusResultContainer.insertAdjacentHTML('afterbegin', html);
-          }
-        };
+      const insertBeforeInfoCard = (html) => {
+        if (!html || !statusResultContainer) return;
+        const firstCard = statusResultContainer.querySelector('.bg-white.rounded-xl');
+        if (firstCard) {
+          firstCard.insertAdjacentHTML('beforebegin', html);
+        } else {
+          statusResultContainer.insertAdjacentHTML('afterbegin', html);
+        }
+      };
 
-        const insertAfterStatusSection = (html) => {
-          if (!html || !statusCatatanSection) return;
-          statusCatatanSection.insertAdjacentHTML('afterend', html);
-        };
+      const insertAfterStatusSection = (html) => {
+        if (!html || !statusCatatanSection) return;
+        statusCatatanSection.insertAdjacentHTML('afterend', html);
+      };
 
-        paymentProofModal?.querySelectorAll('[data-close-payment-modal]').forEach((el) => {
-          el.addEventListener('click', (event) => {
-            event.preventDefault();
-            hidePaymentProofModal();
-          });
-        });
-
-        paymentProofOpenImage?.addEventListener('click', (event) => {
+      paymentProofModal?.querySelectorAll('[data-close-payment-modal]').forEach((el) => {
+        el.addEventListener('click', (event) => {
           event.preventDefault();
-          if (!latestPaymentImageUrl) {
-            toast('info', T('cekStatus.payment.modal.noImageToast'));
-            return;
-          }
-          window.open(latestPaymentImageUrl, '_blank', 'noopener');
+          hidePaymentProofModal();
         });
+      });
 
-        statusResultContainer?.addEventListener('click', (event) => {
-          const trigger = event.target.closest('[data-action="view-payment-proof"]');
-          if (trigger) {
-            event.preventDefault();
-            showPaymentProofModal();
-          }
-        });
+      paymentProofOpenImage?.addEventListener('click', (event) => {
+        event.preventDefault();
+        if (!latestPaymentImageUrl) {
+          toast('info', T('cekStatus.payment.modal.noImageToast'));
+          return;
+        }
+        window.open(latestPaymentImageUrl, '_blank', 'noopener');
+      });
 
-        document.addEventListener('keydown', (event) => {
-          if (event.key === 'Escape' && paymentProofModal?.classList.contains('modal-visible')) {
-            hidePaymentProofModal();
-          }
-        });
+      statusResultContainer?.addEventListener('click', (event) => {
+        const trigger = event.target.closest('[data-action="view-payment-proof"]');
+        if (trigger) {
+          event.preventDefault();
+          showPaymentProofModal();
+        }
+      });
 
-        let lastRender = null;
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && paymentProofModal?.classList.contains('modal-visible')) {
+          hidePaymentProofModal();
+        }
+      });
 
-        const buildPaymentSuccess = (data, payment) => `
+      let lastRender = null;
+
+      const buildPaymentSuccess = (data, payment) => `
           <div class="payment-notification status-extra mb-4 bg-gradient-to-r from-emerald-100 via-white to-emerald-50 border-3 border-emerald-300 rounded-xl p-6 shadow-xl" data-dynamic="true">
             <div class="flex flex-col md:flex-row items-start gap-4">
               <div class="flex-shrink-0">
@@ -1057,7 +1105,7 @@
           </div>
         `;
 
-        const buildPaymentRejected = (data, payment) => `
+      const buildPaymentRejected = (data, payment) => `
           <div class="payment-notification status-extra mb-4 bg-gradient-to-r from-orange-50 to-red-50 border-3 border-orange-400 rounded-xl p-6 shadow-xl" data-dynamic="true">
             <div class="flex flex-col md:flex-row items-start gap-4">
               <div class="flex-shrink-0">
@@ -1093,7 +1141,7 @@
           </div>
         `;
 
-        const buildPaymentPending = (data, payment) => `
+      const buildPaymentPending = (data, payment) => `
           <div class="payment-notification status-extra mb-4 bg-gradient-to-r from-yellow-50 to-amber-50 border-3 border-yellow-400 rounded-xl p-6 shadow-xl" data-dynamic="true">
             <div class="flex flex-col md:flex-row items-start gap-4">
               <div class="flex-shrink-0">
@@ -1131,7 +1179,7 @@
           </div>
         `;
 
-        const buildPaymentInstruction = (data) => `
+      const buildPaymentInstruction = (data) => `
           <div class="payment-notification status-extra mb-4 bg-gradient-to-r from-green-50 to-emerald-50 border-3 border-green-400 rounded-xl p-6 shadow-xl" data-dynamic="true">
             <div class="flex flex-col md:flex-row items-start gap-4">
               <div class="flex-shrink-0">
@@ -1157,7 +1205,7 @@
           </div>
         `;
 
-        const buildRevision = (data) => `
+      const buildRevision = (data) => `
           <div class="payment-notification status-extra mb-4 bg-gradient-to-r from-orange-50 to-amber-50 border-3 border-orange-400 rounded-xl p-6 shadow-xl" data-dynamic="true">
             <div class="flex flex-col md:flex-row items-start gap-4">
               <div class="flex-shrink-0">
@@ -1186,7 +1234,7 @@
           </div>
         `;
 
-        const buildRejection = () => `
+      const buildRejection = () => `
           <div class="payment-notification status-extra mb-4 bg-gradient-to-r from-red-50 to-rose-50 border-3 border-red-400 rounded-xl p-6 shadow-xl" data-dynamic="true">
             <div class="flex flex-col md:flex-row items-start gap-4">
               <div class="flex-shrink-0">
@@ -1209,7 +1257,7 @@
           </div>
         `;
 
-        const buildWaiting = () => `
+      const buildWaiting = () => `
           <div class="mt-3 bg-yellow-50 border-2 border-yellow-300 rounded-xl p-4 status-extra" data-dynamic="true">
             <div class="flex items-start gap-3">
               <i class="bi bi-hourglass-split text-yellow-600 text-2xl"></i>
@@ -1223,229 +1271,232 @@
           </div>
         `;
 
-        const showModal = () => {
-          if (!modalEl) return false;
-          modalEl.classList.remove('modal-hidden');
-          modalEl.classList.add('modal-visible');
-          if (window.Alpine && Alpine.store && Alpine.store('cek')) {
-            Alpine.store('cek').open = true;
+      const showModal = () => {
+        if (!modalEl) return false;
+        modalEl.classList.remove('modal-hidden');
+        modalEl.classList.add('modal-visible');
+        if (window.Alpine && Alpine.store && Alpine.store('cek')) {
+          Alpine.store('cek').open = true;
+        }
+        return true;
+      };
+
+      const renderStatus = (data, query, options = {}) => {
+        const { openModal = true } = options;
+        lastRender = { data, query };
+        removeDynamicElements();
+
+        statusErrorEl?.classList.add('hidden');
+        statusLoadingEl?.classList.add('hidden');
+        statusResultEl?.classList.remove('hidden');
+
+        const fallback = '-';
+
+        if (fieldNisnEl) fieldNisnEl.textContent = data.nisn || query || fallback;
+        if (fieldNamaEl) fieldNamaEl.textContent = data.nama || fallback;
+        if (fieldTempatLahirEl) fieldTempatLahirEl.textContent = data.tempatLahir || fallback;
+        if (fieldTanggalLahirEl) fieldTanggalLahirEl.textContent = formatDate(data.tanggalLahir);
+        if (fieldTanggalDaftarEl) fieldTanggalDaftarEl.textContent = formatDateTime(data.created_at || data.createdat);
+
+        const statusRaw = data.status ?? 'PENDING';
+        const statusKey = String(statusRaw).trim().toUpperCase();
+        const normalizedStatusKey = normalizeStatus(statusRaw) || 'PENDING';
+
+        catatanContainer?.querySelectorAll('.verified-info[data-dynamic="true"]').forEach((el) => el.remove());
+        if (catatanEl) {
+          const note = data.alasan && data.alasan.trim().length > 0 ? data.alasan : T('cekStatus.modal.noNotes');
+          catatanEl.textContent = note;
+          if (data.verified_by && data.verified_at) {
+            const verifiedInfo = document.createElement('div');
+            verifiedInfo.className = 'verified-info status-extra mt-2 text-sm text-gray-600';
+            verifiedInfo.setAttribute('data-dynamic', 'true');
+            verifiedInfo.innerHTML = `<i class="bi bi-person-check"></i> ${T('cekStatus.status.verifiedInfo', { admin: data.verified_by, datetime: formatDateTime(data.verified_at) })}`;
+            catatanEl.insertAdjacentElement('afterend', verifiedInfo);
           }
-          return true;
-        };
+        }
 
-        const renderStatus = (data, query, options = {}) => {
-          const { openModal = true } = options;
-          lastRender = { data, query };
-          removeDynamicElements();
+        const payment = data.pembayaran || null;
+        updatePaymentContext(data, payment);
+        const paymentStatusRaw = payment?.status_pembayaran ? payment.status_pembayaran.toString().trim() : '';
+        const paymentStatusNormalized = normalizeStatus(paymentStatusRaw);
 
-          statusErrorEl?.classList.add('hidden');
-          statusLoadingEl?.classList.add('hidden');
-          statusResultEl?.classList.remove('hidden');
+        const isStatusAccepted = /(DITERIMA|TERVERIFIKASI|VERIFIED)/.test(normalizedStatusKey);
 
-          const fallback = '-';
+        const paymentVerifiedStatuses = new Set([
+          'VERIFIED',
+          'APPROVED',
+          'SUCCESS',
+          'PAID',
+          'LUNAS',
+          'COMPLETED',
+          'TERVERIFIKASI',
+          'PAYMENT_VERIFIED',
+          'VERIFIKASI',
+          'VERIFIED_BY_ADMIN',
+          'SUDAH_DIVERIFIKASI',
+          'SUDAH_VERIFIKASI',
+          'SUDAH_VERIFIKASI_ADMIN',
+          'PEMBAYARAN_TERVERIFIKASI',
+          'PEMBAYARAN_VERIFIED',
+          'DISETUJUI',
+          'ACC'
+        ].map(normalizeStatus));
 
-          if (fieldNisnEl) fieldNisnEl.textContent = data.nisn || query || fallback;
-          if (fieldNamaEl) fieldNamaEl.textContent = data.nama || fallback;
-          if (fieldTempatLahirEl) fieldTempatLahirEl.textContent = data.tempatLahir || fallback;
-          if (fieldTanggalLahirEl) fieldTanggalLahirEl.textContent = formatDate(data.tanggalLahir);
-          if (fieldTanggalDaftarEl) fieldTanggalDaftarEl.textContent = formatDateTime(data.created_at || data.createdat);
+        const paymentRejectedStatuses = new Set([
+          'REJECTED',
+          'DITOLAK',
+          'PAYMENT_REJECTED',
+          'FAILED',
+          'GAGAL',
+          'DITOLAK_ADMIN',
+          'BATAL'
+        ].map(normalizeStatus));
 
-          const statusRaw = data.status ?? 'PENDING';
-          const statusKey = String(statusRaw).trim().toUpperCase();
-          const normalizedStatusKey = normalizeStatus(statusRaw) || 'PENDING';
+        const paymentPendingStatuses = new Set([
+          'PENDING',
+          'MENUNGGU',
+          'WAITING',
+          'IN_REVIEW',
+          'PROCESSING',
+          'PROSES',
+          'MENUNGGU_VERIFIKASI',
+          'ON_REVIEW',
+          'CHECKING',
+          'DIPROSES',
+          'DALAM_PROSES',
+          'MENUNGGU_KONFIRMASI'
+        ].map(normalizeStatus));
 
-          catatanContainer?.querySelectorAll('.verified-info[data-dynamic="true"]').forEach((el) => el.remove());
-          if (catatanEl) {
-            const note = data.alasan && data.alasan.trim().length > 0 ? data.alasan : T('cekStatus.modal.noNotes');
-            catatanEl.textContent = note;
-            if (data.verified_by && data.verified_at) {
-              const verifiedInfo = document.createElement('div');
-              verifiedInfo.className = 'verified-info status-extra mt-2 text-sm text-gray-600';
-              verifiedInfo.setAttribute('data-dynamic', 'true');
-              verifiedInfo.innerHTML = `<i class="bi bi-person-check"></i> ${T('cekStatus.status.verifiedInfo', { admin: data.verified_by, datetime: formatDateTime(data.verified_at) })}`;
-              catatanEl.insertAdjacentElement('afterend', verifiedInfo);
-            }
+        const isPaymentVerified = paymentVerifiedStatuses.has(paymentStatusNormalized);
+        const isPaymentRejected = paymentRejectedStatuses.has(paymentStatusNormalized);
+        const isPaymentPending = paymentPendingStatuses.has(paymentStatusNormalized);
+        const hasPaymentRecord = Boolean(payment);
+
+        const statusConfig = getStatusConfig();
+        let effectiveStatusKey = statusKey;
+
+        if (isPaymentVerified) {
+          effectiveStatusKey = 'VERIFIED';
+        } else if (hasPaymentRecord && isPaymentRejected) {
+          effectiveStatusKey = 'PAYMENT_REJECTED';
+        } else if (hasPaymentRecord && isPaymentPending) {
+          effectiveStatusKey = 'PAYMENT_PENDING';
+        } else if (isStatusAccepted && !hasPaymentRecord) {
+          effectiveStatusKey = 'AWAITING_PAYMENT';
+        } else if (normalizedStatusKey === 'REJECTED' || normalizedStatusKey === 'DITOLAK') {
+          effectiveStatusKey = 'REJECTED';
+        }
+
+        const config = statusConfig[effectiveStatusKey] || statusConfig[statusKey] || statusConfig[normalizedStatusKey] || statusConfig.PENDING;
+
+        statusIconEl.className = `bi ${config.icon} ${config.textClass}`;
+        statusBadgeEl.className = `px-4 py-2 rounded-full ${config.badgeClass} text-white`;
+        statusBadgeEl.textContent = config.label;
+        statusTextEl.className = `inline-block px-3 py-1 rounded ${config.badgeClass} text-white text-sm`;
+        statusTextEl.textContent = config.label;
+
+        if (isPaymentVerified) {
+          insertBeforeInfoCard(buildPaymentSuccess(data, payment));
+        } else if (hasPaymentRecord && isPaymentRejected) {
+          insertBeforeInfoCard(buildPaymentRejected(data, payment));
+        } else if (hasPaymentRecord && isPaymentPending) {
+          insertBeforeInfoCard(buildPaymentPending(data, payment));
+        } else if (isStatusAccepted && !hasPaymentRecord) {
+          insertBeforeInfoCard(buildPaymentInstruction(data));
+        } else if (normalizedStatusKey === 'REVISI') {
+          insertBeforeInfoCard(buildRevision(data));
+        } else if (normalizedStatusKey === 'DITOLAK' || normalizedStatusKey === 'REJECTED') {
+          insertBeforeInfoCard(buildRejection());
+        } else {
+          insertAfterStatusSection(buildWaiting());
+        }
+
+        if (openModal && !showModal()) {
+          toast('error', T('form.messages.alertModalMissing'));
+        }
+
+        applyTranslations(modalEl);
+      };
+
+      input?.addEventListener('keydown', (e) => {
+        if (e.key == 'Enter') {
+          e.preventDefault();
+          btn?.click();
+        }
+      });
+
+      btn?.addEventListener('click', async () => {
+        const nisnValue = input.value?.trim();
+
+        if (!/^\d{10}$/.test(nisnValue)) {
+          toast('error', T('cekStatus.toasts.invalidNisn'));
+          return;
+        }
+
+        const originalHTML = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = `<span class="inline-block animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></span>${T('cekStatus.form.checking')}`;
+
+        statusErrorEl?.classList.add('hidden');
+        statusResultEl?.classList.add('hidden');
+        statusLoadingEl?.classList.remove('hidden');
+
+        try {
+          const cacheBuster = Date.now();
+          const controller = new AbortController();
+          const timeout = setTimeout(() => controller.abort(), 12000);
+          const response = await fetch(`/api/pendaftar_cek_status?nisn=${encodeURIComponent(nisnValue)}&_t=${cacheBuster}`, { signal: controller.signal });
+          clearTimeout(timeout);
+
+          const json = await response.json();
+          if (!response.ok || !json?.ok) {
+            throw new Error(json?.error || `HTTP ${response.status}`);
           }
 
-          const payment = data.pembayaran || null;
-          updatePaymentContext(data, payment);
-          const paymentStatusRaw = payment?.status_pembayaran ? payment.status_pembayaran.toString().trim() : '';
-          const paymentStatusNormalized = normalizeStatus(paymentStatusRaw);
-
-          const isStatusAccepted = /(DITERIMA|TERVERIFIKASI|VERIFIED)/.test(normalizedStatusKey);
-
-          const paymentVerifiedStatuses = new Set([
-            'VERIFIED',
-            'APPROVED',
-            'SUCCESS',
-            'PAID',
-            'LUNAS',
-            'COMPLETED',
-            'TERVERIFIKASI',
-            'PAYMENT_VERIFIED',
-            'VERIFIKASI',
-            'VERIFIED_BY_ADMIN',
-            'SUDAH_DIVERIFIKASI',
-            'SUDAH_VERIFIKASI',
-            'SUDAH_VERIFIKASI_ADMIN',
-            'PEMBAYARAN_TERVERIFIKASI',
-            'PEMBAYARAN_VERIFIED',
-            'DISETUJUI',
-            'ACC'
-          ].map(normalizeStatus));
-
-          const paymentRejectedStatuses = new Set([
-            'REJECTED',
-            'DITOLAK',
-            'PAYMENT_REJECTED',
-            'FAILED',
-            'GAGAL',
-            'DITOLAK_ADMIN',
-            'BATAL'
-          ].map(normalizeStatus));
-
-          const paymentPendingStatuses = new Set([
-            'PENDING',
-            'MENUNGGU',
-            'WAITING',
-            'IN_REVIEW',
-            'PROCESSING',
-            'PROSES',
-            'MENUNGGU_VERIFIKASI',
-            'ON_REVIEW',
-            'CHECKING',
-            'DIPROSES',
-            'DALAM_PROSES',
-            'MENUNGGU_KONFIRMASI'
-          ].map(normalizeStatus));
-
-          const isPaymentVerified = paymentVerifiedStatuses.has(paymentStatusNormalized);
-          const isPaymentRejected = paymentRejectedStatuses.has(paymentStatusNormalized);
-          const isPaymentPending = paymentPendingStatuses.has(paymentStatusNormalized);
-          const hasPaymentRecord = Boolean(payment);
-
-          const statusConfig = getStatusConfig();
-          let effectiveStatusKey = statusKey;
-
-          if (isPaymentVerified) {
-            effectiveStatusKey = 'VERIFIED';
-          } else if (hasPaymentRecord && isPaymentRejected) {
-            effectiveStatusKey = 'PAYMENT_REJECTED';
-          } else if (hasPaymentRecord && isPaymentPending) {
-            effectiveStatusKey = 'PAYMENT_PENDING';
-          } else if (isStatusAccepted && !hasPaymentRecord) {
-            effectiveStatusKey = 'AWAITING_PAYMENT';
-          } else if (normalizedStatusKey === 'REJECTED' || normalizedStatusKey === 'DITOLAK') {
-            effectiveStatusKey = 'REJECTED';
-          }
-
-          const config = statusConfig[effectiveStatusKey] || statusConfig[statusKey] || statusConfig[normalizedStatusKey] || statusConfig.PENDING;
-
-          statusIconEl.className = `bi ${config.icon} ${config.textClass}`;
-          statusBadgeEl.className = `px-4 py-2 rounded-full ${config.badgeClass} text-white`;
-          statusBadgeEl.textContent = config.label;
-          statusTextEl.className = `inline-block px-3 py-1 rounded ${config.badgeClass} text-white text-sm`;
-          statusTextEl.textContent = config.label;
-
-          if (isPaymentVerified) {
-            insertBeforeInfoCard(buildPaymentSuccess(data, payment));
-          } else if (hasPaymentRecord && isPaymentRejected) {
-            insertBeforeInfoCard(buildPaymentRejected(data, payment));
-          } else if (hasPaymentRecord && isPaymentPending) {
-            insertBeforeInfoCard(buildPaymentPending(data, payment));
-          } else if (isStatusAccepted && !hasPaymentRecord) {
-            insertBeforeInfoCard(buildPaymentInstruction(data));
-          } else if (normalizedStatusKey === 'REVISI') {
-            insertBeforeInfoCard(buildRevision(data));
-          } else if (normalizedStatusKey === 'DITOLAK' || normalizedStatusKey === 'REJECTED') {
-            insertBeforeInfoCard(buildRejection());
-          } else {
-            insertAfterStatusSection(buildWaiting());
-          }
-
-          if (openModal && !showModal()) {
-            toast('error', T('form.messages.alertModalMissing'));
-          }
-
-          applyTranslations(modalEl);
-        };
-
-        input?.addEventListener('keydown', (e) => {
-          if (e.key == 'Enter') {
-            e.preventDefault();
-            btn?.click();
-          }
-        });
-
-        btn?.addEventListener('click', async () => {
-          const nisnValue = input.value?.trim();
-
-          if (!/^\d{10}$/.test(nisnValue)) {
-            toast('error', T('cekStatus.toasts.invalidNisn'));
+          if (!json.data) {
+            statusLoadingEl?.classList.add('hidden');
+            toast('warning', T('cekStatus.toasts.notFound'));
             return;
           }
 
-          const originalHTML = btn.innerHTML;
-          btn.disabled = true;
-          btn.innerHTML = `<span class="inline-block animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></span>${T('cekStatus.form.checking')}`;
-
-          statusErrorEl?.classList.add('hidden');
+          renderStatus(json.data, nisnValue, { openModal: true });
+        } catch (error) {
+          console.error('[CEK_STATUS] Error:', error);
+          statusLoadingEl?.classList.add('hidden');
           statusResultEl?.classList.add('hidden');
-          statusLoadingEl?.classList.remove('hidden');
-
-          try {
-            const cacheBuster = Date.now();
-            const controller = new AbortController();
-            const timeout = setTimeout(() => controller.abort(), 12000);
-            const response = await fetch(`/api/pendaftar_cek_status?nisn=${encodeURIComponent(nisnValue)}&_t=${cacheBuster}`, { signal: controller.signal });
-            clearTimeout(timeout);
-
-            const json = await response.json();
-            if (!response.ok || !json?.ok) {
-              throw new Error(json?.error || `HTTP ${response.status}`);
-            }
-
-            if (!json.data) {
-              statusLoadingEl?.classList.add('hidden');
-              toast('warning', T('cekStatus.toasts.notFound'));
-              return;
-            }
-
-            renderStatus(json.data, nisnValue, { openModal: true });
-          } catch (error) {
-            console.error('[CEK_STATUS] Error:', error);
-            statusLoadingEl?.classList.add('hidden');
-            statusResultEl?.classList.add('hidden');
-            if (statusErrorMsgEl) {
-              statusErrorMsgEl.textContent = error?.message || T('cekStatus.modal.error.generic');
-            }
-            statusErrorEl?.classList.remove('hidden');
-            toast('error', error?.message || T('cekStatus.toasts.genericError'));
-          } finally {
-            btn.disabled = false;
-            btn.innerHTML = originalHTML;
-            applyTranslations(btn);
+          if (statusErrorMsgEl) {
+            statusErrorMsgEl.textContent = error?.message || T('cekStatus.modal.error.generic');
           }
-        });
-
-        document.addEventListener('i18n:lang-changed', () => {
-          applyTranslations(document.body);
-          if (lastRender) {
-            const isModalVisible = modalEl?.classList.contains('modal-visible');
-            renderStatus(lastRender.data, lastRender.query, { openModal: isModalVisible });
-          }
-        });
+          statusErrorEl?.classList.remove('hidden');
+          toast('error', error?.message || T('cekStatus.toasts.genericError'));
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = originalHTML;
+          applyTranslations(btn);
+        }
       });
 
-    </script>
-    <!-- FOOTER -->
-    <footer class="bg-white text-gray-600 py-6 shadow-2xl border-t border-gray-200 mt-auto">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <p class="text-sm"><span data-i18n="footer.copyright">© 2025/2026 Pondok Pesantren Al Ikhsan Beji. All rights reserved.</span> <span class="hidden sm:inline" data-i18n="footer.credit">Development by Tim IT Pesantren</span></p>
-      </div>
-    </footer>
-    <script src="/assets/js/navbar.js" defer></script>
-    <script src="/assets/js/pwa.js" defer></script>
+      document.addEventListener('i18n:lang-changed', () => {
+        applyTranslations(document.body);
+        if (lastRender) {
+          const isModalVisible = modalEl?.classList.contains('modal-visible');
+          renderStatus(lastRender.data, lastRender.query, { openModal: isModalVisible });
+        }
+      });
+    });
+
+  </script>
+  <!-- FOOTER -->
+  <footer class="bg-white text-gray-600 py-6 shadow-2xl border-t border-gray-200 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <p class="text-sm"><span data-i18n="footer.copyright">© 2025/2026 Pondok Pesantren Al Ikhsan Beji. All rights
+          reserved.</span> <span class="hidden sm:inline" data-i18n="footer.credit">Development by Tim IT
+          Pesantren</span></p>
+    </div>
+  </footer>
+  <script src="/assets/js/navbar.js" defer></script>
+  <script src="/assets/js/pwa.js" defer></script>
   <script src="/assets/js/install-button.js" defer></script>
-  </body>
+</body>
+
 </html>

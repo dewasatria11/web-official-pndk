@@ -29,6 +29,7 @@ def detect_file_type(filename):
         "Akta Kelahiran": ["akta", "akte", "kelahiran"],
         "Pas Foto 3x4": ["foto", "pasfoto", "pas-foto", "3x4"],
         "BPJS": ["bpjs", "kartu-bpjs"],
+        "Kartu Keluarga": ["kk", "kartu-keluarga", "kartukeluarga"],
     }
     
     for folder, keywords in type_map.items():

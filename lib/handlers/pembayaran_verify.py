@@ -21,6 +21,13 @@ def _dedupe(values: List[str]) -> List[str]:
     return result
 
 class handler(BaseHTTPRequestHandler):
+    def send_json_response(self, status_code: int, payload: dict) -> None:
+        self.send_response(status_code)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.end_headers()
+        self.wfile.write(json.dumps(payload).encode())
+
     def do_POST(self):
         try:
             # Read request body
@@ -36,7 +43,7 @@ class handler(BaseHTTPRequestHandler):
             ).strip()
 
             if not raw_identifier:
-                self._send_json(400, {"error": "Identifier (NISN / NIK) wajib diisi"})
+                self.send_json_response(400, {"error": "Identifier (NISN / NIK) wajib diisi"})
                 return
 
             normalized_identifier = _normalize_digits(raw_identifier)
@@ -45,7 +52,7 @@ class handler(BaseHTTPRequestHandler):
             )
 
             if not normalized_identifier or len(normalized_identifier) not in (10, 16):
-                self._send_json(
+                self.send_json_response(
                     400,
                     {
                         "error": "Identifier tidak valid. Gunakan NISN (10 digit) atau NIK (16 digit)"
@@ -54,13 +61,13 @@ class handler(BaseHTTPRequestHandler):
                 return
 
             if "status" not in data or not data["status"]:
-                self._send_json(400, {"error": "status is required"})
+                self.send_json_response(400, {"error": "status is required"})
                 return
 
             valid_statuses = ["VERIFIED", "REJECTED"]
             status = str(data["status"]).upper()
             if status not in valid_statuses:
-                self._send_json(
+                self.send_json_response(
                     400,
                     {
                         "error": f"Invalid status. Must be one of: {', '.join(valid_statuses)}"
@@ -102,14 +109,14 @@ class handler(BaseHTTPRequestHandler):
                     break
 
             if not payment_row:
-                self._send_json(
+                self.send_json_response(
                     404, {"error": "Pembayaran dengan NISN/NIK tersebut tidak ditemukan"}
                 )
                 return
 
             payment_id = payment_row.get("id")
             if not payment_id:
-                self._send_json(500, {"error": "Data pembayaran tidak lengkap (ID kosong)"})
+                self.send_json_response(500, {"error": "Data pembayaran tidak lengkap (ID kosong)"})
                 return
 
             verified_by = data.get("verified_by", data.get("verifiedBy", "admin"))
@@ -126,7 +133,7 @@ class handler(BaseHTTPRequestHandler):
             )
 
             if not update_result.data:
-                self._send_json(500, {"error": "Gagal memperbarui data pembayaran"})
+                self.send_json_response(500, {"error": "Gagal memperbarui data pembayaran"})
                 return
 
             pendaftar_updated = False
@@ -184,7 +191,7 @@ class handler(BaseHTTPRequestHandler):
                 except Exception as update_err:
                     print(f"Warning: Gagal update status pendaftar: {update_err}")
 
-            self._send_json(
+            self.send_json_response(
                 200,
                 {
                     "message": f"Pembayaran berhasil di{status.lower()}",
@@ -196,7 +203,7 @@ class handler(BaseHTTPRequestHandler):
 
         except Exception as e:
             print(f"Error in pembayaran_verify: {str(e)}")
-            self._send_json(500, {"error": str(e)})
+            self.send_json_response(500, {"error": str(e)})
 
     def do_OPTIONS(self):
         self.send_response(200)
@@ -204,10 +211,3 @@ class handler(BaseHTTPRequestHandler):
         self.send_header("Access-Control-Allow-Methods", "POST, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
         self.end_headers()
-
-    def _send_json(self, status_code: int, payload: dict) -> None:
-        self.send_response(status_code)
-        self.send_header("Content-Type", "application/json")
-        self.send_header("Access-Control-Allow-Origin", "*")
-        self.end_headers()
-        self.wfile.write(json.dumps(payload).encode())
