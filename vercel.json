@@ -150,6 +150,10 @@
       "destination": "/api/index?action=admin_faq_upload"
     },
     {
+      "source": "/api/payment_settings",
+      "destination": "/api/index?action=payment_settings"
+    },
+    {
       "source": "/api/chat/search",
       "destination": "/api/index?action=chat_search"
     },

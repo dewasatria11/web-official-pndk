@@ -6024,6 +6024,26 @@ Jazakumullahu khairan,
   window.savePaymentSettings = savePaymentSettings;
   console.log("[ADMIN] Payment settings functions registered");
 
+  // QRIS Preview Handler
+  document.addEventListener("change", (e) => {
+    if (e.target && e.target.id === "payment-qris-file") {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const preview = document.getElementById("payment-qris-preview");
+          const noneMsg = document.getElementById("payment-qris-none");
+          if (preview && noneMsg) {
+            preview.src = e.target.result;
+            preview.style.display = "block";
+            noneMsg.style.display = "none";
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+  });
+
   /* =========================
      9) INIT
      ========================= */
