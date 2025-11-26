@@ -4732,7 +4732,7 @@ Jazakumullahu khairan,
   }
 
   async function handleBrosurFileChange(event) {
-    const input = event?.target;
+    const input = event?.target || document.getElementById("brosurFile");
     const file = input?.files?.[0];
     if (!file) {
       setBrosurUploadHelp("Unggah file PDF (maks 8MB). URL unduhan akan diisi otomatis setelah upload.");
@@ -4793,6 +4793,15 @@ Jazakumullahu khairan,
     } finally {
       if (input) input.disabled = false;
     }
+  }
+
+  async function triggerBrosurUpload() {
+    const input = document.getElementById("brosurFile");
+    if (!input || !input.files || !input.files[0]) {
+      safeToastr.warning("Pilih file PDF terlebih dahulu");
+      return;
+    }
+    await handleBrosurFileChange({ target: input });
   }
 
   /* ---------- Kontak ---------- */
@@ -5375,6 +5384,7 @@ Jazakumullahu khairan,
         );
       });
     $("#brosurFile")?.addEventListener("change", handleBrosurFileChange);
+    $("#btnUploadBrosur")?.addEventListener("click", triggerBrosurUpload);
     setBrosurActiveLang("id");
 
     $("#kontakForm")?.addEventListener("submit", handleKontakSubmit);

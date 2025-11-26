@@ -2436,7 +2436,12 @@
 
                     <div class="mb-3">
                       <label for="brosurFile" class="form-label">Upload PDF Brosur</label>
-                      <input type="file" class="form-control" id="brosurFile" accept="application/pdf">
+                      <div class="d-flex gap-2">
+                        <input type="file" class="form-control" id="brosurFile" accept="application/pdf">
+                        <button type="button" class="btn btn-outline-primary" id="btnUploadBrosur">
+                          <i class="bi bi-cloud-upload"></i> Upload
+                        </button>
+                      </div>
                       <small class="text-muted d-block mt-1" id="brosurUploadHelp">
                         Unggah file PDF (maks 8MB). URL unduhan akan diisi otomatis setelah upload.
                       </small>
