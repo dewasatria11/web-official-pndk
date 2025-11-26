@@ -177,6 +177,7 @@
     "heading": "Formulir Pendaftaran",
     "intro": "Silakan isi formulir di bawah ini dengan lengkap dan benar.",
     "sections": {
+      "registrationInfo": "Informasi Pendaftaran",
       "personal": "Data Pribadi Calon Siswa",
       "address": "Alamat",
       "education": "Pendidikan & Rencana",
@@ -184,6 +185,10 @@
       "documents": "Upload Berkas"
     },
     "fields": {
+      "gelombang": {
+        "label": "Gelombang Pendaftaran",
+        "placeholder": "Memuat gelombang..."
+      },
       "nik": {
         "label": "NIK Calon Siswa",
         "helper": "16 digit"

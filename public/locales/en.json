@@ -177,6 +177,7 @@
     "heading": "Registration Form",
     "intro": "Please complete the form below accurately.",
     "sections": {
+      "registrationInfo": "Registration Info",
       "personal": "Prospective Student Personal Data",
       "address": "Address",
       "education": "Education & Plan",
@@ -184,6 +185,10 @@
       "documents": "Upload Documents"
     },
     "fields": {
+      "gelombang": {
+        "label": "Period",
+        "placeholder": "Loading period..."
+      },
       "nik": {
         "label": "Student NIK",
         "helper": "16 digits"
