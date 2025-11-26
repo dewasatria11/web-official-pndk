@@ -230,16 +230,30 @@
     function appendMessage(text, sender) {
         const div = document.createElement('div');
         div.classList.add('message', sender);
-        // Convert newlines to <br> for bot messages
+
         if (sender === 'bot') {
-            div.innerHTML = text.replace(/\n/g, '<br>');
+            div.innerHTML = formatBotMessage(text);
         } else {
             div.textContent = text;
         }
 
-        // Insert before typing indicator
         messagesContainer.insertBefore(div, typingIndicator);
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    function formatBotMessage(text) {
+        const escaped = text
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+
+        const withLinks = escaped.replace(/(https?:\/\/[^\s<]+)/g, (url) => {
+            return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+        });
+
+        return withLinks.replace(/\n/g, '<br>');
     }
 
     sendBtn.addEventListener('click', sendMessage);
