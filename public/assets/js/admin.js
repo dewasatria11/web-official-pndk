@@ -4795,16 +4795,6 @@ Jazakumullahu khairan,
     }
   }
 
-  async function triggerBrosurUpload() {
-    const input = document.getElementById("brosurFile");
-    if (!input || !input.files || !input.files[0]) {
-      safeToastr.warning("Pilih file PDF terlebih dahulu");
-      return;
-    }
-    console.log("[BROSUR] Manual upload trigger clicked");
-    await handleBrosurFileChange({ target: input });
-  }
-
   /* ---------- Kontak ---------- */
   const getKontakInput = (field, lang) =>
     document.getElementById(`kontak${capitalize(field)}_${lang}`);
@@ -5375,18 +5365,17 @@ Jazakumullahu khairan,
       });
     setBiayaActiveLang("id");
 
-    $("#brosurForm")?.addEventListener("submit", handleBrosurSubmit);
-    $("#btnResetBrosur")?.addEventListener("click", resetBrosurForm);
-    document
-      .querySelectorAll("[data-brosur-lang-button]")
-      .forEach((button) => {
+  $("#brosurForm")?.addEventListener("submit", handleBrosurSubmit);
+  $("#btnResetBrosur")?.addEventListener("click", resetBrosurForm);
+  document
+    .querySelectorAll("[data-brosur-lang-button]")
+    .forEach((button) => {
         button.addEventListener("click", () =>
           setBrosurActiveLang(button.dataset.brosurLangButton)
         );
       });
-    $("#brosurFile")?.addEventListener("change", handleBrosurFileChange);
-    $("#btnUploadBrosur")?.addEventListener("click", triggerBrosurUpload);
-    setBrosurActiveLang("id");
+  $("#brosurFile")?.addEventListener("change", handleBrosurFileChange);
+  setBrosurActiveLang("id");
 
     $("#kontakForm")?.addEventListener("submit", handleKontakSubmit);
     $("#btnResetKontak")?.addEventListener("click", resetKontakForm);
