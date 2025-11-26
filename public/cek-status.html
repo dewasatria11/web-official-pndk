@@ -230,6 +230,7 @@
       padding: 70px 16px 80px;
       background: linear-gradient(180deg, #047857 0%, #10b981 100%);
       overflow: hidden;
+      z-index: 0;
     }
 
     .hero-inner {
@@ -321,6 +322,18 @@
         margin-top: 32px;
         margin-bottom: 32px;
       }
+    }
+
+    /* Pastikan konten utama berada di atas hero untuk mencegah overlap */
+    #cek-status-form {
+      position: relative;
+      z-index: 10;
+      background: #f8fafc;
+      margin-top: -40px;
+      padding-top: 48px;
+      padding-bottom: 32px;
+      border-radius: 24px 24px 0 0;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     }
   </style>
 </head>
