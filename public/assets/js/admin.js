@@ -4801,6 +4801,7 @@ Jazakumullahu khairan,
       safeToastr.warning("Pilih file PDF terlebih dahulu");
       return;
     }
+    console.log("[BROSUR] Manual upload trigger clicked");
     await handleBrosurFileChange({ target: input });
   }
 
