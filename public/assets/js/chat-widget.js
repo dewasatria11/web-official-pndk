@@ -121,6 +121,12 @@
       border: 1px solid #e5e7eb;
       border-bottom-left-radius: 2px;
     }
+    .message.bot a {
+      color: #047857;
+      text-decoration: underline;
+      word-break: break-all;
+      pointer-events: auto;
+    }
     .typing-indicator {
       display: none;
       align-self: flex-start;
@@ -249,7 +255,7 @@
             .replace(/"/g, '&quot;')
             .replace(/'/g, '&#39;');
 
-        const withLinks = escaped.replace(/(https?:\/\/[^\s<]+)/g, (url) => {
+        const withLinks = escaped.replace(/\bhttps?:\/\/[^\s<>"')]+/g, (url) => {
             return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
         });
 
