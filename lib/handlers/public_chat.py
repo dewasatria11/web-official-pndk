@@ -19,7 +19,8 @@ def handle_chat_search(supa, query_text):
         except (TypeError, ValueError):
             top_score = 0
 
-        return matches if top_score > 0.25 else []
+        # Lebih toleran agar query pendek seperti "cara daftar" tetap lolos
+        return matches if top_score >= 0.15 else []
     except Exception as e:
         print(f"Error searching FAQ: {e}")
         return []
