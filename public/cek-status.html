@@ -324,6 +324,32 @@
       }
     }
 
+    /* Backdrop + scroll handling supaya modal tidak menimpa konten lain */
+    .modal-layer {
+      position: fixed;
+      inset: 0;
+      padding: 24px 16px;
+      align-items: flex-start;
+      overflow-y: auto;
+      background: rgba(15, 23, 42, 0.5);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+
+    @media (min-width: 768px) {
+      .modal-layer {
+        padding: 56px 24px 32px;
+      }
+    }
+
+    body.modal-open {
+      overflow: hidden;
+    }
+
+    #statusResult .status-extra + .status-extra {
+      margin-top: 12px;
+    }
+
     /* Pastikan konten utama berada di atas hero untuk mencegah overlap */
     #cek-status-form {
       position: relative;
@@ -543,17 +569,14 @@
   </main>
 
   <!-- Modal: Hasil Cek Status -->
-  <div id="modalCekStatus" class="modal-hidden fixed inset-0 z-[1000] flex items-center justify-center">
-    <div class="absolute inset-0 bg-black/70"
-      onclick="document.getElementById('modalCekStatus').classList.remove('modal-visible'); document.getElementById('modalCekStatus').classList.add('modal-hidden');">
-    </div>
+  <div id="modalCekStatus" class="modal-hidden modal-layer z-[1000] flex items-center justify-center">
+    <div class="absolute inset-0 bg-black/70" onclick="window.closeStatusModal()"></div>
     <div class="relative bg-white rounded-2xl shadow-2xl max-w-3xl w-[92vw] max-h-[85vh] overflow-y-auto modal-panel">
       <div
         class="px-6 py-4 bg-gradient-to-br from-brand-700 to-brand-800 text-white rounded-t-2xl flex items-center justify-between">
         <h5 class="font-semibold"><i class="bi bi-clipboard-check"></i> <span data-i18n="cekStatus.modal.title">Hasil
             Cek Status Pendaftaran</span></h5>
-        <button class="text-white/90 hover:text-white"
-          onclick="document.getElementById('modalCekStatus').classList.remove('modal-visible'); document.getElementById('modalCekStatus').classList.add('modal-hidden');"><i
+        <button class="text-white/90 hover:text-white" onclick="window.closeStatusModal()"><i
             class="bi bi-x-lg"></i></button>
       </div>
       <div class="p-6">
@@ -626,7 +649,7 @@
       <div class="px-6 py-4 border-t border-gray-100 rounded-b-2xl flex justify-end">
         <button type="button"
           class="inline-flex items-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-800 px-5 py-3 rounded-lg"
-          onclick="document.getElementById('modalCekStatus').classList.remove('modal-visible'); document.getElementById('modalCekStatus').classList.add('modal-hidden');">
+          onclick="window.closeStatusModal()">
           <i class="bi bi-x-circle"></i> <span data-i18n="cekStatus.modal.close">Tutup</span>
         </button>
       </div>
@@ -634,7 +657,7 @@
   </div>
 
   <!-- Modal: Bukti Pembayaran -->
-  <div id="paymentProofModal" class="modal-hidden fixed inset-0 z-[1001] flex items-center justify-center">
+  <div id="paymentProofModal" class="modal-hidden modal-layer z-[1001] flex items-center justify-center">
     <div class="absolute inset-0 bg-black/70" data-close-payment-modal></div>
     <div class="relative bg-white w-full max-w-5xl mx-4 rounded-2xl shadow-2xl overflow-hidden modal-panel">
       <div class="flex items-center justify-between px-6 py-4 bg-emerald-700 text-white">
@@ -793,6 +816,37 @@
       const paymentProofStatusChip = document.getElementById('paymentProofStatusChip');
       const paymentProofStatusText = document.getElementById('paymentProofStatusText');
       const paymentProofNoteEl = document.getElementById('paymentProofNote');
+
+      const syncBodyModalState = () => {
+        const statusOpen = modalEl?.classList.contains('modal-visible');
+        const paymentOpen = paymentProofModal?.classList.contains('modal-visible');
+        document.body.classList.toggle('modal-open', Boolean(statusOpen || paymentOpen));
+      };
+
+      const closeStatusModal = () => {
+        if (!modalEl) return;
+        modalEl.classList.remove('modal-visible');
+        modalEl.classList.add('modal-hidden');
+        if (window.Alpine && typeof Alpine.store === 'function') {
+          const cekStore = Alpine.store('cek');
+          if (cekStore) cekStore.open = false;
+        }
+        syncBodyModalState();
+      };
+
+      const openStatusModal = () => {
+        if (!modalEl) return false;
+        modalEl.classList.remove('modal-hidden');
+        modalEl.classList.add('modal-visible');
+        if (window.Alpine && typeof Alpine.store === 'function') {
+          const cekStore = Alpine.store('cek');
+          if (cekStore) cekStore.open = true;
+        }
+        syncBodyModalState();
+        return true;
+      };
+
+      window.closeStatusModal = closeStatusModal;
 
       const T = (key, replacements) => (typeof window.__ === 'function' ? window.__(key, replacements) : key);
       const applyTranslations = (root) => {
@@ -964,6 +1018,7 @@
         if (!paymentProofModal) return;
         paymentProofModal.classList.remove('modal-visible');
         paymentProofModal.classList.add('modal-hidden');
+        syncBodyModalState();
       };
 
       const updatePaymentContext = (owner, payment) => {
@@ -1028,6 +1083,7 @@
 
         paymentProofModal.classList.remove('modal-hidden');
         paymentProofModal.classList.add('modal-visible');
+        syncBodyModalState();
         applyTranslations(paymentProofModal);
       };
 
@@ -1077,6 +1133,8 @@
       document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape' && paymentProofModal?.classList.contains('modal-visible')) {
           hidePaymentProofModal();
+        } else if (event.key === 'Escape' && modalEl?.classList.contains('modal-visible')) {
+          closeStatusModal();
         }
       });
 
@@ -1296,15 +1354,7 @@
           </div>
         `;
 
-      const showModal = () => {
-        if (!modalEl) return false;
-        modalEl.classList.remove('modal-hidden');
-        modalEl.classList.add('modal-visible');
-        if (window.Alpine && Alpine.store && Alpine.store('cek')) {
-          Alpine.store('cek').open = true;
-        }
-        return true;
-      };
+      const showModal = () => openStatusModal();
 
       const renderStatus = (data, query, options = {}) => {
         const { openModal = true } = options;
