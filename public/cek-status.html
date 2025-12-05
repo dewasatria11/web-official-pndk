@@ -534,8 +534,19 @@
   </section>
 
   <!-- Main Content -->
-  <main class="flex-1 container mx-auto px-4 py-8" id="cek-status-form">
-    <div class="max-w-xl mx-auto">
+  <main class="flex-1 container mx-auto px-4 py-8" id="cek-status-form" data-state="form">
+    <!-- State sections: form (default), loading, result. Error uses the inline alert while keeping the form visible. JS setViewState() flips the visibility so only one main section shows at once. -->
+    <div class="max-w-xl mx-auto" id="statusFormSection" data-section="form">
+      <div id="statusError"
+        class="hidden mb-4 rounded-lg bg-yellow-50 border border-yellow-200 text-yellow-900 px-4 py-3" role="alert">
+        <div class="flex items-start gap-2">
+          <i class="bi bi-exclamation-triangle"></i>
+          <div>
+            <strong data-i18n="cekStatus.modal.error.title">Perhatian!</strong>
+            <p class="mb-0 mt-1" id="statusErrorMsg" data-i18n="cekStatus.modal.error.generic">Terjadi kesalahan.</p>
+          </div>
+        </div>
+      </div>
       <!-- Form Cek Status -->
       <div class="bg-white rounded-xl shadow-lg border border-gray-100">
         <div class="p-6">
@@ -566,95 +577,82 @@
         </div>
       </div>
     </div>
-  </main>
 
-  <!-- Modal: Hasil Cek Status -->
-  <div id="modalCekStatus" class="modal-hidden modal-layer z-[1000] flex items-center justify-center">
-    <div class="absolute inset-0 bg-black/70" onclick="window.closeStatusModal()"></div>
-    <div class="relative bg-white rounded-2xl shadow-2xl max-w-3xl w-[92vw] max-h-[85vh] overflow-y-auto modal-panel">
-      <div
-        class="px-6 py-4 bg-gradient-to-br from-brand-700 to-brand-800 text-white rounded-t-2xl flex items-center justify-between">
-        <h5 class="font-semibold"><i class="bi bi-clipboard-check"></i> <span data-i18n="cekStatus.modal.title">Hasil
-            Cek Status Pendaftaran</span></h5>
-        <button class="text-white/90 hover:text-white" onclick="window.closeStatusModal()"><i
-            class="bi bi-x-lg"></i></button>
-      </div>
-      <div class="p-6">
-        <!-- Loading state -->
-        <div id="statusLoading" class="text-center py-6">
-          <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-brand-500 border-t-transparent">
-          </div>
-          <p class="mt-4 text-gray-600 font-semibold" data-i18n="cekStatus.modal.loading">Mengambil data status Anda...
-          </p>
+    <div id="statusLoadingSection" class="hidden max-w-xl mx-auto" data-section="loading">
+      <div class="bg-white rounded-xl shadow-lg border border-gray-100 p-6 text-center">
+        <div id="statusLoading" class="inline-flex flex-col items-center gap-3">
+          <div class="animate-spin rounded-full h-12 w-12 border-4 border-brand-500 border-t-transparent"></div>
+          <p class="text-gray-700 font-semibold" data-i18n="cekStatus.modal.loading">Mengambil data status Anda...</p>
         </div>
-
-        <!-- Hasil sukses -->
-        <div id="statusResult" class="hidden">
-          <div class="text-center mb-4">
-            <i id="statusIcon" class="bi bi-hourglass-split text-yellow-600" style="font-size: 3rem;"></i>
-          </div>
-          <div class="flex justify-center mb-4">
-            <span id="statusBadge" class="px-4 py-2 rounded-full bg-yellow-500 text-white">-</span>
-          </div>
-          <div class="bg-white rounded-xl border border-gray-200 shadow-sm mb-3">
-            <div class="px-4 py-3 border-b border-gray-100 font-semibold"><i class="bi bi-person-badge"></i> <span
-                data-i18n="cekStatus.modal.sections.info">Informasi Pendaftar</span></div>
-            <div class="divide-y divide-gray-100">
-              <div class="px-4 py-3 flex justify-between text-sm"><span class="text-gray-500"
-                  data-i18n="cekStatus.modal.fields.nisn">NISN</span><strong id="f_nisn">-</strong></div>
-              <div class="px-4 py-3 flex justify-between text-sm"><span class="text-gray-500"
-                  data-i18n="cekStatus.modal.fields.name">Nama Lengkap</span><strong id="f_nama">-</strong></div>
-              <div class="px-4 py-3 flex justify-between text-sm"><span class="text-gray-500"
-                  data-i18n="cekStatus.modal.fields.birthPlace">Tempat Lahir</span><span id="f_tempat_lahir">-</span>
-              </div>
-              <div class="px-4 py-3 flex justify-between text-sm"><span class="text-gray-500"
-                  data-i18n="cekStatus.modal.fields.birthDate">Tanggal Lahir</span><span id="f_tanggal_lahir">-</span>
-              </div>
-              <div class="px-4 py-3 flex justify-between text-sm"><span class="text-gray-500"
-                  data-i18n="cekStatus.modal.fields.submittedAt">Tanggal Daftar</span><span
-                  id="f_tanggal_daftar">-</span></div>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl border border-gray-200 shadow-sm" id="statusCatatanSection">
-            <div class="px-4 py-3 border-b border-gray-100 font-semibold"><i class="bi bi-clipboard-data"></i> <span
-                data-i18n="cekStatus.modal.sections.status">Status & Catatan</span></div>
-            <div class="px-4 py-3 space-y-3">
-              <div>
-                <span class="text-gray-500 block mb-1 text-sm"
-                  data-i18n="cekStatus.modal.fields.verificationStatus">Status Verifikasi</span>
-                <span id="f_status_text"
-                  class="inline-block px-3 py-1 rounded bg-yellow-500 text-white text-sm">-</span>
-              </div>
-              <div id="catatanContainer">
-                <span class="text-gray-500 block mb-1 text-sm" data-i18n="cekStatus.modal.fields.adminNote">Catatan
-                  Admin</span>
-                <p id="f_catatan" class="mb-0 text-gray-800">-</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Error -->
-        <div id="statusError" class="hidden rounded-lg bg-yellow-50 border border-yellow-200 text-yellow-900 px-4 py-3"
-          role="alert">
-          <div class="flex items-start gap-2">
-            <i class="bi bi-exclamation-triangle"></i>
-            <div>
-              <strong data-i18n="cekStatus.modal.error.title">Perhatian!</strong>
-              <p class="mb-0 mt-1" id="statusErrorMsg" data-i18n="cekStatus.modal.error.generic">Terjadi kesalahan.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="px-6 py-4 border-t border-gray-100 rounded-b-2xl flex justify-end">
-        <button type="button"
-          class="inline-flex items-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-800 px-5 py-3 rounded-lg"
-          onclick="window.closeStatusModal()">
-          <i class="bi bi-x-circle"></i> <span data-i18n="cekStatus.modal.close">Tutup</span>
-        </button>
       </div>
     </div>
-  </div>
+
+    <div id="statusResultSection" class="hidden max-w-5xl mx-auto" data-section="result">
+      <div class="bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden">
+        <div
+          class="px-6 py-4 bg-gradient-to-br from-brand-700 to-brand-800 text-white flex items-center justify-between">
+          <h5 class="font-semibold flex items-center gap-2">
+            <i class="bi bi-clipboard-check"></i>
+            <span data-i18n="cekStatus.modal.title">Hasil Cek Status Pendaftaran</span>
+          </h5>
+          <button type="button"
+            class="text-white/90 hover:text-white text-sm font-semibold inline-flex items-center gap-2"
+            id="btnCekUlang">
+            <i class="bi bi-arrow-left"></i>
+            <span data-i18n="cekStatus.form.button">Cek Status Lagi</span>
+          </button>
+        </div>
+        <div class="p-6">
+          <!-- Hasil sukses -->
+          <div id="statusResult" class="hidden space-y-4">
+            <div class="text-center">
+              <i id="statusIcon" class="bi bi-hourglass-split text-yellow-600" style="font-size: 3rem;"></i>
+            </div>
+            <div class="flex justify-center">
+              <span id="statusBadge" class="px-4 py-2 rounded-full bg-yellow-500 text-white">-</span>
+            </div>
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm mb-3">
+              <div class="px-4 py-3 border-b border-gray-100 font-semibold"><i class="bi bi-person-badge"></i> <span
+                  data-i18n="cekStatus.modal.sections.info">Informasi Pendaftar</span></div>
+              <div class="divide-y divide-gray-100">
+                <div class="px-4 py-3 flex justify-between text-sm"><span class="text-gray-500"
+                    data-i18n="cekStatus.modal.fields.nisn">NISN</span><strong id="f_nisn">-</strong></div>
+                <div class="px-4 py-3 flex justify-between text-sm"><span class="text-gray-500"
+                    data-i18n="cekStatus.modal.fields.name">Nama Lengkap</span><strong id="f_nama">-</strong></div>
+                <div class="px-4 py-3 flex justify-between text-sm"><span class="text-gray-500"
+                    data-i18n="cekStatus.modal.fields.birthPlace">Tempat Lahir</span><span id="f_tempat_lahir">-</span>
+                </div>
+                <div class="px-4 py-3 flex justify-between text-sm"><span class="text-gray-500"
+                    data-i18n="cekStatus.modal.fields.birthDate">Tanggal Lahir</span><span
+                    id="f_tanggal_lahir">-</span>
+                </div>
+                <div class="px-4 py-3 flex justify-between text-sm"><span class="text-gray-500"
+                    data-i18n="cekStatus.modal.fields.submittedAt">Tanggal Daftar</span><span
+                    id="f_tanggal_daftar">-</span></div>
+              </div>
+            </div>
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm" id="statusCatatanSection">
+              <div class="px-4 py-3 border-b border-gray-100 font-semibold"><i class="bi bi-clipboard-data"></i> <span
+                  data-i18n="cekStatus.modal.sections.status">Status & Catatan</span></div>
+              <div class="px-4 py-3 space-y-3">
+                <div>
+                  <span class="text-gray-500 block mb-1 text-sm"
+                    data-i18n="cekStatus.modal.fields.verificationStatus">Status Verifikasi</span>
+                  <span id="f_status_text"
+                    class="inline-block px-3 py-1 rounded bg-yellow-500 text-white text-sm">-</span>
+                </div>
+                <div id="catatanContainer">
+                  <span class="text-gray-500 block mb-1 text-sm" data-i18n="cekStatus.modal.fields.adminNote">Catatan
+                    Admin</span>
+                  <p id="f_catatan" class="mb-0 text-gray-800">-</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
 
   <!-- Modal: Bukti Pembayaran -->
   <div id="paymentProofModal" class="modal-hidden modal-layer z-[1001] flex items-center justify-center">
@@ -786,8 +784,6 @@
 
       const btn = document.getElementById('btnCekStatus');
       const input = document.getElementById('nisnInput');
-      const modalEl = document.getElementById('modalCekStatus');
-      const statusLoadingEl = document.getElementById('statusLoading');
       const statusResultEl = document.getElementById('statusResult');
       const statusErrorEl = document.getElementById('statusError');
       const statusErrorMsgEl = document.getElementById('statusErrorMsg');
@@ -816,37 +812,18 @@
       const paymentProofStatusChip = document.getElementById('paymentProofStatusChip');
       const paymentProofStatusText = document.getElementById('paymentProofStatusText');
       const paymentProofNoteEl = document.getElementById('paymentProofNote');
+      const formSection = document.getElementById('statusFormSection');
+      const loadingSection = document.getElementById('statusLoadingSection');
+      const resultSection = document.getElementById('statusResultSection');
+      const cekStatusPage = document.getElementById('cek-status-form');
+      const btnCekUlang = document.getElementById('btnCekUlang');
+      const defaultBtnHTML = btn?.innerHTML || '';
+      let defaultErrorMessage = statusErrorMsgEl?.textContent || '';
 
       const syncBodyModalState = () => {
-        const statusOpen = modalEl?.classList.contains('modal-visible');
         const paymentOpen = paymentProofModal?.classList.contains('modal-visible');
-        document.body.classList.toggle('modal-open', Boolean(statusOpen || paymentOpen));
+        document.body.classList.toggle('modal-open', Boolean(paymentOpen));
       };
-
-      const closeStatusModal = () => {
-        if (!modalEl) return;
-        modalEl.classList.remove('modal-visible');
-        modalEl.classList.add('modal-hidden');
-        if (window.Alpine && typeof Alpine.store === 'function') {
-          const cekStore = Alpine.store('cek');
-          if (cekStore) cekStore.open = false;
-        }
-        syncBodyModalState();
-      };
-
-      const openStatusModal = () => {
-        if (!modalEl) return false;
-        modalEl.classList.remove('modal-hidden');
-        modalEl.classList.add('modal-visible');
-        if (window.Alpine && typeof Alpine.store === 'function') {
-          const cekStore = Alpine.store('cek');
-          if (cekStore) cekStore.open = true;
-        }
-        syncBodyModalState();
-        return true;
-      };
-
-      window.closeStatusModal = closeStatusModal;
 
       const T = (key, replacements) => (typeof window.__ === 'function' ? window.__(key, replacements) : key);
       const applyTranslations = (root) => {
@@ -894,6 +871,40 @@
           return '';
         }
       };
+
+      // View state controller: toggles the visible section between form, loading, result, or error.
+      const setViewState = (state, options = {}) => {
+        const { errorMessage = '' } = options;
+
+        cekStatusPage?.setAttribute('data-state', state);
+        formSection?.classList.toggle('hidden', state === 'loading' || state === 'result');
+        loadingSection?.classList.toggle('hidden', state !== 'loading');
+        resultSection?.classList.toggle('hidden', state !== 'result');
+
+        const showError = state === 'error';
+        if (statusErrorEl) {
+          statusErrorEl.classList.toggle('hidden', !showError);
+          if (statusErrorMsgEl) {
+            statusErrorMsgEl.textContent = showError ? (errorMessage || defaultErrorMessage) : defaultErrorMessage;
+          }
+        }
+
+        if (btn) {
+          btn.disabled = state === 'loading';
+          btn.innerHTML = state === 'loading'
+            ? `<span class="inline-block animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></span>${T('cekStatus.form.checking')}`
+            : defaultBtnHTML;
+        }
+        if (input) {
+          input.disabled = state === 'loading';
+        }
+        if (window.Alpine && typeof Alpine.store === 'function') {
+          const cekStore = Alpine.store('cek');
+          if (cekStore) cekStore.open = state === 'result';
+        }
+      };
+
+      setViewState('form');
 
       const getStatusConfig = () => ({
         PENDING: {
@@ -1088,7 +1099,7 @@
       };
 
       const removeDynamicElements = () => {
-        modalEl?.querySelectorAll('[data-dynamic="true"]').forEach((el) => el.remove());
+        statusResultContainer?.querySelectorAll('[data-dynamic="true"]').forEach((el) => el.remove());
       };
 
       const insertBeforeInfoCard = (html) => {
@@ -1133,8 +1144,6 @@
       document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape' && paymentProofModal?.classList.contains('modal-visible')) {
           hidePaymentProofModal();
-        } else if (event.key === 'Escape' && modalEl?.classList.contains('modal-visible')) {
-          closeStatusModal();
         }
       });
 
@@ -1354,16 +1363,18 @@
           </div>
         `;
 
-      const showModal = () => openStatusModal();
-
       const renderStatus = (data, query, options = {}) => {
         const { openModal = true } = options;
         lastRender = { data, query };
         removeDynamicElements();
 
+        if (openModal) {
+          setViewState('result');
+          statusResultEl?.classList.remove('hidden');
+        } else {
+          statusResultEl?.classList.add('hidden');
+        }
         statusErrorEl?.classList.add('hidden');
-        statusLoadingEl?.classList.add('hidden');
-        statusResultEl?.classList.remove('hidden');
 
         const fallback = '-';
 
@@ -1486,11 +1497,13 @@
           insertAfterStatusSection(buildWaiting());
         }
 
-        if (openModal && !showModal()) {
-          toast('error', T('form.messages.alertModalMissing'));
+        if (openModal) {
+          setTimeout(() => {
+            resultSection?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 100);
         }
 
-        applyTranslations(modalEl);
+        applyTranslations(resultSection || document.body);
       };
 
       input?.addEventListener('keydown', (e) => {
@@ -1508,13 +1521,7 @@
           return;
         }
 
-        const originalHTML = btn.innerHTML;
-        btn.disabled = true;
-        btn.innerHTML = `<span class="inline-block animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></span>${T('cekStatus.form.checking')}`;
-
-        statusErrorEl?.classList.add('hidden');
-        statusResultEl?.classList.add('hidden');
-        statusLoadingEl?.classList.remove('hidden');
+        setViewState('loading');
 
         try {
           const cacheBuster = Date.now();
@@ -1529,33 +1536,41 @@
           }
 
           if (!json.data) {
-            statusLoadingEl?.classList.add('hidden');
             toast('warning', T('cekStatus.toasts.notFound'));
+            setViewState('error', { errorMessage: T('cekStatus.toasts.notFound') });
             return;
           }
 
           renderStatus(json.data, nisnValue, { openModal: true });
         } catch (error) {
           console.error('[CEK_STATUS] Error:', error);
-          statusLoadingEl?.classList.add('hidden');
-          statusResultEl?.classList.add('hidden');
-          if (statusErrorMsgEl) {
-            statusErrorMsgEl.textContent = error?.message || T('cekStatus.modal.error.generic');
-          }
-          statusErrorEl?.classList.remove('hidden');
+          setViewState('error', { errorMessage: error?.message || T('cekStatus.modal.error.generic') });
           toast('error', error?.message || T('cekStatus.toasts.genericError'));
         } finally {
-          btn.disabled = false;
-          btn.innerHTML = originalHTML;
-          applyTranslations(btn);
+          applyTranslations(document.body);
+        }
+      });
+
+      btnCekUlang?.addEventListener('click', (event) => {
+        event.preventDefault();
+        removeDynamicElements();
+        statusResultEl?.classList.add('hidden');
+        setViewState('form');
+        lastRender = null;
+        if (input) {
+          input.focus();
+          input.select();
         }
       });
 
       document.addEventListener('i18n:lang-changed', () => {
         applyTranslations(document.body);
+        if (statusErrorMsgEl) {
+          defaultErrorMessage = statusErrorMsgEl.textContent || defaultErrorMessage;
+        }
         if (lastRender) {
-          const isModalVisible = modalEl?.classList.contains('modal-visible');
-          renderStatus(lastRender.data, lastRender.query, { openModal: isModalVisible });
+          const isResultVisible = resultSection && !resultSection.classList.contains('hidden');
+          renderStatus(lastRender.data, lastRender.query, { openModal: isResultVisible });
         }
       });
     });
