@@ -26,6 +26,9 @@
   <!-- Toastr CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
 
+  <!-- Chart.js for visual statistik -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+
   <style>
     :root {
       --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -1546,42 +1549,78 @@
               </div>
             </div>
 
-            <!-- Hanya Sekolah -->
-            <div class="col-md-4">
+            <!-- Chart row -->
+            <div class="col-12">
+              <div class="row g-4">
+                <div class="col-md-6">
+                  <div class="card">
+                    <div class="card-header" style="background:var(--info-gradient)">
+                      <h5 class="mb-0 text-white"><i class="bi bi-people-fill"></i> Asrama vs Non Asrama</h5>
+                    </div>
+                    <div class="card-body">
+                      <canvas id="chartAsrama" height="200" aria-label="Chart Asrama" role="img"></canvas>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="card">
+                    <div class="card-header" style="background:var(--info-gradient)">
+                      <h5 class="mb-0 text-white"><i class="bi bi-gender-ambiguous"></i> Gender (L vs P)</h5>
+                    </div>
+                    <div class="card-body">
+                      <canvas id="chartGender" height="200" aria-label="Chart Gender" role="img"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hanya Sekolah - MTs -->
+            <div class="col-md-6">
               <div class="card">
                 <div class="card-header" style="background:linear-gradient(135deg,#ffa726 0%,#fb8c00 100%)">
-                  <h5 class="mb-0 text-white"><i class="bi bi-mortarboard-fill"></i> Hanya Sekolah</h5>
+                  <h5 class="mb-0 text-white"><i class="bi bi-mortarboard-fill"></i> Hanya Sekolah - MTs (Tsanawiyah)
+                  </h5>
                 </div>
                 <div class="card-body">
-                  <h6 class="mb-3" style="color:#2a5298;font-weight:600"><i class="bi bi-book"></i> MTs (Tsanawiyah)
-                  </h6>
-                  <div class="d-flex justify-content-between align-items-center mb-2 ps-3">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
                     <span style="color:#495057;font-weight:500"><i class="bi bi-gender-male text-primary"></i>
                       Laki-laki</span>
                     <span class="badge bg-primary" id="hanyaSekolahMtsL">0</span>
                   </div>
-                  <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom ps-3">
+                  <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
                     <span style="color:#495057;font-weight:500"><i class="bi bi-gender-female text-danger"></i>
                       Perempuan</span>
                     <span class="badge bg-danger" id="hanyaSekolahMtsP">0</span>
                   </div>
+                  <div class="d-flex justify-content-between align-items-center mt-2">
+                    <strong style="color:#2a5298">Total MTs</strong>
+                    <strong><span class="badge bg-warning text-dark fs-5" id="hanyaSekolahMtsTotal">0</span></strong>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-                  <h6 class="mb-3" style="color:#2a5298;font-weight:600"><i class="bi bi-book-half"></i> MA (Aliyah)
-                  </h6>
-                  <div class="d-flex justify-content-between align-items-center mb-2 ps-3">
+            <!-- Hanya Sekolah - MA -->
+            <div class="col-md-6">
+              <div class="card">
+                <div class="card-header" style="background:linear-gradient(135deg,#ffb74d 0%,#f57c00 100%)">
+                  <h5 class="mb-0 text-white"><i class="bi bi-mortarboard-fill"></i> Hanya Sekolah - MA (Aliyah)</h5>
+                </div>
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
                     <span style="color:#495057;font-weight:500"><i class="bi bi-gender-male text-primary"></i>
                       Laki-laki</span>
                     <span class="badge bg-primary" id="hanyaSekolahMaL">0</span>
                   </div>
-                  <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom ps-3">
+                  <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
                     <span style="color:#495057;font-weight:500"><i class="bi bi-gender-female text-danger"></i>
                       Perempuan</span>
                     <span class="badge bg-danger" id="hanyaSekolahMaP">0</span>
                   </div>
-
-                  <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
-                    <strong style="color:#2a5298">Total Pendaftar</strong>
-                    <strong><span class="badge bg-warning text-dark fs-5" id="hanyaSekolahTotal">0</span></strong>
+                  <div class="d-flex justify-content-between align-items-center mt-2">
+                    <strong style="color:#2a5298">Total MA</strong>
+                    <strong><span class="badge bg-warning text-dark fs-5" id="hanyaSekolahMaTotal">0</span></strong>
                   </div>
                 </div>
               </div>

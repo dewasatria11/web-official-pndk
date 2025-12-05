@@ -691,6 +691,13 @@
   // Fungsi untuk calculate dan update statistik
   function calculateAndUpdateStatistics(allDataForStats, verifiedPayments) {
     console.log('[STATISTIK] Calculating statistics...');
+    // Chart instances (persist across updates)
+    if (!window.__chartStore) {
+      window.__chartStore = {
+        asrama: null,
+        gender: null,
+      };
+    }
 
     // Helper function to check if payment is verified
     const hasVerifiedPayment = (d) => {
@@ -910,8 +917,20 @@
         return isMatch;
       }
     ).length;
-    const hanyaSekolahTotal =
-      hanyaSekolahMtsL + hanyaSekolahMtsP + hanyaSekolahMaL + hanyaSekolahMaP;
+    const hanyaSekolahMtsTotal = hanyaSekolahMtsL + hanyaSekolahMtsP;
+    const hanyaSekolahMaTotal = hanyaSekolahMaL + hanyaSekolahMaP;
+    const hanyaSekolahTotal = hanyaSekolahMtsTotal + hanyaSekolahMaTotal;
+    const totalAsrama = putraIndukTotal + putraTahfidzTotal + putriTotal;
+
+    // Gender aggregasi semua pendaftar
+    const totalGenderL = allPendaftar.filter((d) => {
+      const g = (d.jeniskelamin || d.jenisKelamin || "").trim().toUpperCase();
+      return g === "L";
+    }).length;
+    const totalGenderP = allPendaftar.filter((d) => {
+      const g = (d.jeniskelamin || d.jenisKelamin || "").trim().toUpperCase();
+      return g === "P";
+    }).length;
 
     // Debug: Log calculated statistics (SEMUA PENDAFTAR)
     console.log("[STATISTIK] Hasil perhitungan (SEMUA PENDAFTAR):");
@@ -923,8 +942,12 @@
       MTs_P: hanyaSekolahMtsP,
       MA_L: hanyaSekolahMaL,
       MA_P: hanyaSekolahMaP,
-      Total: hanyaSekolahTotal
+      Total_MTs: hanyaSekolahMtsTotal,
+      Total_MA: hanyaSekolahMaTotal,
+      Total: hanyaSekolahTotal,
+      Asrama: totalAsrama
     });
+    console.log("Gender (total):", { L: totalGenderL, P: totalGenderP });
     console.log("[STATISTIK] ========================================");
 
     // Pasang ke DOM
@@ -947,7 +970,8 @@
       hanyaSekolahMtsP,
       hanyaSekolahMaL,
       hanyaSekolahMaP,
-      hanyaSekolahTotal,
+      hanyaSekolahMtsTotal,
+      hanyaSekolahMaTotal
     });
 
     const upd = $("#updateTimePendaftar");
@@ -961,6 +985,64 @@
       upd2.textContent = `Data update: ${new Date().toLocaleTimeString(
         "id-ID"
       )}`;
+
+    // Render charts
+    const renderPie = (ctx, data, labels, colors, existingChartRef, title) => {
+      if (!ctx) return existingChartRef;
+      if (existingChartRef) {
+        existingChartRef.data.labels = labels;
+        existingChartRef.data.datasets[0].data = data;
+        existingChartRef.data.datasets[0].backgroundColor = colors;
+        existingChartRef.options.plugins.title.text = title;
+        existingChartRef.update();
+        return existingChartRef;
+      }
+      return new Chart(ctx, {
+        type: "doughnut",
+        data: {
+          labels,
+          datasets: [
+            {
+              data,
+              backgroundColor: colors,
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: "bottom" },
+            title: {
+              display: true,
+              text: title,
+            },
+          },
+        },
+      });
+    };
+
+    const asramaCtx = document.getElementById("chartAsrama")?.getContext("2d");
+    const genderCtx = document.getElementById("chartGender")?.getContext("2d");
+
+    window.__chartStore.asrama = renderPie(
+      asramaCtx,
+      [totalAsrama, hanyaSekolahTotal],
+      ["Asrama", "Non Asrama"],
+      ["#4caf50", "#ff9800"],
+      window.__chartStore.asrama,
+      "Asrama vs Non Asrama"
+    );
+
+    window.__chartStore.gender = renderPie(
+      genderCtx,
+      [totalGenderL, totalGenderP],
+      ["Laki-laki", "Perempuan"],
+      ["#2196f3", "#e91e63"],
+      window.__chartStore.gender,
+      "Komposisi Gender"
+    );
 
     console.log('[STATISTIK] ✅ Statistics updated successfully');
   }
