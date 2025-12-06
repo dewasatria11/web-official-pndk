@@ -392,8 +392,11 @@
         loadPendaftar();
       }
       setTimeout(() => {
+        renderCachedChartsIfVisible();
         scheduleStatChartResize();
-      }, 150);
+      }, 50);
+      // Reapply angka terakhir kalau sudah ada cache
+      applyLatestStatNumbers();
     } else if (tab === "gelombang") {
       // Load gelombang data
       loadGelombangData();
@@ -446,6 +449,11 @@
   let lastStatsFetchTime = 0;
   const STATS_CACHE_DURATION = 60000; // 1 menit
   let latestStatChartData = null;
+  let latestStatNumbers = null;
+  let statCharts = {
+    asrama: null,
+    gender: null,
+  };
 
   const isStatistikTabVisible = () => {
     const tab = document.getElementById("tab-statistik");
@@ -1009,7 +1017,7 @@
     // Pasang ke DOM
     const mapSet = (m) =>
       Object.entries(m).forEach(([id, val]) => setText(id, val));
-    mapSet({
+    const statMap = {
       putraIndukMts,
       putraIndukMa,
       putraIndukKuliah,
@@ -1028,7 +1036,10 @@
       hanyaSekolahMaP,
       hanyaSekolahMtsTotal,
       hanyaSekolahMaTotal
-    });
+    };
+
+    mapSet(statMap);
+    latestStatNumbers = { ...statMap };
 
     const upd = $("#updateTimePendaftar");
     if (upd)
@@ -1050,22 +1061,20 @@
     if (!isStatistikTabVisible()) return;
     if (!latestStatChartData) return;
 
+    // Pastikan angka terakhir juga diterapkan ulang
+    applyLatestStatNumbers();
+
     // Render charts
-    const renderPie = (ctx, data, labels, colors, existingChartRef, title) => {
-      if (!ctx) return existingChartRef;
-      if (existingChartRef) {
-        existingChartRef.data.labels = labels;
-        existingChartRef.data.datasets[0].data = data;
-        existingChartRef.data.datasets[0].backgroundColor = colors;
-        existingChartRef.options.plugins.title.text = title;
-        // Force resize + update to fix charts yang dibuat saat tab tersembunyi
-        if (typeof existingChartRef.resize === "function") {
-          existingChartRef.resize();
-        }
-        existingChartRef.update("resize");
-        return existingChartRef;
+    const renderPie = (ctx, data, labels, colors, chartKey, title) => {
+      if (!ctx) return null;
+
+      // Destroy old chart to avoid zero-width artifacts when tab sebelumnya hidden
+      if (statCharts[chartKey]) {
+        statCharts[chartKey].destroy();
+        statCharts[chartKey] = null;
       }
-      return new Chart(ctx, {
+
+      statCharts[chartKey] = new Chart(ctx, {
         type: "doughnut",
         data: {
           labels,
@@ -1089,6 +1098,7 @@
           },
         },
       });
+      return statCharts[chartKey];
     };
 
     const asramaCtx = document.getElementById("chartAsrama")?.getContext("2d");
@@ -1096,23 +1106,32 @@
 
     window.__chartStore.asrama = renderPie(
       asramaCtx,
-      [totalAsrama, hanyaSekolahTotal],
-      ["Asrama", "Non Asrama"],
-      ["#4caf50", "#ff9800"],
-      window.__chartStore.asrama,
-      "Asrama vs Non Asrama"
+      latestStatChartData.asrama.data,
+      latestStatChartData.asrama.labels,
+      latestStatChartData.asrama.colors,
+      "asrama",
+      latestStatChartData.asrama.title
     );
 
     window.__chartStore.gender = renderPie(
       genderCtx,
-      [totalGenderL, totalGenderP],
-      ["Laki-laki", "Perempuan"],
-      ["#2196f3", "#e91e63"],
-      window.__chartStore.gender,
-      "Komposisi Gender"
+      latestStatChartData.gender.data,
+      latestStatChartData.gender.labels,
+      latestStatChartData.gender.colors,
+      "gender",
+      latestStatChartData.gender.title
     );
 
     console.log('[STATISTIK] ✅ Statistics updated successfully');
+    scheduleStatChartResize();
+  }
+
+  function applyLatestStatNumbers() {
+    if (!latestStatNumbers) return;
+    Object.entries(latestStatNumbers).forEach(([id, val]) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val;
+    });
   }
 
   /* =========================
