@@ -453,6 +453,7 @@
   let statCharts = {
     asrama: null,
     gender: null,
+    province: null,
   };
 
   const isStatistikTabVisible = () => {
@@ -821,6 +822,25 @@
       return jenjang.trim(); // Trim whitespace
     };
 
+    const getProvinsi = (d) => {
+      const candidates = [
+        d.provinsi,
+        d.provinsitempatlahir,
+        d.provinsiDomisili,
+        d.provinsiAlamat,
+      ].map((v) => (v || "").toString().trim());
+      const prov = candidates.find(Boolean);
+      if (!prov) return "";
+      return prov
+        .replace(/(provinsi|prov\.?|propinsi)/i, "")
+        .trim()
+        .replace(/\s+/g, " ")
+        .replace(/^dk i jakarta$/i, "DKI Jakarta")
+        .replace(/^dki jakarta$/i, "DKI Jakarta")
+        .replace(/^kep\.? bangka belitung$/i, "Kepulauan Bangka Belitung")
+        .replace(/^kep\.? riau$/i, "Kepulauan Riau");
+    };
+
     // REVISI: Gunakan SEMUA pendaftar untuk statistik, bukan hanya yang verified
     const allPendaftar = allDataForStats; // Gunakan SEMUA data untuk statistik (bukan hanya halaman saat ini)
 
@@ -980,6 +1000,22 @@
       return g === "P";
     }).length;
 
+    // Distribusi provinsi
+    const provinceCounts = new Map();
+    allPendaftar.forEach((d) => {
+      const prov = getProvinsi(d);
+      if (!prov) return;
+      provinceCounts.set(prov, (provinceCounts.get(prov) || 0) + 1);
+    });
+
+    const sortedProvince = Array.from(provinceCounts.entries()).sort(
+      (a, b) => b[1] - a[1]
+    );
+
+    const topProvince = sortedProvince.slice(0, 8);
+    const provinceLabels = topProvince.map(([name]) => name);
+    const provinceData = topProvince.map(([, count]) => count);
+
     // Debug: Log calculated statistics (SEMUA PENDAFTAR)
     console.log("[STATISTIK] Hasil perhitungan (SEMUA PENDAFTAR):");
     console.log("Asrama Putra Induk:", { MTs: putraIndukMts, MA: putraIndukMa, Kuliah: putraIndukKuliah, Total: putraIndukTotal });
@@ -1012,6 +1048,11 @@
         colors: ["#2196f3", "#e91e63"],
         title: "Komposisi Gender",
       },
+      province: {
+        data: provinceData,
+        labels: provinceLabels,
+        title: "Asal Provinsi Teratas",
+      },
     };
 
     // Pasang ke DOM
@@ -1035,7 +1076,9 @@
       hanyaSekolahMaL,
       hanyaSekolahMaP,
       hanyaSekolahMtsTotal,
-      hanyaSekolahMaTotal
+      hanyaSekolahMaTotal,
+      // Insight provinsi
+      totalProvinsi: provinceCounts.size || 0,
     };
 
     mapSet(statMap);
@@ -1101,8 +1144,53 @@
       return statCharts[chartKey];
     };
 
+    const renderBar = (ctx, data, labels, chartKey, title) => {
+      if (!ctx) return null;
+
+      if (statCharts[chartKey]) {
+        statCharts[chartKey].destroy();
+        statCharts[chartKey] = null;
+      }
+
+      statCharts[chartKey] = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels,
+          datasets: [
+            {
+              label: "Jumlah Pendaftar",
+              data,
+              backgroundColor: "#3b82f6",
+              borderRadius: 6,
+            },
+          ],
+        },
+        options: {
+          indexAxis: "y",
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              beginAtZero: true,
+              ticks: { precision: 0 },
+            },
+          },
+          plugins: {
+            legend: { display: false },
+            title: {
+              display: true,
+              text: title,
+            },
+          },
+        },
+      });
+
+      return statCharts[chartKey];
+    };
+
     const asramaCtx = document.getElementById("chartAsrama")?.getContext("2d");
     const genderCtx = document.getElementById("chartGender")?.getContext("2d");
+    const provCtx = document.getElementById("chartProvince")?.getContext("2d");
 
     window.__chartStore.asrama = renderPie(
       asramaCtx,
@@ -1122,8 +1210,40 @@
       latestStatChartData.gender.title
     );
 
+    if (latestStatChartData.province.labels.length > 0) {
+      window.__chartStore.province = renderBar(
+        provCtx,
+        latestStatChartData.province.data,
+        latestStatChartData.province.labels,
+        "province",
+        latestStatChartData.province.title
+      );
+      updateProvinceTopList(latestStatChartData.province.labels, latestStatChartData.province.data);
+    } else if (provCtx) {
+      provCtx.canvas.parentElement.innerHTML = '<div class="text-muted text-center py-4">Belum ada data provinsi</div>';
+      updateProvinceTopList([], []);
+    }
+
     console.log('[STATISTIK] ✅ Statistics updated successfully');
     scheduleStatChartResize();
+  }
+
+  function updateProvinceTopList(labels, data) {
+    const list = document.getElementById("provinceTopList");
+    if (!list) return;
+    if (!labels || labels.length === 0) {
+      list.innerHTML = '<li class="list-group-item text-muted">Belum ada data provinsi</li>';
+      return;
+    }
+    list.innerHTML = labels
+      .map((name, idx) => {
+        const count = data[idx] || 0;
+        return `<li class="list-group-item d-flex justify-content-between align-items-center">
+          <span>${idx + 1}. ${name}</span>
+          <span class="badge bg-primary rounded-pill">${count}</span>
+        </li>`;
+      })
+      .join("");
   }
 
   function applyLatestStatNumbers() {

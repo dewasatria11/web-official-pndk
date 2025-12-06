@@ -469,7 +469,7 @@
     /* Chart Containers */
     .chart-card-body {
       position: relative;
-      min-height: 280px;
+      min-height: 220px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -478,12 +478,13 @@
     .chart-card-body canvas {
       width: 100% !important;
       height: 100% !important;
-      min-height: 240px;
+      min-height: 200px;
+      max-height: 320px;
     }
 
     @media (min-width: 1200px) {
       .chart-card-body {
-        min-height: 340px;
+        min-height: 260px;
       }
     }
 
@@ -1558,6 +1559,28 @@
                     </div>
                     <div class="card-body chart-card-body">
                       <canvas id="chartGender" aria-label="Chart Gender" role="img"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Asal Provinsi -->
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header" style="background:linear-gradient(135deg,#3b82f6 0%,#0ea5e9 100%)">
+                  <h5 class="mb-0 text-white"><i class="bi bi-geo-alt-fill"></i> Asal Provinsi Pendaftar</h5>
+                </div>
+                <div class="card-body chart-card-body">
+                  <div class="row w-100">
+                    <div class="col-lg-8 mb-3 mb-lg-0">
+                      <canvas id="chartProvince" aria-label="Chart Asal Provinsi" role="img"></canvas>
+                    </div>
+                    <div class="col-lg-4">
+                      <h6 class="text-muted mb-2">Top Provinsi</h6>
+                      <ul class="list-group list-group-flush small" id="provinceTopList">
+                        <li class="list-group-item">Memuat data...</li>
+                      </ul>
                     </div>
                   </div>
                 </div>
