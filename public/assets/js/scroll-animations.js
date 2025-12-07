@@ -124,36 +124,69 @@
 
     /**
      * ==============================================
-     * HERO SECTION ANIMATIONS
+     * HERO SECTION ANIMATIONS (SMPDISS Style)
      * ==============================================
-     * Animasi entrance untuk hero section saat halaman dimuat
-     * Elemen dengan class "reveal-item" di dalam hero akan
-     * muncul secara berurutan dengan staggered timing
+     * Animasi entrance untuk hero section menggunakan IntersectionObserver
+     * Elemen dengan class "fade-up" dan "fade-in" akan dianimasikan
+     * saat hero section masuk ke viewport
      */
     function initHeroAnimations() {
-        const heroItems = document.querySelectorAll('.hero-content .reveal-item');
+        const heroSection = document.querySelector('.hero-smpdiss');
+        const fadeUpElements = document.querySelectorAll('.hero-smpdiss .fade-up');
+        const fadeInElements = document.querySelectorAll('.hero-smpdiss .fade-in');
 
-        if (heroItems.length === 0) {
-            console.log('[HERO_ANIM] No hero items found');
+        const allHeroElements = [...fadeUpElements, ...fadeInElements];
+
+        if (allHeroElements.length === 0) {
+            console.log('[HERO_ANIM] No hero animation elements found');
             return;
         }
 
         // Cek preferensi reduced motion
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            heroItems.forEach(item => item.classList.add('active'));
+            allHeroElements.forEach(item => item.classList.add('active'));
+            console.log('[HERO_ANIM] Reduced motion enabled, showing all elements immediately');
             return;
         }
 
-        console.log(`[HERO_ANIM] Found ${heroItems.length} hero items to animate`);
+        console.log(`[HERO_ANIM] Found ${allHeroElements.length} hero elements to animate`);
 
-        // Animate hero items dengan staggered delay
-        heroItems.forEach((item, index) => {
-            setTimeout(() => {
-                item.classList.add('active');
-            }, 200 + (index * 150)); // Start at 200ms, 150ms between each
-        });
+        // Menggunakan IntersectionObserver untuk trigger animasi saat hero terlihat
+        if ('IntersectionObserver' in window) {
+            const heroObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Animate semua hero elements dengan staggered timing
+                        allHeroElements.forEach((element, index) => {
+                            setTimeout(() => {
+                                element.classList.add('active');
+                            }, index * 100); // 100ms delay antar elemen
+                        });
 
-        console.log('[HERO_ANIM] ✅ Hero animations initialized');
+                        // Hentikan observasi setelah animasi berjalan
+                        heroObserver.unobserve(entry.target);
+                        console.log('[HERO_ANIM] ✅ Hero animations triggered');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            // Observe hero section
+            if (heroSection) {
+                heroObserver.observe(heroSection);
+                console.log('[HERO_ANIM] ✅ Hero observer initialized');
+            }
+        } else {
+            // Fallback: langsung animate jika IntersectionObserver tidak tersedia
+            allHeroElements.forEach((element, index) => {
+                setTimeout(() => {
+                    element.classList.add('active');
+                }, 200 + (index * 100));
+            });
+            console.log('[HERO_ANIM] ✅ Hero animations (fallback) initialized');
+        }
     }
 
     // Jalankan hero animations saat DOM ready

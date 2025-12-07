@@ -773,99 +773,75 @@
 
   <!-- MAIN -->
   <main class="flex-1">
-    <!-- HERO SECTION - Full Height (smpdiss.sch.id style) -->
-    <section class="hero-fullscreen" id="heroSection">
-      <!-- Background Image - GANTI URL DENGAN FOTO SEKOLAH ANDA -->
-      <div class="hero-background">
-        <img src="https://images.unsplash.com/photo-1562774053-701939374585?w=1920&h=1080&fit=crop"
-          alt="Pondok Pesantren Al Ikhsan Beji" loading="eager" />
-      </div>
+    <!-- HERO SECTION - SMPDISS Style -->
+    <section class="hero-smpdiss" id="heroSection">
+      <!-- Mint/Green Gradient Background -->
+      <div class="hero-bg-gradient"></div>
 
-      <!-- Gradient Overlay -->
-      <div class="hero-overlay"></div>
+      <!-- Decorative Elements -->
+      <div class="hero-decoration hero-decoration-1"></div>
+      <div class="hero-decoration hero-decoration-2"></div>
 
-      <!-- Decorative Pattern -->
-      <div class="hero-pattern"></div>
+      <!-- Hero Main Content -->
+      <div class="hero-container">
+        <!-- Photo Card Section -->
+        <div class="hero-photo-section">
+          <!-- Left Arrow -->
+          <button type="button" class="hero-nav-arrow hero-nav-prev fade-in" aria-label="Previous slide">
+            <i class="bi bi-chevron-left"></i>
+          </button>
 
-      <!-- Hero Content -->
-      <div class="hero-content">
-        <!-- Badge PPDB -->
-        <div class="hero-year-badge reveal-item">
-          <i class="bi bi-calendar-check"></i>
-          <span data-i18n="hero.badge">PPDB 2026/2027 Dibuka!</span>
-        </div>
-
-        <!-- Main Title -->
-        <h1 class="hero-main-title reveal-item" data-i18n="hero.headingMain">
-          Penerimaan Peserta Didik Baru<br />
-          <span class="highlight">Al Ikhsan Beji</span>
-        </h1>
-
-        <!-- Subtitle -->
-        <h2 class="hero-subtitle reveal-item" data-i18n="hero.headingSub">
-          MTs, MA & Pondok Pesantren Terintegrasi
-        </h2>
-
-        <!-- Description -->
-        <p class="hero-description reveal-item" data-i18n="hero.subtitle">
-          Bergabunglah menjadi santri Pondok Pesantren Al Ikhsan Beji.
-          Pendidikan islami terpadu dengan pembinaan akhlak, tahfidz Al-Qur'an,
-          dan ilmu pengetahuan yang membentuk generasi Qur'ani dan berprestasi.
-        </p>
-
-        <!-- CTA Buttons -->
-        <div class="hero-buttons reveal-item">
-          <a href="/daftar.html" class="hero-btn hero-btn-primary">
-            <i class="bi bi-pencil-square"></i>
-            <span data-i18n="hero.ctaApply">Daftar PPDB</span>
-          </a>
-          <a href="/brosur.html" class="hero-btn hero-btn-secondary">
-            <i class="bi bi-building"></i>
-            <span data-i18n="hero.ctaProfile">Profil Sekolah</span>
-          </a>
-        </div>
-
-        <!-- Highlight Boxes -->
-        <div class="hero-highlights reveal-item">
-          <!-- Highlight 1 -->
-          <div class="highlight-box">
-            <div class="highlight-icon">
-              <i class="bi bi-book"></i>
+          <!-- Photo Card -->
+          <div class="hero-photo-card fade-up">
+            <div class="hero-photo-frame">
+              <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?w=400&h=500&fit=crop"
+                alt="Santri Al Ikhsan Beji" loading="eager" />
             </div>
-            <div class="highlight-text">
-              <h4 data-i18n="hero.highlight1.title">Kurikulum Terintegrasi</h4>
-              <p data-i18n="hero.highlight1.desc">Perpaduan kurikulum nasional & pesantren</p>
+            <div class="hero-photo-badge">
+              <i class="bi bi-mortarboard-fill"></i>
+              <span>Santri Berprestasi</span>
             </div>
           </div>
 
-          <!-- Highlight 2 -->
-          <div class="highlight-box">
-            <div class="highlight-icon">
-              <i class="bi bi-moon-stars"></i>
-            </div>
-            <div class="highlight-text">
-              <h4 data-i18n="hero.highlight2.title">Pembinaan Karakter Islami</h4>
-              <p data-i18n="hero.highlight2.desc">Akhlakul karimah & tahfidz Al-Qur'an</p>
-            </div>
-          </div>
+          <!-- Right Arrow -->
+          <button type="button" class="hero-nav-arrow hero-nav-next fade-in" aria-label="Next slide">
+            <i class="bi bi-chevron-right"></i>
+          </button>
+        </div>
 
-          <!-- Highlight 3 -->
-          <div class="highlight-box">
-            <div class="highlight-icon">
-              <i class="bi bi-tree"></i>
-            </div>
-            <div class="highlight-text">
-              <h4 data-i18n="hero.highlight3.title">Lingkungan Nyaman</h4>
-              <p data-i18n="hero.highlight3.desc">Fasilitas modern & asri</p>
-            </div>
+        <!-- Text Content Section -->
+        <div class="hero-text-block">
+          <!-- Arabic Tagline -->
+          <p class="hero-arabic fade-in">العلم نور والجهل ظلام</p>
+
+          <!-- Main Headline -->
+          <h1 class="hero-headline fade-up">
+            <span class="hero-headline-main" data-i18n="hero.headingMain">Penerimaan Peserta Didik Baru</span>
+            <span class="hero-headline-highlight">Al Ikhsan Beji</span>
+          </h1>
+
+          <!-- Description -->
+          <p class="hero-description fade-up" data-i18n="hero.subtitle">
+            Bergabunglah menjadi santri Pondok Pesantren Al Ikhsan Beji.
+            Pendidikan islami terpadu dengan pembinaan akhlak, tahfidz Al-Qur'an,
+            dan ilmu pengetahuan yang membentuk generasi Qur'ani dan berprestasi.
+          </p>
+
+          <!-- CTA Button -->
+          <div class="hero-cta-wrapper fade-up">
+            <a href="/daftar.html" class="hero-cta-button">
+              <i class="bi bi-pencil-square"></i>
+              <span data-i18n="hero.ctaApply">Daftar Sekarang</span>
+            </a>
           </div>
         </div>
-      </div>
 
-      <!-- Scroll Indicator -->
-      <div class="hero-scroll-indicator">
-        <span>Scroll</span>
-        <i class="bi bi-chevron-double-down"></i>
+        <!-- Slider Dots -->
+        <div class="hero-slider-dots fade-in">
+          <button type="button" class="hero-dot active" aria-label="Slide 1"></button>
+          <button type="button" class="hero-dot" aria-label="Slide 2"></button>
+          <button type="button" class="hero-dot" aria-label="Slide 3"></button>
+        </div>
       </div>
 
       <!-- Wave Divider -->
