@@ -458,7 +458,9 @@
    Responsive Adjustments
    ========================= */
 
-/* Tablet */
+/* =========================
+   Responsive: Tablet (1024px and below)
+   ========================= */
 @media (max-width: 1024px) {
     .hero-carousel {
         padding: 5rem 1.5rem 3.5rem;
@@ -469,7 +471,12 @@
     }
 
     .hero-image-card {
-        max-width: 320px;
+        max-width: 300px;
+        height: 380px;
+    }
+
+    .hero-slide-image img {
+        height: 420px;
     }
 
     .hero-arrow {
@@ -496,178 +503,101 @@
     }
 }
 
-/* Mobile - Stack layout */
+/* =========================
+   Responsive: Mobile (768px and below)
+   Layout: Stacked (Image on top, text below)
+   ========================= */
 @media (max-width: 768px) {
     .hero-carousel {
         min-height: auto;
-        padding: 5rem 1.25rem 4rem;
+        padding: 5rem 1rem 3rem;
     }
 
     .hero-wrapper {
-        grid-template-columns: 1fr;
-        gap: 1.75rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
         text-align: center;
     }
 
-    /* Reorder: image first on mobile */
+    /* Image Area - First on mobile */
     .hero-image-area {
         order: -1;
-        margin-bottom: 0.5rem;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
+    /* Text Area */
     .hero-text-area {
+        width: 100%;
         min-height: auto;
         padding: 0 0.5rem;
     }
 
+    /* Force only active slide to show */
     .hero-slide-text {
         position: relative;
-        display: none;
+        display: none !important;
         transform: none;
+        opacity: 0;
     }
 
     .hero-slide-text--active {
-        display: block;
+        display: block !important;
         opacity: 1;
     }
 
+    /* Arabic text */
     .hero-arabic-text {
         text-align: center;
-        font-size: 1.25rem;
-        margin-bottom: 0.625rem;
+        font-size: 1.125rem;
+        margin-bottom: 0.5rem;
     }
 
+    /* Title */
     .hero-title {
-        font-size: 1.625rem;
-        line-height: 1.3;
-        margin-bottom: 0.875rem;
+        font-size: 1.5rem;
+        line-height: 1.35;
+        margin-bottom: 0.75rem;
     }
 
+    .hero-title br {
+        display: none;
+    }
+
+    /* Description */
     .hero-desc {
         max-width: 100%;
-        font-size: 0.9375rem;
-        line-height: 1.65;
-        margin-bottom: 1.5rem;
-        color: #4b5563;
-    }
-
-    .hero-cta {
-        padding: 0.875rem 1.75rem;
-        font-size: 0.9375rem;
-    }
-
-    /* Image card adjustments for mobile */
-    .hero-image-card {
-        max-width: 220px;
-        height: 280px;
-    }
-
-    .hero-image-bg {
-        border-radius: 24px;
-    }
-
-    .hero-slide-image {
-        bottom: -15px;
-    }
-
-    .hero-slide-image img {
-        height: 320px;
-    }
-
-    .hero-cta-group {
-        justify-content: center;
-    }
-
-    .hero-cta {
-        padding: 0.75rem 1.5rem;
-        font-size: 0.875rem;
-    }
-
-    /* Arrows on mobile - smaller and closer to card */
-    .hero-arrow {
-        width: 40px;
-        height: 40px;
-        font-size: 0.9375rem;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    .hero-arrow-prev {
-        left: -20px;
-    }
-
-    .hero-arrow-next {
-        right: -20px;
-    }
-
-    .hero-dots {
-        margin-top: 1.75rem;
-        gap: 0.625rem;
-    }
-
-    .hero-dot {
-        width: 10px;
-        height: 10px;
-    }
-
-    .hero-dot--active {
-        width: 28px;
-    }
-
-    /* Smaller decorative circles on mobile */
-    .hero-decor-1 {
-        width: 250px;
-        height: 250px;
-        top: -80px;
-        right: -80px;
-        filter: blur(40px);
-    }
-
-    .hero-decor-2 {
-        width: 200px;
-        height: 200px;
-        bottom: -60px;
-        left: -60px;
-        filter: blur(40px);
-    }
-
-    /* Wave smaller on mobile */
-    .hero-wave svg {
-        height: 60px;
-    }
-}
-
-/* Small Mobile (iPhone SE, etc.) */
-@media (max-width: 480px) {
-    .hero-carousel {
-        padding: 4.5rem 1rem 3.5rem;
-    }
-
-    .hero-wrapper {
-        gap: 1.5rem;
-    }
-
-    .hero-text-area {
+        font-size: 0.9rem;
+        line-height: 1.6;
+        margin-bottom: 1.25rem;
         padding: 0 0.25rem;
     }
 
-    .hero-arabic-text {
-        font-size: 1.125rem;
+    /* CTA Buttons - Stack vertically on mobile */
+    .hero-cta-group {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.625rem;
+        width: 100%;
     }
 
-    .hero-title {
-        font-size: 1.375rem;
-        line-height: 1.35;
+    .hero-cta {
+        width: 100%;
+        max-width: 280px;
+        justify-content: center;
+        padding: 0.875rem 1.5rem;
+        font-size: 0.9rem;
     }
 
-    .hero-desc {
-        font-size: 0.875rem;
-        line-height: 1.6;
-        margin-bottom: 1.25rem;
-    }
-
+    /* Image card on mobile */
     .hero-image-card {
-        max-width: 180px;
-        height: 230px;
+        max-width: 200px;
+        height: 250px;
+        margin: 0 auto;
     }
 
     .hero-image-bg {
@@ -675,17 +605,20 @@
     }
 
     .hero-slide-image {
-        bottom: -12px;
+        bottom: -15px;
     }
 
     .hero-slide-image img {
-        height: 260px;
+        height: 290px;
+        width: auto;
     }
 
+    /* Navigation arrows - positioned inside card area */
     .hero-arrow {
         width: 36px;
         height: 36px;
         font-size: 0.875rem;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
     }
 
     .hero-arrow-prev {
@@ -696,16 +629,10 @@
         right: -18px;
     }
 
-    .hero-cta {
-        padding: 0.75rem 1.5rem;
-        font-size: 0.875rem;
-        width: 100%;
-        max-width: 220px;
-        justify-content: center;
-    }
-
+    /* Slider dots */
     .hero-dots {
-        margin-top: 1.5rem;
+        margin-top: 1.25rem;
+        gap: 0.5rem;
     }
 
     .hero-dot {
@@ -717,9 +644,121 @@
         width: 24px;
     }
 
+    /* Decorative circles - smaller */
+    .hero-decor-1 {
+        width: 200px;
+        height: 200px;
+        top: -60px;
+        right: -60px;
+        filter: blur(35px);
+        opacity: 0.3;
+    }
+
+    .hero-decor-2 {
+        width: 150px;
+        height: 150px;
+        bottom: -50px;
+        left: -50px;
+        filter: blur(35px);
+        opacity: 0.25;
+    }
+
+    /* Wave */
+    .hero-wave svg {
+        height: 50px;
+    }
+}
+
+/* =========================
+   Responsive: Small Mobile (480px and below)
+   iPhone SE, older phones
+   ========================= */
+@media (max-width: 480px) {
+    .hero-carousel {
+        padding: 4.5rem 0.75rem 2.5rem;
+    }
+
+    .hero-wrapper {
+        gap: 1.25rem;
+    }
+
+    .hero-text-area {
+        padding: 0;
+    }
+
+    .hero-arabic-text {
+        font-size: 1rem;
+    }
+
+    .hero-title {
+        font-size: 1.25rem;
+        line-height: 1.4;
+        margin-bottom: 0.625rem;
+    }
+
+    .hero-desc {
+        font-size: 0.85rem;
+        line-height: 1.55;
+        margin-bottom: 1rem;
+    }
+
+    .hero-image-card {
+        max-width: 170px;
+        height: 210px;
+    }
+
+    .hero-image-bg {
+        border-radius: 16px;
+    }
+
+    .hero-slide-image {
+        bottom: -12px;
+    }
+
+    .hero-slide-image img {
+        height: 240px;
+    }
+
+    .hero-arrow {
+        width: 32px;
+        height: 32px;
+        font-size: 0.75rem;
+    }
+
+    .hero-arrow-prev {
+        left: -16px;
+    }
+
+    .hero-arrow-next {
+        right: -16px;
+    }
+
+    .hero-cta {
+        max-width: 260px;
+        padding: 0.75rem 1.25rem;
+        font-size: 0.85rem;
+    }
+
+    .hero-dots {
+        margin-top: 1rem;
+    }
+
+    .hero-dot {
+        width: 6px;
+        height: 6px;
+    }
+
+    .hero-dot--active {
+        width: 20px;
+    }
+
     /* Hide decorative circles on very small screens */
     .hero-decor {
         display: none;
+    }
+
+    .hero-wave svg {
+        height: 40px;
     }
 }
 

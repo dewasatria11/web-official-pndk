@@ -325,49 +325,120 @@
       }
     }
 
-    /* Backdrop + scroll handling supaya modal tidak menimpa konten lain */
+    /* =========================
+       Modal System - Overlay & Panel
+       ========================= */
+
+    /* Modal Overlay - Full screen with blur */
     .modal-layer {
       position: fixed;
       inset: 0;
       z-index: 9999;
-      /* Pastikan z-index sangat tinggi */
       display: flex;
-      /* Tambahkan display flex */
       align-items: center;
-      /* Center vertical */
       justify-content: center;
-      /* Center horizontal */
-      padding: 24px 16px;
+      padding: 20px;
       overflow-y: auto;
-      background: rgba(15, 23, 42, 0.7);
-      /* Lebih gelap untuk overlay yang lebih jelas */
+      background: rgba(15, 23, 42, 0.6);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
     }
 
-    @media (min-width: 768px) {
-      .modal-layer {
-        padding: 56px 24px 32px;
-      }
-    }
-
-    /* Pastikan modal panel berada di atas overlay backdrop */
-    .modal-layer>.modal-panel,
-    .modal-layer>div:not([data-close-payment-modal]) {
+    /* Modal Panel - Centered, scrollable, with max-height */
+    .modal-panel {
       position: relative;
       z-index: 10000;
+      width: 100%;
+      max-width: 640px;
+      max-height: 90vh;
+      overflow-y: auto;
+      border-radius: 16px;
+      background: #ffffff;
+      box-shadow: 0 20px 60px rgba(15, 23, 42, 0.25);
     }
 
-    /* Overlay backdrop inside modal (yang clickable untuk close) */
+    /* Wide modal for payment details */
+    .modal-panel--wide {
+      max-width: 900px;
+    }
+
+    /* Modal panel internal scroll styling */
+    .modal-panel::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .modal-panel::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 4px;
+    }
+
+    .modal-panel::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+
+    .modal-panel::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    /* Overlay backdrop inside modal (clickable to close) */
+    .modal-layer>[data-close-modal],
     .modal-layer>[data-close-payment-modal] {
       position: absolute;
       inset: 0;
       z-index: 1;
+      cursor: pointer;
     }
 
+    /* Modal close button styling */
+    .modal-close-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      font-size: 1.25rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .modal-close-btn:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: scale(1.05);
+    }
+
+    /* Body state when modal is open */
     body.modal-open {
       overflow: hidden;
     }
+
+    /* Mobile responsive modal */
+    @media (max-width: 640px) {
+      .modal-layer {
+        padding: 16px 12px;
+        align-items: flex-start;
+        padding-top: 40px;
+      }
+
+      .modal-panel {
+        width: 92%;
+        max-width: none;
+        max-height: 85vh;
+        border-radius: 12px;
+      }
+
+      .modal-panel--wide {
+        max-width: none;
+      }
+    }
+
+    /* =========================
+       Additional Status Page Styles
+       ========================= */
 
     #statusResult .status-extra+.status-extra {
       margin-top: 12px;
@@ -609,67 +680,103 @@
       </div>
     </div>
 
-    <div id="statusResultSection" class="hidden max-w-5xl mx-auto" data-section="result">
-      <div class="bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden">
+    <!-- Modal: Status Result (shows after successful check) -->
+    <div id="statusResultModal" class="modal-hidden modal-layer" data-section="result">
+      <div class="absolute inset-0" data-close-status-modal></div>
+      <div class="modal-panel modal-panel--wide">
+        <!-- Modal Header -->
         <div
-          class="px-6 py-4 bg-gradient-to-br from-brand-700 to-brand-800 text-white flex items-center justify-between">
+          class="px-6 py-4 bg-gradient-to-br from-brand-700 to-brand-800 text-white flex items-center justify-between sticky top-0 z-10">
           <h5 class="font-semibold flex items-center gap-2">
             <i class="bi bi-clipboard-check"></i>
             <span data-i18n="cekStatus.modal.title">Hasil Cek Status Pendaftaran</span>
           </h5>
-          <button type="button"
-            class="text-white/90 hover:text-white text-sm font-semibold inline-flex items-center gap-2"
-            id="btnCekUlang">
-            <i class="bi bi-arrow-left"></i>
-            <span data-i18n="cekStatus.form.button">Cek Status Lagi</span>
+          <button type="button" class="modal-close-btn" data-close-status-modal aria-label="Tutup">
+            <i class="bi bi-x-lg"></i>
           </button>
         </div>
-        <div class="p-6">
-          <!-- Hasil sukses -->
+
+        <!-- Modal Body (scrollable) -->
+        <div class="p-6 bg-gray-50">
+          <!-- Status Result Content -->
           <div id="statusResult" class="hidden space-y-4">
+            <!-- Status Icon & Badge -->
             <div class="text-center">
               <i id="statusIcon" class="bi bi-hourglass-split text-yellow-600" style="font-size: 3rem;"></i>
             </div>
-            <div class="flex justify-center">
-              <span id="statusBadge" class="px-4 py-2 rounded-full bg-yellow-500 text-white">-</span>
+            <div class="flex justify-center mb-4">
+              <span id="statusBadge" class="px-4 py-2 rounded-full bg-yellow-500 text-white font-semibold">-</span>
             </div>
-            <div class="bg-white rounded-xl border border-gray-200 shadow-sm mb-3">
-              <div class="px-4 py-3 border-b border-gray-100 font-semibold"><i class="bi bi-person-badge"></i> <span
-                  data-i18n="cekStatus.modal.sections.info">Informasi Pendaftar</span></div>
+
+            <!-- Informasi Pendaftar -->
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm">
+              <div class="px-4 py-3 border-b border-gray-100 font-semibold bg-gray-50 rounded-t-xl">
+                <i class="bi bi-person-badge text-brand-600"></i>
+                <span data-i18n="cekStatus.modal.sections.info">Informasi Pendaftar</span>
+              </div>
               <div class="divide-y divide-gray-100">
-                <div class="px-4 py-3 flex justify-between text-sm"><span class="text-gray-500"
-                    data-i18n="cekStatus.modal.fields.nisn">NISN</span><strong id="f_nisn">-</strong></div>
-                <div class="px-4 py-3 flex justify-between text-sm"><span class="text-gray-500"
-                    data-i18n="cekStatus.modal.fields.name">Nama Lengkap</span><strong id="f_nama">-</strong></div>
-                <div class="px-4 py-3 flex justify-between text-sm"><span class="text-gray-500"
-                    data-i18n="cekStatus.modal.fields.birthPlace">Tempat Lahir</span><span id="f_tempat_lahir">-</span>
+                <div class="px-4 py-3 flex justify-between text-sm">
+                  <span class="text-gray-500" data-i18n="cekStatus.modal.fields.nisn">NISN</span>
+                  <strong id="f_nisn">-</strong>
                 </div>
-                <div class="px-4 py-3 flex justify-between text-sm"><span class="text-gray-500"
-                    data-i18n="cekStatus.modal.fields.birthDate">Tanggal Lahir</span><span id="f_tanggal_lahir">-</span>
+                <div class="px-4 py-3 flex justify-between text-sm">
+                  <span class="text-gray-500" data-i18n="cekStatus.modal.fields.name">Nama Lengkap</span>
+                  <strong id="f_nama">-</strong>
                 </div>
-                <div class="px-4 py-3 flex justify-between text-sm"><span class="text-gray-500"
-                    data-i18n="cekStatus.modal.fields.submittedAt">Tanggal Daftar</span><span
-                    id="f_tanggal_daftar">-</span></div>
+                <div class="px-4 py-3 flex justify-between text-sm">
+                  <span class="text-gray-500" data-i18n="cekStatus.modal.fields.birthPlace">Tempat Lahir</span>
+                  <span id="f_tempat_lahir">-</span>
+                </div>
+                <div class="px-4 py-3 flex justify-between text-sm">
+                  <span class="text-gray-500" data-i18n="cekStatus.modal.fields.birthDate">Tanggal Lahir</span>
+                  <span id="f_tanggal_lahir">-</span>
+                </div>
+                <div class="px-4 py-3 flex justify-between text-sm">
+                  <span class="text-gray-500" data-i18n="cekStatus.modal.fields.submittedAt">Tanggal Daftar</span>
+                  <span id="f_tanggal_daftar">-</span>
+                </div>
               </div>
             </div>
+
+            <!-- Status & Catatan -->
             <div class="bg-white rounded-xl border border-gray-200 shadow-sm" id="statusCatatanSection">
-              <div class="px-4 py-3 border-b border-gray-100 font-semibold"><i class="bi bi-clipboard-data"></i> <span
-                  data-i18n="cekStatus.modal.sections.status">Status & Catatan</span></div>
-              <div class="px-4 py-3 space-y-3">
+              <div class="px-4 py-3 border-b border-gray-100 font-semibold bg-gray-50 rounded-t-xl">
+                <i class="bi bi-clipboard-data text-brand-600"></i>
+                <span data-i18n="cekStatus.modal.sections.status">Status & Catatan</span>
+              </div>
+              <div class="px-4 py-4 space-y-3">
                 <div>
                   <span class="text-gray-500 block mb-1 text-sm"
                     data-i18n="cekStatus.modal.fields.verificationStatus">Status Verifikasi</span>
                   <span id="f_status_text"
-                    class="inline-block px-3 py-1 rounded bg-yellow-500 text-white text-sm">-</span>
+                    class="inline-block px-3 py-1 rounded bg-yellow-500 text-white text-sm font-medium">-</span>
                 </div>
                 <div id="catatanContainer">
                   <span class="text-gray-500 block mb-1 text-sm" data-i18n="cekStatus.modal.fields.adminNote">Catatan
                     Admin</span>
-                  <p id="f_catatan" class="mb-0 text-gray-800">-</p>
+                  <p id="f_catatan" class="mb-0 text-gray-800 bg-gray-50 p-3 rounded-lg border border-gray-100">-</p>
                 </div>
               </div>
             </div>
+
+            <!-- Dynamic content for payment info will be injected here -->
           </div>
+        </div>
+
+        <!-- Modal Footer -->
+        <div
+          class="px-6 py-4 bg-white border-t border-gray-100 flex flex-wrap gap-3 justify-between items-center sticky bottom-0">
+          <button type="button" class="inline-flex items-center gap-2 text-gray-600 hover:text-gray-800 font-semibold"
+            id="btnCekUlang">
+            <i class="bi bi-arrow-left"></i>
+            <span data-i18n="cekStatus.buttons.checkAgain">Cek Status Lagi</span>
+          </button>
+          <button type="button"
+            class="inline-flex items-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-800 px-5 py-2.5 rounded-lg font-semibold"
+            data-close-status-modal>
+            <i class="bi bi-x-circle"></i>
+            <span>Tutup</span>
+          </button>
         </div>
       </div>
     </div>
@@ -677,16 +784,15 @@
 
   <!-- Modal: Bukti Pembayaran -->
   <div id="paymentProofModal" class="modal-hidden modal-layer">
-    <div class="absolute inset-0 bg-black/70" data-close-payment-modal></div>
-    <div class="relative bg-white w-full max-w-5xl mx-4 rounded-2xl shadow-2xl overflow-hidden modal-panel">
+    <div class="absolute inset-0" data-close-payment-modal></div>
+    <div class="modal-panel modal-panel--wide">
       <div class="flex items-center justify-between px-6 py-4 bg-emerald-700 text-white">
         <div>
           <h5 class="font-semibold text-lg" data-i18n="cekStatus.payment.modal.title">Detail Bukti Pembayaran</h5>
           <p class="text-white/80 text-sm" data-i18n="cekStatus.payment.modal.subtitle">Bukti pembayaran yang Anda
             unggah tersimpan aman dan diperiksa oleh admin.</p>
         </div>
-        <button type="button" class="text-white/80 hover:text-white text-xl" data-close-payment-modal
-          aria-label="Tutup">
+        <button type="button" class="modal-close-btn" data-close-payment-modal aria-label="Tutup">
           <i class="bi bi-x-lg"></i>
         </button>
       </div>
@@ -835,16 +941,57 @@
       const paymentProofNoteEl = document.getElementById('paymentProofNote');
       const formSection = document.getElementById('statusFormSection');
       const loadingSection = document.getElementById('statusLoadingSection');
-      const resultSection = document.getElementById('statusResultSection');
+      const resultSection = document.getElementById('statusResultModal');
       const cekStatusPage = document.getElementById('cek-status-form');
       const btnCekUlang = document.getElementById('btnCekUlang');
       const defaultBtnHTML = btn?.innerHTML || '';
       let defaultErrorMessage = statusErrorMsgEl?.textContent || '';
 
+      // Sync body scroll lock when any modal is open
       const syncBodyModalState = () => {
+        const statusOpen = resultSection?.classList.contains('modal-visible');
         const paymentOpen = paymentProofModal?.classList.contains('modal-visible');
-        document.body.classList.toggle('modal-open', Boolean(paymentOpen));
+        document.body.classList.toggle('modal-open', Boolean(statusOpen || paymentOpen));
       };
+
+      // Show status result modal
+      const showStatusModal = () => {
+        if (!resultSection) return;
+        resultSection.classList.remove('modal-hidden');
+        resultSection.classList.add('modal-visible');
+        syncBodyModalState();
+      };
+
+      // Hide status result modal
+      const hideStatusModal = () => {
+        if (!resultSection) return;
+        resultSection.classList.remove('modal-visible');
+        resultSection.classList.add('modal-hidden');
+        syncBodyModalState();
+      };
+
+      // Status modal close handlers
+      document.querySelectorAll('[data-close-status-modal]').forEach(el => {
+        el.addEventListener('click', (e) => {
+          // Only close if clicking the backdrop (not the modal content) or a close button
+          if (e.target === el || el.hasAttribute('aria-label') || el.querySelector('i')) {
+            hideStatusModal();
+            setViewState('form');
+          }
+        });
+      });
+
+      // Escape key handler for modals
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          if (paymentProofModal?.classList.contains('modal-visible')) {
+            hidePaymentProofModal();
+          } else if (resultSection?.classList.contains('modal-visible')) {
+            hideStatusModal();
+            setViewState('form');
+          }
+        }
+      });
 
       const T = (key, replacements) => (typeof window.__ === 'function' ? window.__(key, replacements) : key);
       const applyTranslations = (root) => {
@@ -900,7 +1047,13 @@
         cekStatusPage?.setAttribute('data-state', state);
         formSection?.classList.toggle('hidden', state === 'loading' || state === 'result');
         loadingSection?.classList.toggle('hidden', state !== 'loading');
-        resultSection?.classList.toggle('hidden', state !== 'result');
+
+        // Handle status result modal visibility
+        if (state === 'result') {
+          showStatusModal();
+        } else {
+          hideStatusModal();
+        }
 
         const showError = state === 'error';
         if (statusErrorEl) {
