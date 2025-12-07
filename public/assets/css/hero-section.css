@@ -147,7 +147,7 @@
     font-family: 'Amiri', serif;
     font-size: clamp(1.25rem, 3vw, 1.75rem);
     font-weight: 700;
-    color: #047857;
+    color: #046e50;
     margin-bottom: 0.75rem;
     direction: rtl;
     text-align: left;
@@ -164,7 +164,7 @@
 }
 
 .hero-title-highlight {
-    background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+    background: linear-gradient(135deg, #046e50 0%, #059669 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -179,29 +179,55 @@
     max-width: 520px;
 }
 
-/* CTA Button */
+/* CTA Button Group */
+.hero-cta-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+/* CTA Buttons - Base */
 .hero-cta {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.875rem 2rem;
-    background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
-    color: #ffffff;
-    font-size: 1rem;
+    padding: 0.875rem 1.75rem;
+    font-size: 0.9375rem;
     font-weight: 600;
     text-decoration: none;
     border-radius: 999px;
-    box-shadow: 0 8px 25px rgba(22, 163, 74, 0.35);
     transition: all 0.3s ease;
 }
 
-.hero-cta:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 35px rgba(22, 163, 74, 0.45);
+.hero-cta i {
+    font-size: 1rem;
 }
 
-.hero-cta i {
-    font-size: 1.125rem;
+/* Primary Button - Green solid */
+.hero-cta-primary {
+    background: linear-gradient(135deg, #046e50 0%, #059669 100%);
+    color: #ffffff;
+    box-shadow: 0 8px 25px rgba(4, 110, 80, 0.35);
+}
+
+.hero-cta-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(4, 110, 80, 0.45);
+}
+
+/* Secondary Button - Outline */
+.hero-cta-secondary {
+    background: transparent;
+    color: #046e50;
+    border: 2px solid #046e50;
+    box-shadow: none;
+}
+
+.hero-cta-secondary:hover {
+    background: #046e50;
+    color: #ffffff;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(4, 110, 80, 0.3);
 }
 
 /* =========================
@@ -214,47 +240,81 @@
     justify-content: center;
 }
 
-/* Image Card Container */
+/* 
+   Image Card Container
+   - Green rounded card as backdrop
+   - PNG student image positioned above
+   - overflow: visible allows image to extend outside
+*/
 .hero-image-card {
     position: relative;
     width: 100%;
-    max-width: 380px;
-    aspect-ratio: 9 / 11;
-    border-radius: 24px;
-    overflow: hidden;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+    max-width: 340px;
+    height: 420px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    /* No overflow hidden - allow PNG to extend outside */
+    overflow: visible;
 }
 
-/* Background behind image */
+/* Green rounded backdrop card */
 .hero-image-bg {
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+    background: linear-gradient(160deg, #0d9463 0%, #065f46 100%);
+    border-radius: 30px;
     z-index: 0;
+    box-shadow:
+        0 20px 40px -10px rgba(6, 95, 70, 0.4),
+        0 10px 20px -5px rgba(0, 0, 0, 0.1);
 }
 
-/* Slide Images */
+/* 
+   Slide Images Container
+   - Positioned to allow PNG to extend beyond card
+   - Bottom aligned with slight extension
+*/
 .hero-slide-image {
     position: absolute;
-    inset: 0;
+    left: 0;
+    right: 0;
+    bottom: -20px;
+    /* PNG extends below the card */
     z-index: 1;
     opacity: 0;
-    transform: scale(1.05);
+    transform: scale(0.95) translateY(20px);
     transition:
         opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1),
         transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
 }
 
 .hero-slide-image--active {
     opacity: 1;
-    transform: scale(1);
+    transform: scale(1) translateY(0);
 }
 
+/* 
+   PNG Student Image Styling
+   - Maintains natural proportions
+   - Does not stretch or distort
+   - Bottom of image extends slightly outside card
+   
+   === GANTI GAMBAR DI HTML ===
+   Gunakan gambar PNG dengan background transparan
+   Path: img/hero-student-1.png, img/hero-student-2.png, dll.
+*/
 .hero-slide-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center top;
+    width: auto;
+    height: 480px;
+    /* Taller than card to extend outside */
+    max-width: 100%;
+    object-fit: contain;
+    object-position: bottom center;
+    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.15));
 }
 
 /* =========================
@@ -273,7 +333,7 @@
     border-radius: 50%;
     border: none;
     background: #ffffff;
-    color: #16a34a;
+    color: #046e50;
     font-size: 1.25rem;
     cursor: pointer;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
@@ -281,10 +341,10 @@
 }
 
 .hero-arrow:hover {
-    background: #16a34a;
+    background: #046e50;
     color: #ffffff;
     transform: translateY(-50%) scale(1.08);
-    box-shadow: 0 8px 25px rgba(22, 163, 74, 0.4);
+    box-shadow: 0 8px 25px rgba(4, 110, 80, 0.4);
 }
 
 .hero-arrow:active {
@@ -318,22 +378,22 @@
     height: 12px;
     border-radius: 50%;
     border: none;
-    background: rgba(22, 163, 74, 0.2);
+    background: rgba(4, 110, 80, 0.2);
     cursor: pointer;
     transition: all 0.3s ease;
     padding: 0;
 }
 
 .hero-dot:hover {
-    background: rgba(22, 163, 74, 0.4);
+    background: rgba(4, 110, 80, 0.4);
     transform: scale(1.15);
 }
 
 .hero-dot--active {
-    background: #16a34a;
+    background: #046e50;
     width: 36px;
     border-radius: 999px;
-    box-shadow: 0 2px 8px rgba(22, 163, 74, 0.4);
+    box-shadow: 0 2px 8px rgba(4, 110, 80, 0.4);
 }
 
 /* =========================
@@ -440,107 +500,224 @@
 @media (max-width: 768px) {
     .hero-carousel {
         min-height: auto;
-        padding: 4rem 1rem 3rem;
+        padding: 5rem 1.25rem 4rem;
     }
 
     .hero-wrapper {
         grid-template-columns: 1fr;
-        gap: 2rem;
+        gap: 1.75rem;
         text-align: center;
     }
 
     /* Reorder: image first on mobile */
     .hero-image-area {
         order: -1;
+        margin-bottom: 0.5rem;
     }
 
     .hero-text-area {
         min-height: auto;
+        padding: 0 0.5rem;
     }
 
     .hero-slide-text {
         position: relative;
         display: none;
+        transform: none;
     }
 
     .hero-slide-text--active {
         display: block;
+        opacity: 1;
     }
 
     .hero-arabic-text {
         text-align: center;
+        font-size: 1.25rem;
+        margin-bottom: 0.625rem;
+    }
+
+    .hero-title {
+        font-size: 1.625rem;
+        line-height: 1.3;
+        margin-bottom: 0.875rem;
     }
 
     .hero-desc {
         max-width: 100%;
+        font-size: 0.9375rem;
+        line-height: 1.65;
+        margin-bottom: 1.5rem;
+        color: #4b5563;
     }
 
+    .hero-cta {
+        padding: 0.875rem 1.75rem;
+        font-size: 0.9375rem;
+    }
+
+    /* Image card adjustments for mobile */
     .hero-image-card {
-        max-width: 280px;
-        aspect-ratio: 3 / 4;
+        max-width: 220px;
+        height: 280px;
     }
 
+    .hero-image-bg {
+        border-radius: 24px;
+    }
+
+    .hero-slide-image {
+        bottom: -15px;
+    }
+
+    .hero-slide-image img {
+        height: 320px;
+    }
+
+    .hero-cta-group {
+        justify-content: center;
+    }
+
+    .hero-cta {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.875rem;
+    }
+
+    /* Arrows on mobile - smaller and closer to card */
     .hero-arrow {
-        width: 42px;
-        height: 42px;
-        font-size: 1rem;
+        width: 40px;
+        height: 40px;
+        font-size: 0.9375rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
     .hero-arrow-prev {
-        left: -21px;
+        left: -20px;
     }
 
     .hero-arrow-next {
-        right: -21px;
+        right: -20px;
+    }
+
+    .hero-dots {
+        margin-top: 1.75rem;
+        gap: 0.625rem;
+    }
+
+    .hero-dot {
+        width: 10px;
+        height: 10px;
+    }
+
+    .hero-dot--active {
+        width: 28px;
+    }
+
+    /* Smaller decorative circles on mobile */
+    .hero-decor-1 {
+        width: 250px;
+        height: 250px;
+        top: -80px;
+        right: -80px;
+        filter: blur(40px);
+    }
+
+    .hero-decor-2 {
+        width: 200px;
+        height: 200px;
+        bottom: -60px;
+        left: -60px;
+        filter: blur(40px);
+    }
+
+    /* Wave smaller on mobile */
+    .hero-wave svg {
+        height: 60px;
+    }
+}
+
+/* Small Mobile (iPhone SE, etc.) */
+@media (max-width: 480px) {
+    .hero-carousel {
+        padding: 4.5rem 1rem 3.5rem;
+    }
+
+    .hero-wrapper {
+        gap: 1.5rem;
+    }
+
+    .hero-text-area {
+        padding: 0 0.25rem;
+    }
+
+    .hero-arabic-text {
+        font-size: 1.125rem;
+    }
+
+    .hero-title {
+        font-size: 1.375rem;
+        line-height: 1.35;
+    }
+
+    .hero-desc {
+        font-size: 0.875rem;
+        line-height: 1.6;
+        margin-bottom: 1.25rem;
+    }
+
+    .hero-image-card {
+        max-width: 180px;
+        height: 230px;
+    }
+
+    .hero-image-bg {
+        border-radius: 20px;
+    }
+
+    .hero-slide-image {
+        bottom: -12px;
+    }
+
+    .hero-slide-image img {
+        height: 260px;
+    }
+
+    .hero-arrow {
+        width: 36px;
+        height: 36px;
+        font-size: 0.875rem;
+    }
+
+    .hero-arrow-prev {
+        left: -18px;
+    }
+
+    .hero-arrow-next {
+        right: -18px;
+    }
+
+    .hero-cta {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.875rem;
+        width: 100%;
+        max-width: 220px;
+        justify-content: center;
     }
 
     .hero-dots {
         margin-top: 1.5rem;
     }
 
-    .hero-decor-1 {
-        width: 300px;
-        height: 300px;
-        top: -100px;
-        right: -100px;
+    .hero-dot {
+        width: 8px;
+        height: 8px;
     }
 
-    .hero-decor-2 {
-        width: 250px;
-        height: 250px;
-        bottom: -80px;
-        left: -80px;
-    }
-}
-
-/* Small Mobile */
-@media (max-width: 480px) {
-    .hero-carousel {
-        padding: 3.5rem 0.75rem 2.5rem;
+    .hero-dot--active {
+        width: 24px;
     }
 
-    .hero-image-card {
-        max-width: 240px;
-    }
-
-    .hero-arrow {
-        width: 38px;
-        height: 38px;
-    }
-
-    .hero-arrow-prev {
-        left: -19px;
-    }
-
-    .hero-arrow-next {
-        right: -19px;
-    }
-
-    .hero-cta {
-        padding: 0.75rem 1.5rem;
-        font-size: 0.9375rem;
-    }
-
+    /* Hide decorative circles on very small screens */
     .hero-decor {
         display: none;
     }

@@ -317,6 +317,7 @@
       margin-top: 24px;
       margin-bottom: 24px;
     }
+
     @media (min-width: 768px) {
       .modal-panel {
         margin-top: 32px;
@@ -328,12 +329,20 @@
     .modal-layer {
       position: fixed;
       inset: 0;
+      z-index: 9999;
+      /* Pastikan z-index sangat tinggi */
+      display: flex;
+      /* Tambahkan display flex */
+      align-items: center;
+      /* Center vertical */
+      justify-content: center;
+      /* Center horizontal */
       padding: 24px 16px;
-      align-items: flex-start;
       overflow-y: auto;
-      background: rgba(15, 23, 42, 0.5);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
+      background: rgba(15, 23, 42, 0.7);
+      /* Lebih gelap untuk overlay yang lebih jelas */
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
 
     @media (min-width: 768px) {
@@ -342,11 +351,25 @@
       }
     }
 
+    /* Pastikan modal panel berada di atas overlay backdrop */
+    .modal-layer>.modal-panel,
+    .modal-layer>div:not([data-close-payment-modal]) {
+      position: relative;
+      z-index: 10000;
+    }
+
+    /* Overlay backdrop inside modal (yang clickable untuk close) */
+    .modal-layer>[data-close-payment-modal] {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
+
     body.modal-open {
       overflow: hidden;
     }
 
-    #statusResult .status-extra + .status-extra {
+    #statusResult .status-extra+.status-extra {
       margin-top: 12px;
     }
 
@@ -395,8 +418,7 @@
     </div>
   </header>
   <!-- NAVBAR -->
-  <nav class="sticky top-0 z-[20] bg-white/95 backdrop-blur supports-backdrop-blur:bg-white/85 shadow-lg"
-    data-nav-root>
+  <nav class="sticky top-0 z-[20] bg-white/95 backdrop-blur supports-backdrop-blur:bg-white/85 shadow-lg" data-nav-root>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16 min-h-[64px]">
         <!-- Logo -->
@@ -623,8 +645,7 @@
                     data-i18n="cekStatus.modal.fields.birthPlace">Tempat Lahir</span><span id="f_tempat_lahir">-</span>
                 </div>
                 <div class="px-4 py-3 flex justify-between text-sm"><span class="text-gray-500"
-                    data-i18n="cekStatus.modal.fields.birthDate">Tanggal Lahir</span><span
-                    id="f_tanggal_lahir">-</span>
+                    data-i18n="cekStatus.modal.fields.birthDate">Tanggal Lahir</span><span id="f_tanggal_lahir">-</span>
                 </div>
                 <div class="px-4 py-3 flex justify-between text-sm"><span class="text-gray-500"
                     data-i18n="cekStatus.modal.fields.submittedAt">Tanggal Daftar</span><span
@@ -655,7 +676,7 @@
   </main>
 
   <!-- Modal: Bukti Pembayaran -->
-  <div id="paymentProofModal" class="modal-hidden modal-layer z-[1001] flex items-center justify-center">
+  <div id="paymentProofModal" class="modal-hidden modal-layer">
     <div class="absolute inset-0 bg-black/70" data-close-payment-modal></div>
     <div class="relative bg-white w-full max-w-5xl mx-4 rounded-2xl shadow-2xl overflow-hidden modal-panel">
       <div class="flex items-center justify-between px-6 py-4 bg-emerald-700 text-white">
