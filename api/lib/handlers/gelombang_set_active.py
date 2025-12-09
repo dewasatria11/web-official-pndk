@@ -2,7 +2,7 @@ from http.server import BaseHTTPRequestHandler
 import json
 import os
 from datetime import datetime
-from .._supabase import supabase_client
+from lib._supabase import supabase_client
 
 # Simple admin token from environment (optional)
 # If not set, relies on Supabase RLS policies

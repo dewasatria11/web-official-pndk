@@ -3,6 +3,15 @@ Unified Serverless Function Router
 Handles all API endpoints to stay under Vercel's 12 function limit
 """
 
+import sys
+import os
+
+# Add the api directory to sys.path so that 'lib' can be imported correctly
+# This is required for Vercel serverless functions
+api_dir = os.path.dirname(os.path.abspath(__file__))
+if api_dir not in sys.path:
+    sys.path.insert(0, api_dir)
+
 from http.server import BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs
 

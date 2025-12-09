@@ -5,7 +5,7 @@ Delete hero image from slider
 from http.server import BaseHTTPRequestHandler
 import json
 from urllib.parse import urlparse, parse_qs
-from .._supabase import supabase_client
+from lib._supabase import supabase_client
 
 class handler(BaseHTTPRequestHandler):
     def do_DELETE(self):

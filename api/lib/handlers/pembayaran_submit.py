@@ -1,6 +1,6 @@
 from http.server import BaseHTTPRequestHandler
 import json
-from .._supabase import supabase_client
+from lib._supabase import supabase_client
 import datetime
 import time
 import re

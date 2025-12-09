@@ -162,6 +162,10 @@
       "destination": "/api/index?action=chat_search"
     },
     {
+      "source": "/api/admin_users",
+      "destination": "/api/index?action=admin_users"
+    },
+    {
       "source": "/",
       "destination": "/index.html"
     },

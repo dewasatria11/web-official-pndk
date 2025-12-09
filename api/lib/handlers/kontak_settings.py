@@ -3,8 +3,8 @@ API Handler untuk kontak_settings (map embed, dsb)
 """
 from http.server import BaseHTTPRequestHandler
 
-from .._supabase import supabase_client
-from ._crud_helpers import read_json_body, send_json, now_timestamp, allow_cors
+from lib._supabase import supabase_client
+from lib.handlers._crud_helpers import read_json_body, send_json, now_timestamp, allow_cors
 
 
 TABLE_NAME = "kontak_settings"

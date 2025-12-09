@@ -2,7 +2,7 @@ from http.server import BaseHTTPRequestHandler
 import json
 import traceback
 from urllib.parse import parse_qs, urlparse
-from .._supabase import supabase_client
+from lib._supabase import supabase_client
 from typing import Any, Dict
 
 class handler(BaseHTTPRequestHandler):
