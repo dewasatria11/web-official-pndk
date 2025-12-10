@@ -31,12 +31,12 @@
 
   <style>
     :root {
-      --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --primary-gradient: linear-gradient(135deg, #059669 0%, #047857 100%);
       --success-gradient: linear-gradient(135deg, #0f9d58 0%, #0a7a43 100%);
       --danger-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
       --warning-gradient: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
       --info-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-      --sidebar-gradient: linear-gradient(180deg, #1e3c72 0%, #2a5298 100%);
+      --sidebar-gradient: linear-gradient(180deg, #064e3b 0%, #065f46 100%);
     }
 
     body {
@@ -158,7 +158,7 @@
     }
 
     .page-header h2 {
-      color: #2a5298;
+      color: #047857;
       font-weight: 700;
       margin: 0;
     }
@@ -255,7 +255,7 @@
     }
 
     .stat-card h3 {
-      color: #2a5298;
+      color: #047857;
       font-weight: 700;
       font-size: 2rem;
       margin: 0;
@@ -287,8 +287,8 @@
     }
 
     .nav-tabs .nav-link:hover {
-      color: #2a5298;
-      background: #f0f4ff;
+      color: #047857;
+      background: #ecfdf5;
     }
 
     .nav-tabs .nav-link.active {
@@ -1653,7 +1653,7 @@
                       <span class="badge bg-danger" id="hanyaSekolahMtsP">0</span>
                     </div>
                     <div class="d-flex justify-content-between align-items-center mt-2">
-                      <strong style="color:#2a5298">Total MTs</strong>
+                      <strong style="color:#047857">Total MTs</strong>
                       <strong><span class="badge bg-warning text-dark fs-5" id="hanyaSekolahMtsTotal">0</span></strong>
                     </div>
                   </div>
@@ -1678,7 +1678,7 @@
                       <span class="badge bg-danger" id="hanyaSekolahMaP">0</span>
                     </div>
                     <div class="d-flex justify-content-between align-items-center mt-2">
-                      <strong style="color:#2a5298">Total MA</strong>
+                      <strong style="color:#047857">Total MA</strong>
                       <strong><span class="badge bg-warning text-dark fs-5" id="hanyaSekolahMaTotal">0</span></strong>
                     </div>
                   </div>
@@ -3411,9 +3411,15 @@
           const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN4YnZhZHpjd3Bhb3ZraGdodHR2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjExMDg4MDYsImV4cCI6MjA3NjY4NDgwNn0.miJeKmsNgjgS4fWegGlwrxF_cPUoZBT0YKl1oxmmXTE';
 
           // Initialize Supabase client (UMD exposes supabase global)
+          // Menggunakan persistSession: false agar user harus login ulang setiap buka browser
           if (typeof supabase !== 'undefined' && supabase.createClient) {
-            window.supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-            console.log('[SUPABASE ADMIN] ✅ Client initialized successfully (UMD)');
+            window.supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+              auth: {
+                persistSession: false,  // Jangan simpan sesi - user harus login ulang setiap buka browser
+                autoRefreshToken: false // Nonaktifkan auto-refresh token
+              }
+            });
+            console.log('[SUPABASE ADMIN] ✅ Client initialized (session NOT persisted)');
           } else {
             console.error('[SUPABASE ADMIN] ❌ Supabase library not loaded');
             return;

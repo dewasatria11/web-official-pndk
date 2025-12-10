@@ -53,6 +53,148 @@
       opacity: 0.1;
     }
 
+    /* Animated Green Pattern for Login Card Area */
+    .login-pattern-bg {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .login-pattern-bg::before {
+      content: '';
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      top: -50%;
+      left: -50%;
+      background-image:
+        radial-gradient(circle at 20% 30%, rgba(16, 185, 129, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(5, 150, 105, 0.06) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(4, 120, 87, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 70% 20%, rgba(6, 95, 70, 0.04) 0%, transparent 45%);
+      animation: patternFloat 20s ease-in-out infinite;
+    }
+
+    .login-pattern-bg::after {
+      content: '';
+      position: absolute;
+      width: 150%;
+      height: 150%;
+      top: -25%;
+      left: -25%;
+      background-image:
+        repeating-linear-gradient(45deg,
+          transparent,
+          transparent 30px,
+          rgba(16, 185, 129, 0.015) 30px,
+          rgba(16, 185, 129, 0.015) 60px),
+        repeating-linear-gradient(-45deg,
+          transparent,
+          transparent 30px,
+          rgba(5, 150, 105, 0.01) 30px,
+          rgba(5, 150, 105, 0.01) 60px);
+      animation: patternDrift 30s linear infinite;
+    }
+
+    /* Floating circles animation */
+    .floating-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(40px);
+      opacity: 0.4;
+      animation: orbFloat 15s ease-in-out infinite;
+    }
+
+    .floating-orb-1 {
+      width: 200px;
+      height: 200px;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.1) 100%);
+      top: -50px;
+      right: -50px;
+      animation-delay: 0s;
+    }
+
+    .floating-orb-2 {
+      width: 150px;
+      height: 150px;
+      background: linear-gradient(135deg, rgba(4, 120, 87, 0.12) 0%, rgba(6, 78, 59, 0.08) 100%);
+      bottom: -30px;
+      left: -30px;
+      animation-delay: -5s;
+      animation-duration: 18s;
+    }
+
+    .floating-orb-3 {
+      width: 100px;
+      height: 100px;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, transparent 100%);
+      top: 40%;
+      right: 10%;
+      animation-delay: -10s;
+      animation-duration: 12s;
+    }
+
+    @keyframes patternFloat {
+
+      0%,
+      100% {
+        transform: translate(0, 0) rotate(0deg);
+      }
+
+      25% {
+        transform: translate(-2%, 1%) rotate(1deg);
+      }
+
+      50% {
+        transform: translate(1%, -1%) rotate(-0.5deg);
+      }
+
+      75% {
+        transform: translate(-1%, -2%) rotate(0.5deg);
+      }
+    }
+
+    @keyframes patternDrift {
+      0% {
+        transform: translate(0, 0);
+      }
+
+      100% {
+        transform: translate(30px, 30px);
+      }
+    }
+
+    @keyframes orbFloat {
+
+      0%,
+      100% {
+        transform: translate(0, 0) scale(1);
+      }
+
+      25% {
+        transform: translate(10px, -15px) scale(1.05);
+      }
+
+      50% {
+        transform: translate(-5px, 10px) scale(0.95);
+      }
+
+      75% {
+        transform: translate(-10px, -5px) scale(1.02);
+      }
+    }
+
+    /* Reduce motion for accessibility */
+    @media (prefers-reduced-motion: reduce) {
+
+      .login-pattern-bg::before,
+      .login-pattern-bg::after,
+      .floating-orb {
+        animation: none;
+      }
+    }
+
     /* Loading overlay */
     #loadingOverlay {
       position: fixed;
@@ -160,11 +302,19 @@
     </div>
 
     <!-- BAGIAN KANAN: Form Login -->
-    <div class="w-full md:w-1/2 lg:w-2/5 flex flex-col items-center justify-center p-6 bg-gray-50 relative">
+    <div
+      class="w-full md:w-1/2 lg:w-2/5 flex flex-col items-center justify-center p-6 bg-gray-50 relative overflow-hidden">
+
+      <!-- Animated Green Pattern Background -->
+      <div class="login-pattern-bg">
+        <div class="floating-orb floating-orb-1"></div>
+        <div class="floating-orb floating-orb-2"></div>
+        <div class="floating-orb floating-orb-3"></div>
+      </div>
 
       <!-- Card Login -->
       <div
-        class="w-full max-w-sm z-10 bg-white rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] p-8 sm:p-10 border border-gray-100">
+        class="w-full max-w-sm z-10 bg-white/95 backdrop-blur-sm rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] p-8 sm:p-10 border border-gray-100">
 
         <!-- Header -->
         <div class="text-center mb-8">
@@ -246,7 +396,12 @@
     const SUPABASE_URL = 'https://sxbvadzcwpaovkhghttv.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN4YnZhZHpjd3Bhb3ZraGdodHR2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjExMDg4MDYsImV4cCI6MjA3NjY4NDgwNn0.miJeKmsNgjgS4fWegGlwrxF_cPUoZBT0YKl1oxmmXTE';
 
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: {
+        persistSession: false,  // Jangan simpan sesi - user harus login ulang setiap buka browser
+        autoRefreshToken: false // Nonaktifkan auto-refresh token
+      }
+    });
 
     // DOM Elements
     const loginForm = document.getElementById('loginForm');
@@ -328,10 +483,8 @@
 
         console.log('[LOGIN] ✅ Login successful!', data.user.email);
 
-        // Set localStorage for initial guard (admin.js uses this for sync check)
-        localStorage.setItem('isAdminLoggedIn', 'true');
-        localStorage.setItem('adminEmail', data.user.email);
-        localStorage.setItem('loginTimestamp', Date.now().toString());
+        // NOTE: Tidak pakai localStorage karena persistSession: false
+        // Sesi hanya valid di memory browser, akan hilang saat browser ditutup
 
         // Show success state
         btnLogin.innerHTML = '<i class="fas fa-check mr-2"></i>Berhasil';

@@ -2099,6 +2099,44 @@
   <script src="/assets/js/scroll-animations.js" defer></script>
   <script src="/assets/js/hero-carousel.js" defer></script>
 
+  <!-- Hero Carousel Images Loader - Load santri images from database -->
+  <script>
+    (async function loadHeroCarouselImages() {
+      'use strict';
+
+      try {
+        console.log('[HERO_IMAGES] Loading santri images from database...');
+
+        const response = await fetch('/api/hero_carousel_list');
+        const result = await response.json();
+
+        if (!result.ok || !result.data || result.data.length === 0) {
+          console.log('[HERO_IMAGES] No images found, using default placeholders');
+          return;
+        }
+
+        console.log('[HERO_IMAGES] Found', result.data.length, 'images');
+
+        // Map slide_order to data-slide index (1 -> 0, 2 -> 1, 3 -> 2)
+        result.data.forEach((image) => {
+          const slideIndex = (image.slide_order || 1) - 1; // Convert 1-based to 0-based
+          const slideEl = document.querySelector(`.hero-slide-image[data-slide="${slideIndex}"] img`);
+
+          if (slideEl && image.image_url) {
+            console.log(`[HERO_IMAGES] Updating slide ${slideIndex} with:`, image.image_url);
+            slideEl.src = image.image_url;
+            slideEl.alt = image.alt_text || 'Santri Al Ikhsan Beji';
+          }
+        });
+
+        console.log('[HERO_IMAGES] ✅ Images loaded successfully');
+
+      } catch (error) {
+        console.error('[HERO_IMAGES] Error loading images:', error);
+        // Keep default placeholder images if API fails
+      }
+    })();
+  </script>
 
 
   <style>

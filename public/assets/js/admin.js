@@ -298,27 +298,18 @@
   /* =========================
      1) LOGIN GUARD & HEADER
      ========================= */
-  // guard login (jalan seawal mungkin)
-  if (localStorage.getItem("isAdminLoggedIn") !== "true") {
-    window.location.href = "/login.html";
-  }
+  // NOTE: Auth check dilakukan di admin.html via Supabase dengan persistSession: false
+  // Sehingga user harus login ulang setiap membuka browser baru
 
   document.addEventListener("DOMContentLoaded", () => {
-    const adminEmail = localStorage.getItem("adminEmail") || "Admin";
-    const adminEmailEl = $("#adminEmail");
-    if (adminEmailEl) adminEmailEl.textContent = adminEmail;
+    // NOTE: adminEmail ditampilkan dari admin.html via Supabase session
 
     const logoutBtn = $("#logoutBtn");
     if (logoutBtn) {
       logoutBtn.addEventListener("click", async (event) => {
         event.preventDefault();
 
-        // Clear localStorage first
-        localStorage.removeItem("isAdminLoggedIn");
-        localStorage.removeItem("adminEmail");
-        localStorage.removeItem("loginTimestamp");
-
-        // Sign out from Supabase Auth (if available)
+        // Sign out from Supabase Auth (sesi akan hilang karena persistSession: false)
         try {
           if (typeof window.supabase !== 'undefined') {
             await window.supabase.auth.signOut();
@@ -335,14 +326,8 @@
       });
     }
 
-    const navLinks = $$(".sidebar .nav-link");
-    navLinks.forEach((link) => {
-      link.addEventListener("click", () => {
-        if (isMobileViewport()) {
-          closeSidebar();
-        }
-      });
-    });
+    // NOTE: Sidebar closure di mobile sudah ditangani di switchTab()
+    // Tidak perlu event listener tambahan di sini
 
     let resizeTimer = null;
     window.addEventListener("resize", () => {

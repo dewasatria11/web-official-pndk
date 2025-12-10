@@ -111,6 +111,10 @@ class handler(BaseHTTPRequestHandler):
                 else:
                     SupaProxyHandler.do_OPTIONS(self)
             
+            elif action == 'hero_carousel_list':
+                from lib.handlers.hero_carousel_list import handler as HeroCarouselListHandler
+                HeroCarouselListHandler.do_GET(self) if self.command == 'GET' else HeroCarouselListHandler.do_OPTIONS(self)
+            
             elif action == 'hero_images_list':
                 from lib.handlers.hero_images_list import handler as HeroImagesListHandler
                 HeroImagesListHandler.do_GET(self) if self.command == 'GET' else HeroImagesListHandler.do_OPTIONS(self)
