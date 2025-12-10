@@ -242,15 +242,16 @@
 
 /* 
    Image Card Container
-   - Green rounded card as backdrop
-   - PNG student image positioned above
+   - Green rounded card as backdrop (LANDSCAPE)
+   - PNG student image positioned at bottom center
    - overflow: visible allows image to extend outside
 */
 .hero-image-card {
     position: relative;
     width: 100%;
-    max-width: 340px;
-    height: 420px;
+    max-width: 500px;
+    aspect-ratio: 16 / 9;
+    /* Landscape ratio */
     display: flex;
     align-items: flex-end;
     justify-content: center;
@@ -299,22 +300,26 @@
 
 /* 
    PNG Student Image Styling
+   - Positioned at bottom center of card
    - Maintains natural proportions
-   - Does not stretch or distort
-   - Bottom of image extends slightly outside card
+   - Extends above the card for emphasis
    
    === GANTI GAMBAR DI HTML ===
    Gunakan gambar PNG dengan background transparan
    Path: img/hero-student-1.png, img/hero-student-2.png, dll.
 */
 .hero-slide-image img {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    height: auto;
+    max-height: 130%;
+    /* Allow to extend above card */
     width: auto;
-    height: 480px;
-    /* Taller than card to extend outside */
-    max-width: 100%;
+    max-width: 80%;
     object-fit: contain;
-    object-position: bottom center;
-    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.15));
+    filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.2));
 }
 
 /* =========================
@@ -471,12 +476,12 @@
     }
 
     .hero-image-card {
-        max-width: 300px;
-        height: 380px;
+        max-width: 400px;
+        aspect-ratio: 16 / 9;
     }
 
     .hero-slide-image img {
-        height: 420px;
+        max-height: 120%;
     }
 
     .hero-arrow {
@@ -593,10 +598,10 @@
         font-size: 0.9rem;
     }
 
-    /* Image card on mobile */
+    /* Image card on mobile - LANDSCAPE */
     .hero-image-card {
-        max-width: 200px;
-        height: 250px;
+        max-width: 320px;
+        aspect-ratio: 16 / 9;
         margin: 0 auto;
     }
 
@@ -605,12 +610,12 @@
     }
 
     .hero-slide-image {
-        bottom: -15px;
+        bottom: 0;
     }
 
     .hero-slide-image img {
-        height: 290px;
-        width: auto;
+        max-height: 150%;
+        max-width: 90%;
     }
 
     /* Navigation arrows - positioned inside card area */
@@ -693,8 +698,8 @@
     }
 
     .hero-image-card {
-        max-width: 170px;
-        height: 210px;
+        max-width: 280px;
+        aspect-ratio: 16 / 9;
     }
 
     .hero-image-bg {
@@ -702,11 +707,12 @@
     }
 
     .hero-slide-image {
-        bottom: -12px;
+        bottom: 0;
     }
 
     .hero-slide-image img {
-        height: 240px;
+        max-height: 160%;
+        max-width: 95%;
     }
 
     .hero-arrow {
