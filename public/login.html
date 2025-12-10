@@ -398,8 +398,12 @@
 
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
       auth: {
-        persistSession: false,  // Jangan simpan sesi - user harus login ulang setiap buka browser
-        autoRefreshToken: false // Nonaktifkan auto-refresh token
+        // Gunakan sessionStorage agar sesi bertahan saat navigasi,
+        // tapi hilang saat browser/tab ditutup
+        storage: window.sessionStorage,
+        autoRefreshToken: true,
+        persistSession: true,
+        detectSessionInUrl: true
       }
     });
 
@@ -483,8 +487,8 @@
 
         console.log('[LOGIN] ✅ Login successful!', data.user.email);
 
-        // NOTE: Tidak pakai localStorage karena persistSession: false
-        // Sesi hanya valid di memory browser, akan hilang saat browser ditutup
+        // NOTE: Sesi disimpan di sessionStorage, bertahan saat navigasi
+        // Tapi akan hilang saat browser/tab ditutup
 
         // Show success state
         btnLogin.innerHTML = '<i class="fas fa-check mr-2"></i>Berhasil';

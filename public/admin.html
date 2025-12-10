@@ -3411,15 +3411,18 @@
           const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN4YnZhZHpjd3Bhb3ZraGdodHR2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjExMDg4MDYsImV4cCI6MjA3NjY4NDgwNn0.miJeKmsNgjgS4fWegGlwrxF_cPUoZBT0YKl1oxmmXTE';
 
           // Initialize Supabase client (UMD exposes supabase global)
-          // Menggunakan persistSession: false agar user harus login ulang setiap buka browser
+          // Menggunakan sessionStorage agar sesi bertahan saat navigasi,
+          // tapi hilang saat browser/tab ditutup
           if (typeof supabase !== 'undefined' && supabase.createClient) {
             window.supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
               auth: {
-                persistSession: false,  // Jangan simpan sesi - user harus login ulang setiap buka browser
-                autoRefreshToken: false // Nonaktifkan auto-refresh token
+                storage: window.sessionStorage,
+                autoRefreshToken: true,
+                persistSession: true,
+                detectSessionInUrl: true
               }
             });
-            console.log('[SUPABASE ADMIN] ✅ Client initialized (session NOT persisted)');
+            console.log('[SUPABASE ADMIN] ✅ Client initialized (using sessionStorage)');
           } else {
             console.error('[SUPABASE ADMIN] ❌ Supabase library not loaded');
             return;

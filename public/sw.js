@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ppdsb-pwa-v3';
+const CACHE_NAME = 'ppdsb-pwa-v4';
 const CORE_ASSETS = [
   '/',
   '/index.html',
@@ -22,13 +22,29 @@ const CORE_ASSETS = [
   '/favicon.ico',
   '/favicon.png',
   '/apple-touch-icon.png',
-  '/logo-bimi.svg',
   '/manifest.webmanifest'
 ];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(CORE_ASSETS)).then(() => self.skipWaiting())
+    caches.open(CACHE_NAME).then(async (cache) => {
+      // Cache each asset individually to avoid failing all if one fails
+      const cachePromises = CORE_ASSETS.map(async (url) => {
+        try {
+          const response = await fetch(url, { cache: 'no-store' });
+          if (response.ok) {
+            await cache.put(url, response);
+            console.log('[SW] Cached:', url);
+          } else {
+            console.warn('[SW] Failed to fetch (status):', url, response.status);
+          }
+        } catch (error) {
+          console.warn('[SW] Failed to cache:', url, error.message);
+        }
+      });
+      await Promise.all(cachePromises);
+      return self.skipWaiting();
+    })
   );
 });
 
