@@ -30,9 +30,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     overflow: hidden;
-    padding: 6rem 2rem 4rem;
+    padding: 4rem 2rem 4rem;
     /* WHITE background */
     background: #ffffff;
 }
@@ -468,7 +468,7 @@
    ========================= */
 @media (max-width: 1024px) {
     .hero-carousel {
-        padding: 5rem 1.5rem 3.5rem;
+        padding: 3.75rem 1.5rem 3.5rem;
     }
 
     .hero-wrapper {
@@ -515,7 +515,7 @@
 @media (max-width: 768px) {
     .hero-carousel {
         min-height: auto;
-        padding: 5rem 1rem 3rem;
+        padding: 3.75rem 1rem 3rem;
     }
 
     .hero-wrapper {
@@ -670,7 +670,7 @@
    ========================= */
 @media (max-width: 480px) {
     .hero-carousel {
-        padding: 4.5rem 0.75rem 2.5rem;
+        padding: 3.5rem 0.75rem 2.5rem;
     }
 
     .hero-wrapper {
