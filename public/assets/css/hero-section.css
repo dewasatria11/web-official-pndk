@@ -26,13 +26,13 @@
 .hero-carousel {
     position: relative;
     width: 100%;
-    min-height: 100vh;
+    min-height: calc(100vh - var(--nav-h, 90px));
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
     justify-content: flex-start;
     overflow: hidden;
-    padding: 4rem 2rem 4rem;
+    padding: 2rem 2rem 4rem;
     /* WHITE background */
     background: #ffffff;
 }
@@ -109,7 +109,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 3rem;
-    align-items: center;
+    align-items: flex-start;
 }
 
 /* =========================
@@ -255,8 +255,21 @@
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    /* No overflow hidden - allow PNG to extend outside */
+    /* Keep outside overflow for arrows/layout; cropping is handled by .hero-image-cropper */
     overflow: visible;
+}
+
+/* Cropping wrapper (keeps rounded corners clean) */
+.hero-image-cropper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 30px;
+    overflow: hidden;
+    --scale-adjust: 0;
+    box-shadow:
+        0 20px 40px -10px rgba(6, 95, 70, 0.4),
+        0 10px 20px -5px rgba(0, 0, 0, 0.1);
 }
 
 /* Green rounded backdrop card */
@@ -264,11 +277,8 @@
     position: absolute;
     inset: 0;
     background: linear-gradient(160deg, #0d9463 0%, #065f46 100%);
-    border-radius: 30px;
+    border-radius: inherit;
     z-index: 0;
-    box-shadow:
-        0 20px 40px -10px rgba(6, 95, 70, 0.4),
-        0 10px 20px -5px rgba(0, 0, 0, 0.1);
 }
 
 /* 
@@ -278,10 +288,7 @@
 */
 .hero-slide-image {
     position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -20px;
-    /* PNG extends below the card */
+    inset: 0;
     z-index: 1;
     opacity: 0;
     transform: scale(0.95) translateY(20px);
@@ -312,13 +319,14 @@
     position: absolute;
     bottom: 0;
     left: 50%;
-    transform: translateX(-50%);
-    height: auto;
-    max-height: 130%;
-    /* Allow to extend above card */
-    width: auto;
-    max-width: 80%;
-    object-fit: contain;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    object-fit: cover;
+    object-position: 50% 100%;
+    transform-origin: 50% 100%;
+    transform: translateX(-50%) translateY(var(--y, 0px)) scale(calc(var(--scale, 1) + var(--scale-adjust, 0)));
     filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.2));
 }
 
@@ -468,7 +476,7 @@
    ========================= */
 @media (max-width: 1024px) {
     .hero-carousel {
-        padding: 3.75rem 1.5rem 3.5rem;
+        padding: 1.75rem 1.5rem 3.5rem;
     }
 
     .hero-wrapper {
@@ -480,8 +488,8 @@
         aspect-ratio: 16 / 9;
     }
 
-    .hero-slide-image img {
-        max-height: 120%;
+    .hero-image-cropper {
+        --scale-adjust: -0.15;
     }
 
     .hero-arrow {
@@ -515,7 +523,7 @@
 @media (max-width: 768px) {
     .hero-carousel {
         min-height: auto;
-        padding: 3.75rem 1rem 3rem;
+        padding: 1.75rem 1rem 3rem;
     }
 
     .hero-wrapper {
@@ -606,17 +614,15 @@
     }
 
     .hero-image-bg {
+        border-radius: inherit;
+    }
+
+    .hero-image-cropper {
         border-radius: 20px;
+        --scale-adjust: -0.25;
     }
 
-    .hero-slide-image {
-        bottom: 0;
-    }
-
-    .hero-slide-image img {
-        max-height: 150%;
-        max-width: 90%;
-    }
+    .hero-slide-image img { object-position: 50% 100%; }
 
     /* Navigation arrows - positioned inside card area */
     .hero-arrow {
@@ -670,7 +676,7 @@
    ========================= */
 @media (max-width: 480px) {
     .hero-carousel {
-        padding: 3.5rem 0.75rem 2.5rem;
+        padding: 1.5rem 0.75rem 2.5rem;
     }
 
     .hero-wrapper {
@@ -703,17 +709,15 @@
     }
 
     .hero-image-bg {
+        border-radius: inherit;
+    }
+
+    .hero-image-cropper {
         border-radius: 16px;
+        --scale-adjust: -0.25;
     }
 
-    .hero-slide-image {
-        bottom: 0;
-    }
-
-    .hero-slide-image img {
-        max-height: 160%;
-        max-width: 95%;
-    }
+    .hero-slide-image img { object-position: 50% 100%; }
 
     .hero-arrow {
         width: 32px;
