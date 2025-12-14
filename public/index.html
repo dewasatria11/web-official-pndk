@@ -1301,6 +1301,16 @@
             const buttonLabel = getButtonLabel(stateKey);
             const displayName = translateWaveName(gelombang.nama, lang);
 
+            // Dynamic icon based on status
+            let statusIcon = "bi-calendar-check"; // default
+            if (stateKey === "ACTIVE") {
+              statusIcon = "bi-unlock-fill"; // Dibuka
+            } else if (stateKey === "UPCOMING") {
+              statusIcon = "bi-clock-fill"; // Segera
+            } else if (stateKey === "CLOSED") {
+              statusIcon = "bi-x-circle-fill"; // Tutup
+            }
+
             let buttonHTML = "";
             let statusHTML = "";
 
@@ -1331,7 +1341,7 @@
                 <div class="absolute top-0 right-0 ${colors.badge} text-white px-4 py-2 rounded-bl-lg text-sm font-semibold">${gelombang._label}</div>
                 <div class="text-center mt-4">
                   <div class="w-16 h-16 ${colors.icon} rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                    <i class="bi bi-calendar-check text-white text-2xl"></i>
+                    <i class="bi ${statusIcon} text-white text-2xl"></i>
                   </div>
                   <h3 class="text-xl font-bold mb-2 text-gray-800">${escapeHtml(displayName)}</h3>
                   <div class="space-y-2 mb-4">
