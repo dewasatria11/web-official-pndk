@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ppdsb-pwa-v4';
+const CACHE_NAME = 'ppdsb-pwa-v5';
 const CORE_ASSETS = [
   '/',
   '/index.html',
@@ -83,7 +83,8 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  event.respondWith(cacheFirst(event.request));
+  // Use stale-while-revalidate for CSS/JS - serve cache but update in background
+  event.respondWith(staleWhileRevalidate(event.request));
 });
 
 function isHtmlRequest(request) {
@@ -126,6 +127,35 @@ async function networkOnly(request) {
   } catch (error) {
     return Response.error();
   }
+}
+
+/**
+ * Stale-while-revalidate: Return cached version immediately,
+ * but fetch fresh version in background for next visit.
+ * This ensures users get updates without hard refresh.
+ */
+async function staleWhileRevalidate(request) {
+  const cache = await caches.open(CACHE_NAME);
+  const cachedResponse = await cache.match(request);
+
+  // Fetch fresh version in background
+  const fetchPromise = fetch(request).then(response => {
+    if (response.ok) {
+      cache.put(request, response.clone());
+    }
+    return response;
+  }).catch(() => null);
+
+  // Return cached version immediately if available, otherwise wait for network
+  if (cachedResponse) {
+    // Update cache in background (don't wait)
+    fetchPromise;
+    return cachedResponse;
+  }
+
+  // No cache, wait for network
+  const networkResponse = await fetchPromise;
+  return networkResponse || Response.error();
 }
 
 /* ===== Maintenance-aware HTML handling ===== */
