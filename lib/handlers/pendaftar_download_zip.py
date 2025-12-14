@@ -11,9 +11,10 @@ from lib._supabase import supabase_client
 
 
 # Configuration
-MAX_PENDAFTAR_PER_REQUEST = 200  # Increased to handle all pendaftar
-MAX_CONCURRENT_DOWNLOADS = 15   # More parallel download workers for speed
-DOWNLOAD_TIMEOUT_SECONDS = 55   # Increased timeout (Vercel max is 60s)
+# Configuration
+MAX_PENDAFTAR_PER_REQUEST = 1000  # Increased to handle up to 1000 pendaftar
+MAX_CONCURRENT_DOWNLOADS = 20     # More parallel download workers for speed
+DOWNLOAD_TIMEOUT_SECONDS = 58     # Maximize timeout within Vercel's 60s limit
 
 
 def slugify(text):
