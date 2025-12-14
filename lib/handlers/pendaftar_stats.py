@@ -144,6 +144,11 @@ class handler(BaseHTTPRequestHandler):
                 # For now stick to strict-ish text match to avoid over-counting garbage data.
             
             # Sort provinces by count (descending) and top 10
+            sorted_prov = sorted(province_counts.items(), key=lambda item: item[1], reverse=True)[:10]
+            prov_chart_data = {
+                "labels": [k for k, v in sorted_prov],
+                "data": [v for k, v in sorted_prov]
+            }
             
             # Debug: Collect distinct values to diagnose mismatch
             distinct_programs = set()
