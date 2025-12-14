@@ -63,8 +63,8 @@ class handler(BaseHTTPRequestHandler):
                 elif "PEREMPUAN" in jk: gender_counts["P"] += 1
                 
                 # Program (Jenjang + Program)
-                jenjang = row.get("rencanatingkat") or "?"
-                prog = row.get("rencanaprogram") or "?"
+                jenjang = (row.get("rencanatingkat") or "").strip()
+                prog = (row.get("rencanaprogram") or "").strip()
                 full_prog = f"{jenjang} - {prog}"
                 program_counts[full_prog] = program_counts.get(full_prog, 0) + 1
                 
@@ -73,11 +73,65 @@ class handler(BaseHTTPRequestHandler):
                      asrama_counts["Asrama"] += 1
                 else:
                      asrama_counts["Non-Asrama"] += 1
+
+            # 2. Detailed Breakdown Calculation (logic mirror from old admin.js)
+            breakdown = {
+                "putraIndukMts": 0, "putraIndukMa": 0, "putraIndukKuliah": 0, "putraIndukTotal": 0,
+                "putraTahfidzMts": 0, "putraTahfidzMa": 0, "putraTahfidzKuliah": 0, "putraTahfidzTotal": 0,
+                "putriMts": 0, "putriMa": 0, "putriKuliah": 0, "putriTotal": 0,
+                "hanyaSekolahMtsL": 0, "hanyaSekolahMtsP": 0, "hanyaSekolahMtsTotal": 0,
+                "hanyaSekolahMaL": 0, "hanyaSekolahMaP": 0, "hanyaSekolahMaTotal": 0
+            }
+
+            for row in data:
+                prog = (row.get("rencanaprogram") or "").strip()
+                jenjang = (row.get("rencanatingkat") or "").strip()
+                jk = (row.get("jeniskelamin") or "").strip().upper()
+                
+                # Helper bools
+                is_mts = jenjang == "MTs"
+                is_ma = jenjang == "MA"
+                is_kuliah = jenjang == "Kuliah"
+                is_l = jk == "L" or jk == "LAKI-LAKI"
+                is_p = jk == "P" or jk == "PEREMPUAN"
+
+                # Putra Induk
+                if prog == "Asrama Putra Induk":
+                    if is_mts: breakdown["putraIndukMts"] += 1
+                    if is_ma: breakdown["putraIndukMa"] += 1
+                    if is_kuliah: breakdown["putraIndukKuliah"] += 1
+                    breakdown["putraIndukTotal"] += 1
+                
+                # Putra Tahfidz
+                elif prog == "Asrama Putra Tahfidz":
+                    if is_mts: breakdown["putraTahfidzMts"] += 1
+                    if is_ma: breakdown["putraTahfidzMa"] += 1
+                    if is_kuliah: breakdown["putraTahfidzKuliah"] += 1
+                    breakdown["putraTahfidzTotal"] += 1
+                
+                # Putri
+                elif prog == "Asrama Putri":
+                    if is_mts: breakdown["putriMts"] += 1
+                    if is_ma: breakdown["putriMa"] += 1
+                    if is_kuliah: breakdown["putriKuliah"] += 1
+                    breakdown["putriTotal"] += 1
+                
+                # Hanya Sekolah
+                elif prog == "Hanya Sekolah":
+                    if is_mts:
+                        if is_l: breakdown["hanyaSekolahMtsL"] += 1
+                        if is_p: breakdown["hanyaSekolahMtsP"] += 1
+                        breakdown["hanyaSekolahMtsTotal"] += 1
+                    elif is_ma:
+                        if is_l: breakdown["hanyaSekolahMaL"] += 1
+                        if is_p: breakdown["hanyaSekolahMaP"] += 1
+                        breakdown["hanyaSekolahMaTotal"] += 1
             
             # Construct response
             response_data = {
                 "success": True,
                 "kpi": stats,
+                "breakdown": breakdown,
                 "charts": {
                     "gender": gender_counts,
                     "program": program_counts,

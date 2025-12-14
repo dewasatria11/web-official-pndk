@@ -735,6 +735,13 @@
       updateElementText("ditolakCount", result.kpi.ditolak);
       updateElementText("revisiCount", result.kpi.revisi);
 
+      // Update Breakdown Table (Metrics)
+      if (result.breakdown) {
+        Object.entries(result.breakdown).forEach(([id, val]) => {
+          updateElementText(id, val);
+        });
+      }
+
       // Update Last Updated Time
       // Update Last Updated Time
       const upd = document.getElementById("updateTimePendaftar");
