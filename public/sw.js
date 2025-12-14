@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ppdsb-pwa-v7';
+const CACHE_NAME = 'ppdsb-pwa-v8';
 const CORE_ASSETS = [
   '/',
   '/index.html',
@@ -28,15 +28,12 @@ const CORE_ASSETS = [
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(async (cache) => {
-      // Cache each asset individually to avoid failing all if one fails
       const cachePromises = CORE_ASSETS.map(async (url) => {
         try {
           const response = await fetch(url, { cache: 'no-store' });
           if (response.ok) {
             await cache.put(url, response);
             console.log('[SW] Cached:', url);
-          } else {
-            console.warn('[SW] Failed to fetch (status):', url, response.status);
           }
         } catch (error) {
           console.warn('[SW] Failed to cache:', url, error.message);
@@ -67,32 +64,54 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(event.request.url);
 
+  // External origins - fetch directly
   if (url.origin !== self.location.origin) {
     event.respondWith(fetch(event.request).catch(() => caches.match('/offline.html')));
     return;
   }
 
-  // 🚫 Jangan cache request API supaya data admin (pendaftar/pembayaran/etc) selalu real-time
+  // API requests - always network
   if (url.pathname.startsWith('/api/')) {
     event.respondWith(networkOnly(event.request));
     return;
   }
 
+  // HTML pages - network first (always get fresh)
   if (isHtmlRequest(event.request)) {
     event.respondWith(handleHtmlRequest(event.request));
     return;
   }
 
-  event.respondWith(cacheFirst(event.request));
+  // Images - cache first (fast loading)
+  if (isImageRequest(url.pathname)) {
+    event.respondWith(cacheFirst(event.request));
+    return;
+  }
+
+  // CSS/JS - stale while revalidate (serve cache, update in background)
+  if (isCssJsRequest(url.pathname)) {
+    event.respondWith(staleWhileRevalidate(event.request));
+    return;
+  }
+
+  // Default - stale while revalidate
+  event.respondWith(staleWhileRevalidate(event.request));
 });
 
 function isHtmlRequest(request) {
   return request.mode === 'navigate' || (request.headers.get('accept') || '').includes('text/html');
 }
 
+function isImageRequest(pathname) {
+  return /\.(jpg|jpeg|png|gif|webp|svg|ico|bmp)$/i.test(pathname);
+}
+
+function isCssJsRequest(pathname) {
+  return /\.(css|js|json)$/i.test(pathname);
+}
+
 async function networkFirst(request) {
   const cache = await caches.open(CACHE_NAME);
-
   try {
     const freshResponse = await fetch(request);
     cache.put(request, freshResponse.clone());
@@ -120,6 +139,29 @@ async function cacheFirst(request) {
   }
 }
 
+async function staleWhileRevalidate(request) {
+  const cache = await caches.open(CACHE_NAME);
+  const cachedResponse = await cache.match(request);
+
+  // Fetch fresh version in background
+  const fetchPromise = fetch(request).then(response => {
+    if (response.ok) {
+      cache.put(request, response.clone());
+    }
+    return response;
+  }).catch(() => null);
+
+  // Return cache immediately if available
+  if (cachedResponse) {
+    fetchPromise; // Update in background
+    return cachedResponse;
+  }
+
+  // No cache - wait for network
+  const networkResponse = await fetchPromise;
+  return networkResponse || Response.error();
+}
+
 async function networkOnly(request) {
   try {
     return await fetch(request);
@@ -127,6 +169,7 @@ async function networkOnly(request) {
     return Response.error();
   }
 }
+
 
 /* ===== Maintenance-aware HTML handling ===== */
 const MAINTENANCE_API = '/api/maintenance_status';
