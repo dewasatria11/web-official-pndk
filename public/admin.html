@@ -1487,16 +1487,23 @@
 
             <div class="d-flex justify-content-between align-items-center mb-3">
               <h5 class="mb-0"><i class="bi bi-table"></i> Tabel Data Pendaftar</h5>
-              <div class="d-flex gap-2">
+              <div class="d-flex flex-wrap gap-2 align-items-center">
+                <!-- Search Input -->
+                <div class="input-group input-group-sm" style="width: 250px;">
+                  <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
+                  <input type="text" class="form-control border-start-0 ps-0" id="searchInput"
+                    placeholder="Cari nama pendaftar..." style="border-left: none; box-shadow: none;">
+                </div>
+
                 <!-- Download ZIP Button -->
-                <button class="btn btn-primary" onclick="downloadAllZip()"
+                <button class="btn btn-primary btn-sm" onclick="downloadAllZip()"
                   title="Download semua berkas dalam 1 file ZIP">
-                  <i class="bi bi-file-earmark-zip"></i> Download Semua Berkas (ZIP)
+                  <i class="bi bi-file-earmark-zip"></i> ZIP
                 </button>
 
                 <!-- Excel Export Button -->
-                <button class="btn btn-success" onclick="exportToExcel()" title="Export ke Excel (.xlsx)">
-                  <i class="bi bi-file-earmark-excel"></i> Download Excel
+                <button class="btn btn-success btn-sm" onclick="exportToExcel()" title="Export ke Excel (.xlsx)">
+                  <i class="bi bi-file-earmark-excel"></i> Excel
                 </button>
               </div>
             </div>
@@ -3441,6 +3448,34 @@
             return;
           }
 
+
+          // ======================================================
+          // STRICT SESSION RE-LOGIN ENFORCEMENT
+          // Check if this is a fresh browser session (tab closed/reopened)
+          // If so, clear stored credentials to force re-login
+          // ======================================================
+          (function checkFreshSession() {
+            const SESSION_MARKER = 'admin_session_active';
+            const hasSessionMarker = sessionStorage.getItem(SESSION_MARKER);
+
+            if (!hasSessionMarker) {
+              console.log('[AUTH] Fresh browser session detected on Admin Page.');
+              console.log('[AUTH] Clearing persistent tokens to enforce re-login.');
+
+              // Clear Supabase auth data from localStorage
+              const keysToRemove = [];
+              for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key && key.includes('supabase')) {
+                  keysToRemove.push(key);
+                }
+              }
+              keysToRemove.forEach(key => localStorage.removeItem(key));
+            } else {
+              console.log('[AUTH] Active session marker found. Continuing.');
+            }
+          })();
+
           // Initialize Supabase client with default localStorage
           if (typeof supabase !== 'undefined' && supabase.createClient) {
             window.supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -3793,7 +3828,7 @@
   <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
 
   <!-- Admin JS (load last, after all dependencies) - Async to prevent blocking -->
-  <script defer src="/assets/js/admin.js?v=supabase_fix_1"></script>
+  <script defer src="/assets/js/admin.js?v=force_relogin_v11"></script>
   <script defer src="/assets/js/pwa.js"></script>
 
   <!-- DEBUG: Test if admin.js loaded successfully -->

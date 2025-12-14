@@ -427,6 +427,7 @@
       }
       setTimeout(() => {
         renderCachedChartsIfVisible();
+        renderCachedChartsIfVisible();
         scheduleStatChartResize();
       }, 50);
       // Reapply angka terakhir kalau sudah ada cache
@@ -605,7 +606,12 @@
       }
 
       // Fetch pendaftar data dengan pagination - WITH TIMEOUT
-      const url = `/api/pendaftar_list?page=${currentPage}&pageSize=${pageSize}`;
+      // Fetch pendaftar data dengan pagination - WITH TIMEOUT
+      let url = `/api/pendaftar_list?page=${currentPage}&pageSize=${pageSize}`;
+      const searchInput = document.getElementById('searchInput');
+      if (searchInput && searchInput.value) {
+        url += `&q=${encodeURIComponent(searchInput.value.trim())}`;
+      }
       console.log('[PENDAFTAR] → API:', url);
 
       // Add timeout to prevent hanging
