@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ppdsb-pwa-v6';
+const CACHE_NAME = 'ppdsb-pwa-v7';
 const CORE_ASSETS = [
   '/',
   '/index.html',
@@ -83,21 +83,8 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Images use cacheFirst for fast loading
-  if (isImageRequest(event.request)) {
-    event.respondWith(cacheFirst(event.request));
-    return;
-  }
-
-  // CSS/JS use stale-while-revalidate - serve cache but update in background
-  event.respondWith(staleWhileRevalidate(event.request));
+  event.respondWith(cacheFirst(event.request));
 });
-
-function isImageRequest(request) {
-  const url = new URL(request.url);
-  return /\.(jpg|jpeg|png|gif|webp|svg|ico|bmp)$/i.test(url.pathname);
-}
-
 
 function isHtmlRequest(request) {
   return request.mode === 'navigate' || (request.headers.get('accept') || '').includes('text/html');
@@ -139,35 +126,6 @@ async function networkOnly(request) {
   } catch (error) {
     return Response.error();
   }
-}
-
-/**
- * Stale-while-revalidate: Return cached version immediately,
- * but fetch fresh version in background for next visit.
- * This ensures users get updates without hard refresh.
- */
-async function staleWhileRevalidate(request) {
-  const cache = await caches.open(CACHE_NAME);
-  const cachedResponse = await cache.match(request);
-
-  // Fetch fresh version in background
-  const fetchPromise = fetch(request).then(response => {
-    if (response.ok) {
-      cache.put(request, response.clone());
-    }
-    return response;
-  }).catch(() => null);
-
-  // Return cached version immediately if available, otherwise wait for network
-  if (cachedResponse) {
-    // Update cache in background (don't wait)
-    fetchPromise;
-    return cachedResponse;
-  }
-
-  // No cache, wait for network
-  const networkResponse = await fetchPromise;
-  return networkResponse || Response.error();
 }
 
 /* ===== Maintenance-aware HTML handling ===== */
