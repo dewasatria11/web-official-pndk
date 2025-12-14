@@ -6958,12 +6958,43 @@ Jazakumullahu khairan,
   document.addEventListener("DOMContentLoaded", () => {
     console.log("[ADMIN] 🚀 Page loaded - initializing...");
 
+
     // ✅ ONLY load active tab (pendaftar)
     // Other tabs will lazy-load when clicked via switchTab()
     console.log("[ADMIN] 📊 Loading initial data: Pendaftar only");
-    loadPendaftar();
 
-    // ❌ REMOVED: loadPembayaran() - will lazy load on tab switch
-    console.log("[ADMIN] ✅ Initial load complete (lazy loading enabled for other tabs)");
+    // Search Pendaftar Handler (Optimized: 300ms debounce + Visual Feedback)
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+      console.log("[ADMIN] 🔍 Search input found, attaching listener");
+      let debounceTimer;
+      const originalPlaceholder = searchInput.placeholder;
+
+      searchInput.addEventListener('input', (e) => {
+        clearTimeout(debounceTimer);
+
+        // Visual feedback immediately
+        const tableBody = document.getElementById("pendaftarTable");
+        if (tableBody) {
+          tableBody.style.opacity = '0.5'; // Dim table to indicate stale data
+        }
+
+        // Debounce 300ms for "realtime" feel
+        debounceTimer = setTimeout(() => {
+          currentPage = 1; // Reset to page 1
+          loadPendaftar().then(() => {
+            if (tableBody) tableBody.style.opacity = '1'; // Restore opacity
+          });
+        }, 300);
+      });
+    } else {
+      console.warn("[ADMIN] ⚠️ Search input NOT found");
+    }
+
+    loadPendaftar();
   });
-})();
+
+  // ❌ REMOVED: loadPembayaran() - will lazy load on tab switch
+  console.log("[ADMIN] ✅ Initial load complete (lazy loading enabled for other tabs)");
+});
+}) ();
