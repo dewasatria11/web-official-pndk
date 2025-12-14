@@ -70,6 +70,24 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   }
+
+  // Navbar scroll effect for data-nav-root navbar (index.html)
+  const navRoot = document.querySelector("[data-nav-root]");
+  if (navRoot) {
+    window.addEventListener("scroll", function () {
+      if (window.scrollY > 50) {
+        // Scrolled: white background + shadow
+        navRoot.style.backgroundColor = "rgba(255, 255, 255, 0.95)";
+        navRoot.style.backdropFilter = "blur(8px)";
+        navRoot.style.boxShadow = "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)";
+      } else {
+        // Top: transparent
+        navRoot.style.backgroundColor = "transparent";
+        navRoot.style.backdropFilter = "none";
+        navRoot.style.boxShadow = "none";
+      }
+    });
+  }
 });
 
 // Helper: Show toast notification
@@ -168,37 +186,37 @@ function createImageWithFallback(src, alt, className = '', placeholderPath = '/a
   img.src = src;
   img.alt = alt;
   if (className) img.className = className;
-  
+
   // Set up error handling to prevent infinite loops
-  img.onerror = function() {
+  img.onerror = function () {
     // Prevent infinite loop by setting onerror to null
     this.onerror = null;
     console.warn(`Failed to load image: ${this.src}, using placeholder`);
     this.src = placeholderPath;
   };
-  
-  img.onload = function() {
+
+  img.onload = function () {
     console.log(`Successfully loaded image: ${this.src}`);
   };
-  
+
   return img;
 }
 
 // Helper: Set up image fallback for existing images
 function setupImageFallback(imgElement, placeholderPath = '/assets/placeholder.svg') {
   if (!imgElement) return;
-  
+
   // Store original src
   const originalSrc = imgElement.src;
-  
-  imgElement.onerror = function() {
+
+  imgElement.onerror = function () {
     // Prevent infinite loop
     this.onerror = null;
     console.warn(`Failed to load image: ${originalSrc}, using placeholder`);
     this.src = placeholderPath;
   };
-  
-  imgElement.onload = function() {
+
+  imgElement.onload = function () {
     console.log(`Successfully loaded image: ${this.src}`);
   };
 }
@@ -207,17 +225,17 @@ function setupImageFallback(imgElement, placeholderPath = '/assets/placeholder.s
 async function preloadImage(src, placeholderPath = '/assets/placeholder.svg') {
   return new Promise((resolve) => {
     const img = new Image();
-    
+
     img.onload = () => {
       console.log(`Preloaded image: ${src}`);
       resolve(src);
     };
-    
+
     img.onerror = () => {
       console.warn(`Failed to preload image: ${src}, using placeholder`);
       resolve(placeholderPath);
     };
-    
+
     img.src = src;
   });
 }

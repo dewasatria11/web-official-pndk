@@ -26,13 +26,16 @@
 .hero-carousel {
     position: relative;
     width: 100%;
-    min-height: calc(100vh - var(--nav-h, 90px));
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: stretch;
     justify-content: flex-start;
     overflow: hidden;
-    padding: 2rem 2rem 4rem;
+    /* Pull hero up behind navbar */
+    margin-top: -64px;
+    /* Add padding: navbar height + base padding + extra 50px */
+    padding: calc(64px + 2rem + 50px) 2rem 4rem;
     /* WHITE background */
     background: #ffffff;
 }
@@ -109,7 +112,8 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 3rem;
-    align-items: flex-start;
+    /* Align text and image at the same level */
+    align-items: center;
 }
 
 /* =========================
@@ -238,6 +242,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    /* Push image down to align with text content */
+    margin-top: 70px;
+    align-self: center;
 }
 
 /* 
@@ -259,26 +266,20 @@
     overflow: visible;
 }
 
-/* Cropping wrapper (keeps rounded corners clean) */
+/* Cropping wrapper - transparent, no card shape */
 .hero-image-cropper {
     position: relative;
     width: 100%;
     height: 100%;
-    border-radius: 30px;
-    overflow: hidden;
+    border-radius: 0;
+    overflow: visible;
     --scale-adjust: 0;
-    box-shadow:
-        0 20px 40px -10px rgba(6, 95, 70, 0.4),
-        0 10px 20px -5px rgba(0, 0, 0, 0.1);
+    box-shadow: none;
 }
 
-/* Green rounded backdrop card */
+/* Green rounded backdrop card - HIDDEN for transparent images */
 .hero-image-bg {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(160deg, #0d9463 0%, #065f46 100%);
-    border-radius: inherit;
-    z-index: 0;
+    display: none;
 }
 
 /* 
@@ -307,13 +308,9 @@
 
 /* 
    PNG Student Image Styling
-   - Positioned at bottom center of card
-   - Maintains natural proportions
-   - Extends above the card for emphasis
-   
-   === GANTI GAMBAR DI HTML ===
-   Gunakan gambar PNG dengan background transparan
-   Path: img/hero-student-1.png, img/hero-student-2.png, dll.
+   - Positioned at center of container
+   - Maintains natural proportions (contain)
+   - No shadow for clean look
 */
 .hero-slide-image img {
     position: absolute;
@@ -323,11 +320,10 @@
     height: 100%;
     max-width: none;
     max-height: none;
-    object-fit: cover;
-    object-position: 50% 100%;
+    object-fit: contain;
+    object-position: center bottom;
     transform-origin: 50% 100%;
     transform: translateX(-50%) translateY(var(--y, 0px)) scale(calc(var(--scale, 1) + var(--scale-adjust, 0)));
-    filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.2));
 }
 
 /* =========================
@@ -622,7 +618,9 @@
         --scale-adjust: -0.25;
     }
 
-    .hero-slide-image img { object-position: 50% 100%; }
+    .hero-slide-image img {
+        object-position: 50% 100%;
+    }
 
     /* Navigation arrows - positioned inside card area */
     .hero-arrow {
@@ -717,7 +715,9 @@
         --scale-adjust: -0.25;
     }
 
-    .hero-slide-image img { object-position: 50% 100%; }
+    .hero-slide-image img {
+        object-position: 50% 100%;
+    }
 
     .hero-arrow {
         width: 32px;

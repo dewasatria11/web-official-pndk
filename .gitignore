@@ -29,3 +29,6 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Dev Tools (seeder bot, etc)
+tools/
