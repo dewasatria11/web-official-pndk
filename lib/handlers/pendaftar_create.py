@@ -1,30 +1,81 @@
 from http.server import BaseHTTPRequestHandler
 import json
 import re
-from typing import Any, Dict, Tuple
+import os
+from typing import Any, Dict, Tuple, List
 import requests
 from lib._supabase import supabase_client
 
 
-def verify_turnstile(token: str) -> Tuple[bool, str]:
+def _pick_client_ip(headers) -> str:
+    try:
+        # Prefer Cloudflare/Vercel forwarding headers when available
+        cf = headers.get("cf-connecting-ip")
+        if cf:
+            return str(cf).split(",")[0].strip()
+        xff = headers.get("x-forwarded-for")
+        if xff:
+            return str(xff).split(",")[0].strip()
+    except Exception:
+        pass
+    return ""
+
+
+def _turnstile_error_message(codes: List[str]) -> str:
+    normalized = [str(c).strip() for c in (codes or []) if str(c).strip()]
+    if not normalized:
+        return "Verifikasi CAPTCHA gagal"
+
+    # Common Turnstile error codes:
+    # - timeout-or-duplicate
+    # - invalid-input-response
+    # - missing-input-response
+    # - invalid-input-secret
+    # - bad-request
+    mapping = {
+        "missing-input-response": "CAPTCHA belum terisi. Silakan verifikasi terlebih dahulu.",
+        "invalid-input-response": "CAPTCHA tidak valid. Silakan coba lagi.",
+        "timeout-or-duplicate": "CAPTCHA kedaluwarsa / sudah dipakai. Silakan verifikasi ulang.",
+        "invalid-input-secret": "Konfigurasi CAPTCHA server salah. Hubungi admin.",
+        "bad-request": "Permintaan verifikasi CAPTCHA tidak valid. Silakan refresh dan coba lagi.",
+    }
+    # Return the first mapped message if present
+    for code in normalized:
+        if code in mapping:
+            return mapping[code]
+    return "Verifikasi CAPTCHA gagal"
+
+
+def verify_turnstile(token: str, remote_ip: str = "") -> Tuple[bool, str, List[str]]:
     """
     Verifikasi token Cloudflare Turnstile.
     Return (success, message)
     """
-    secret_key = "0x4AAAAAACDDkPTYaJhn5UrQqHPSd5xEEEE"
+    secret_key = (
+        os.getenv("TURNSTILE_SECRET_KEY")
+        or os.getenv("CLOUDFLARE_TURNSTILE_SECRET_KEY")
+        or "0x4AAAAAACDDkPTYaJhn5UrQqHPSd5xEEEE"
+    )
     url = "https://challenges.cloudflare.com/turnstile/v0/siteverify"
 
     if not token:
-        return False, "Token CAPTCHA tidak ditemukan"
+        return False, "Token CAPTCHA tidak ditemukan", ["missing-input-response"]
 
     try:
-        resp = requests.post(url, data={"secret": secret_key, "response": token}, timeout=10)
+        payload = {"secret": secret_key, "response": token}
+        if remote_ip:
+            payload["remoteip"] = remote_ip
+        resp = requests.post(url, data=payload, timeout=10)
         resp.raise_for_status()
         result = resp.json()
-        return bool(result.get("success")), result.get("error-codes", [])
+        codes = result.get("error-codes", []) or []
+        success = bool(result.get("success"))
+        if success:
+            return True, "OK", []
+        return False, _turnstile_error_message(codes), list(codes) if isinstance(codes, list) else [str(codes)]
     except Exception as exc:
         print(f"[TURNSTILE] Error: {exc}")
-        return False, "Gagal memverifikasi CAPTCHA"
+        return False, "Gagal memverifikasi CAPTCHA", ["verify-failed"]
 
 class handler(BaseHTTPRequestHandler):
     def do_POST(self):
@@ -41,7 +92,8 @@ class handler(BaseHTTPRequestHandler):
 
             # Verify Cloudflare Turnstile
             captcha_token = data.get("cf-turnstile-response") or data.get("cf_turnstile_response")
-            is_human, captcha_message = verify_turnstile(captcha_token)
+            client_ip = _pick_client_ip(self.headers)
+            is_human, captcha_message, captcha_codes = verify_turnstile(captcha_token, client_ip)
             if not is_human:
                 self.send_response(400)
                 self.send_header('Content-Type', 'application/json')
@@ -50,7 +102,8 @@ class handler(BaseHTTPRequestHandler):
                 self.wfile.write(json.dumps({
                     "ok": False,
                     "error": "Verifikasi CAPTCHA gagal. Silakan coba lagi.",
-                    "details": captcha_message
+                    "details": captcha_message,
+                    "codes": captcha_codes
                 }).encode())
                 return
             

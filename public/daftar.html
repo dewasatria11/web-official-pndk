@@ -847,11 +847,14 @@
           </div>
         </div>
 
-        <div class="mt-4">
-          <p class="text-sm text-gray-600 mb-2">Keamanan data / Data security: verifikasi ini melindungi formulir dari
-            bot.</p>
-          <div class="cf-turnstile" data-sitekey="0x4AAAAAACDDkC6MDnS8Ozbo" data-theme="light"></div>
-        </div>
+	        <div class="mt-4">
+	          <p class="text-sm text-gray-600 mb-2">Keamanan data / Data security: verifikasi ini melindungi formulir dari
+	            bot.</p>
+	          <div id="turnstileWidget" class="cf-turnstile" data-sitekey="0x4AAAAAACDDkC6MDnS8Ozbo" data-theme="light"
+	            data-callback="onTurnstileSuccess" data-expired-callback="onTurnstileExpired"
+	            data-timeout-callback="onTurnstileExpired" data-error-callback="onTurnstileError"
+	            data-refresh-expired="auto" data-refresh-timeout="auto"></div>
+	        </div>
 
         <div class="mt-4 flex flex-col sm:flex-row gap-2">
           <button id="btnLanjutKonfirmasi"
@@ -966,13 +969,57 @@
     }
   </script>
 
-  <!-- Custom scripts for form functionality -->
-  <script>
-    const form = document.getElementById("formPendaftar");
-    let formDataGlobal = null;
+	  <!-- Custom scripts for form functionality -->
+	  <script>
+	    const form = document.getElementById("formPendaftar");
+	    let formDataGlobal = null;
+	    let latestTurnstileToken = "";
 
-    const translate = (key, replacements) =>
-      typeof window.__ === "function" ? window.__(key, replacements) : key;
+	    function getTurnstileToken() {
+	      // Prefer API response (always latest), fallback to hidden input
+	      try {
+	        if (window.turnstile && typeof window.turnstile.getResponse === "function") {
+	          const t = window.turnstile.getResponse();
+	          if (t) return t;
+	        }
+	      } catch (err) {
+	        // ignore
+	      }
+	      const input = document.querySelector('input[name="cf-turnstile-response"]');
+	      return (input && input.value) ? input.value : "";
+	    }
+
+	    function resetTurnstile() {
+	      try {
+	        if (window.turnstile && typeof window.turnstile.reset === "function") {
+	          window.turnstile.reset();
+	        }
+	      } catch (err) {
+	        // ignore
+	      }
+	      latestTurnstileToken = "";
+	    }
+
+	    function focusTurnstile() {
+	      const el = document.getElementById("turnstileWidget");
+	      if (el) {
+	        el.scrollIntoView({ behavior: "smooth", block: "center" });
+	      }
+	    }
+
+	    // Turnstile callbacks (referenced from data-* attributes)
+	    window.onTurnstileSuccess = (token) => {
+	      latestTurnstileToken = token || "";
+	    };
+	    window.onTurnstileExpired = () => {
+	      latestTurnstileToken = "";
+	    };
+	    window.onTurnstileError = () => {
+	      latestTurnstileToken = "";
+	    };
+
+	    const translate = (key, replacements) =>
+	      typeof window.__ === "function" ? window.__(key, replacements) : key;
 
     const getFileLabel = (type) => {
       const map = {
@@ -2431,27 +2478,39 @@
     }
 
     // Function to submit final
-    async function submitFinal() {
-      const submitBtn = document.querySelector('#btnKonfirmasiKirim');
-      const originalText = submitBtn.innerHTML;
+	    async function submitFinal() {
+	      const submitBtn = document.querySelector('#btnKonfirmasiKirim');
+	      const originalText = submitBtn.innerHTML;
 
-      submitBtn.disabled = true;
-      submitBtn.innerHTML =
-        `<span class="inline-block animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></span>${translate("form.progress.sending")}`;
+	      submitBtn.disabled = true;
+	      submitBtn.innerHTML =
+	        `<span class="inline-block animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></span>${translate("form.progress.sending")}`;
 
-      try {
-        const formData = formDataGlobal;
-        const data = {};
+	      try {
+	        // Rebuild form data to make sure Turnstile token is the latest (token can refresh/expire)
+	        const formData = new FormData(form);
+	        formDataGlobal = formData;
+	        const data = {};
 
-        const captchaToken =
-          formData.get("cf-turnstile-response") || formData.get("cf_turnstile_response");
-        if (!captchaToken) {
-          throw new Error("Verifikasi CAPTCHA diperlukan. Silakan selesaikan kotak keamanan.");
-        }
+	        const captchaToken =
+	          getTurnstileToken() ||
+	          latestTurnstileToken ||
+	          formData.get("cf-turnstile-response") ||
+	          formData.get("cf_turnstile_response");
+	        if (!captchaToken) {
+	          // Close confirmation modal so user can see the widget
+	          const modalKonfirmasi = document.getElementById("modalKonfirmasi");
+	          if (modalKonfirmasi) {
+	            modalKonfirmasi.classList.remove("modal-visible");
+	            modalKonfirmasi.classList.add("modal-hidden");
+	          }
+	          focusTurnstile();
+	          throw new Error("Verifikasi CAPTCHA diperlukan atau sudah kedaluwarsa. Silakan verifikasi ulang.");
+	        }
 
-        for (let [key, value] of formData.entries()) {
-          if (!key.startsWith("file")) {
-            data[key] = value;
+	        for (let [key, value] of formData.entries()) {
+	          if (!key.startsWith("file")) {
+	            data[key] = value;
           }
         }
 
@@ -2476,31 +2535,49 @@
         console.log("[SUBMIT] Response status:", res.status);
         console.log("[SUBMIT] Response headers:", Object.fromEntries(res.headers.entries()));
 
-        const responseText = await res.text();
-        console.log("[SUBMIT] Raw response text:", responseText);
+	        const responseText = await res.text();
+	        console.log("[SUBMIT] Raw response text:", responseText);
 
-        let json;
-        try {
-          json = JSON.parse(responseText);
-        } catch (parseError) {
-          console.error("[SUBMIT] ❌ Failed to parse JSON:", parseError);
-          console.error("[SUBMIT] Response was:", responseText);
-          throw new Error(translate("form.errors.serverInvalidJson", { snippet: responseText.substring(0, 100) }));
-        }
+	        let json;
+	        try {
+	          json = JSON.parse(responseText);
+	        } catch (parseError) {
+	          console.error("[SUBMIT] ❌ Failed to parse JSON:", parseError);
+	          console.error("[SUBMIT] Response was:", responseText);
+	          throw new Error(translate("form.errors.serverInvalidJson", { snippet: responseText.substring(0, 100) }));
+	        }
 
         console.log("[SUBMIT] Parsed response:", json);
         console.log("[SUBMIT] json.ok =", json.ok);
         console.log("[SUBMIT] json.nisn =", json.nisn);
         console.log("[SUBMIT] json.id =", json.id);
 
-        if (!json.ok) {
-          console.error("[SUBMIT] ❌ Server returned ok=false");
-          console.error("[SUBMIT] Error:", json.error);
-          console.error("[SUBMIT] Details:", json.details);
-          throw new Error(json.error || translate("form.messages.submitErrorGeneric"));
-        }
+	        if (!json.ok) {
+	          console.error("[SUBMIT] ❌ Server returned ok=false");
+	          console.error("[SUBMIT] Error:", json.error);
+	          console.error("[SUBMIT] Details:", json.details);
+	          const detailsText = (json.details || json.codes || "").toString().toLowerCase();
+	          const isCaptchaError =
+	            (json.error || "").toString().toLowerCase().includes("captcha") ||
+	            detailsText.includes("turnstile") ||
+	            detailsText.includes("timeout-or-duplicate") ||
+	            detailsText.includes("invalid-input-response") ||
+	            detailsText.includes("missing-input-response");
+	          if (isCaptchaError) {
+	            resetTurnstile();
+	            const modalKonfirmasi = document.getElementById("modalKonfirmasi");
+	            if (modalKonfirmasi) {
+	              modalKonfirmasi.classList.remove("modal-visible");
+	              modalKonfirmasi.classList.add("modal-hidden");
+	            }
+	            focusTurnstile();
+	          }
+	          throw new Error(json.error || translate("form.messages.submitErrorGeneric"));
+	        }
 
-        console.log("[SUBMIT] ✓ Data berhasil disimpan!");
+	        console.log("[SUBMIT] ✓ Data berhasil disimpan!");
+	        // Token Turnstile bersifat sekali pakai — reset setelah sukses supaya tidak duplikat di submit berikutnya
+	        resetTurnstile();
 
         const nisn = json.nisn;
         const pendaftarId = json.id;
@@ -2633,7 +2710,7 @@
           modalSukses.classList.remove('modal-hidden');
           modalSukses.classList.add('modal-visible');
         }
-      } catch (error) {
+	      } catch (error) {
         console.error("=".repeat(80));
         console.error("❌ SUBMIT ERROR DETAILS:");
         console.error("=".repeat(80));
@@ -2642,16 +2719,20 @@
         console.error("Error Stack:", error.stack);
         console.error("=".repeat(80));
 
-        let errorMsg = error.message || translate("form.messages.submitErrorGeneric");
-        const normalizedMsg = (errorMsg || "").toLowerCase();
+	        let errorMsg = error.message || translate("form.messages.submitErrorGeneric");
+	        const normalizedMsg = (errorMsg || "").toLowerCase();
 
-        if (normalizedMsg.includes("timeout")) {
-          errorMsg = translate("form.messages.submitErrorTimeout");
-        } else if (normalizedMsg.includes("networkerror") || normalizedMsg.includes("failed to fetch")) {
-          errorMsg = translate("form.messages.submitErrorNetwork");
-        } else if (normalizedMsg.includes("nisn tidak diterima")) {
-          errorMsg = translate("form.errors.nisnMissing");
-        }
+	        if (normalizedMsg.includes("timeout")) {
+	          errorMsg = translate("form.messages.submitErrorTimeout");
+	        } else if (normalizedMsg.includes("networkerror") || normalizedMsg.includes("failed to fetch")) {
+	          errorMsg = translate("form.messages.submitErrorNetwork");
+	        } else if (normalizedMsg.includes("nisn tidak diterima")) {
+	          errorMsg = translate("form.errors.nisnMissing");
+	        } else if (normalizedMsg.includes("captcha")) {
+	          // Pastikan captcha siap untuk percobaan ulang
+	          resetTurnstile();
+	          focusTurnstile();
+	        }
 
         const errorTitle = translate("form.messages.submitErrorTitle");
         toastr.error(`❌ ${errorMsg}`, errorTitle, {

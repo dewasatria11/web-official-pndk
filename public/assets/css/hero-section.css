@@ -117,6 +117,8 @@
 .hero-text-area {
     position: relative;
     min-height: 380px;
+    /* Reserve vertical space so CTA stays locked even if description is removed */
+    --hero-cta-lock-space: 7.5rem;
 }
 
 /* Individual slide text containers */
@@ -125,12 +127,15 @@
     top: 0;
     left: 0;
     width: 100%;
+    height: 100%;
     opacity: 0;
     transform: translateY(-30px);
     pointer-events: none;
     transition:
         opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
         transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    display: grid;
+    grid-template-rows: auto auto var(--hero-cta-lock-space) auto;
 }
 
 /* Active slide text - visible and interactive */
@@ -182,6 +187,8 @@
 
 /* CTA Button Group */
 .hero-cta-group {
+    /* Always place CTA in the last row so it doesn't move up when the description is removed */
+    grid-row: 4;
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
@@ -550,6 +557,7 @@
         width: 100%;
         min-height: auto;
         padding: 0 0.5rem;
+        --hero-cta-lock-space: 6rem;
     }
 
     /* Force only active slide to show */
@@ -561,7 +569,7 @@
     }
 
     .hero-slide-text--active {
-        display: block !important;
+        display: grid !important;
         opacity: 1;
     }
 
@@ -714,6 +722,7 @@
 
     .hero-text-area {
         padding: 0;
+        --hero-cta-lock-space: 4.75rem;
     }
 
     .hero-arabic-text {
