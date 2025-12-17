@@ -63,9 +63,9 @@
     top: -200px;
     right: -200px;
     background: radial-gradient(circle,
-            rgba(134, 239, 172, 0.4) 0%,
-            rgba(74, 222, 128, 0.2) 40%,
-            rgba(34, 197, 94, 0.05) 70%,
+            rgba(134, 239, 172, 0.58) 0%,
+            rgba(74, 222, 128, 0.32) 40%,
+            rgba(34, 197, 94, 0.14) 70%,
             transparent 100%);
     animation: pulseCircle 6s ease-in-out infinite;
 }
@@ -77,9 +77,9 @@
     bottom: -150px;
     left: -150px;
     background: radial-gradient(circle,
-            rgba(167, 243, 208, 0.35) 0%,
-            rgba(110, 231, 183, 0.18) 40%,
-            rgba(52, 211, 153, 0.05) 70%,
+            rgba(167, 243, 208, 0.52) 0%,
+            rgba(110, 231, 183, 0.3) 40%,
+            rgba(52, 211, 153, 0.14) 70%,
             transparent 100%);
     animation: pulseCircle 7s ease-in-out infinite;
     animation-delay: 1s;
@@ -95,8 +95,8 @@
     }
 
     50% {
-        opacity: 0.6;
-        transform: scale(1.05);
+        opacity: 0.82;
+        transform: scale(1.06);
     }
 }
 
@@ -474,6 +474,8 @@
    ========================= */
 @media (max-width: 1024px) {
     .hero-carousel {
+        /* On tablet/mobile, don't pull hero behind navbar */
+        margin-top: 0;
         padding: 1.75rem 1.5rem 3.5rem;
     }
 
@@ -521,7 +523,9 @@
 @media (max-width: 768px) {
     .hero-carousel {
         min-height: auto;
-        padding: 1.5rem 1rem 6rem;
+        /* Ensure hero content starts 20px below navbar */
+        margin-top: 0;
+        padding: 20px 1rem 6rem;
         /* Increased bottom padding for wave */
     }
 
@@ -541,7 +545,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-top: 1rem;
+        margin-top: 0;
     }
 
     /* Text Area */
@@ -677,7 +681,7 @@
         top: -100px;
         right: -100px;
         filter: blur(50px);
-        opacity: 0.4;
+        opacity: 0.55;
     }
 
     .hero-decor-2 {
@@ -686,7 +690,7 @@
         bottom: -80px;
         left: -80px;
         filter: blur(50px);
-        opacity: 0.35;
+        opacity: 0.5;
     }
 
     /* Wave */
@@ -702,7 +706,9 @@
    ========================= */
 @media (max-width: 480px) {
     .hero-carousel {
-        padding: 1.5rem 0.75rem 2.5rem;
+        /* Keep the 20px gap under navbar on small screens too */
+        margin-top: 0;
+        padding: 20px 0.75rem 2.5rem;
     }
 
     .hero-wrapper {
@@ -787,7 +793,7 @@
         top: -60px;
         right: -60px;
         filter: blur(35px);
-        opacity: 0.3;
+        opacity: 0.45;
     }
 
     .hero-decor-2 {
@@ -796,7 +802,7 @@
         bottom: -50px;
         left: -50px;
         filter: blur(35px);
-        opacity: 0.25;
+        opacity: 0.4;
     }
 
     .hero-wave svg {

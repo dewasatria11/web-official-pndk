@@ -2004,17 +2004,18 @@
                 slide)</p>
             </div>
 
-            <!-- Info Alert -->
-            <div class="alert alert-info mb-4">
-              <i class="bi bi-info-circle-fill"></i> <strong>Panduan Gambar:</strong>
-              <ul class="mb-0 mt-2">
-                <li><strong>Format:</strong> PNG dengan background transparan (recommended)</li>
-                <li><strong>Ukuran:</strong> Minimal 800x1000px untuk hasil terbaik</li>
-                <li><strong>Konten:</strong> Foto santri/siswa yang akan ditampilkan di hero section</li>
-                <li><strong>Posisi:</strong> Gambar akan muncul di kartu hijau di sebelah kanan teks hero</li>
-                <li>Maksimal <strong>3 gambar</strong> untuk 3 slide carousel</li>
-              </ul>
-            </div>
+	            <!-- Info Alert -->
+	            <div class="alert alert-info mb-4">
+	              <i class="bi bi-info-circle-fill"></i> <strong>Panduan Gambar:</strong>
+	              <ul class="mb-0 mt-2">
+	                <li><strong>Format:</strong> PNG transparan (disarankan) atau WebP transparan</li>
+	                <li><strong>Ukuran:</strong> Rekomendasi portrait (mis. 800×1000px atau lebih)</li>
+	                <li><strong>Ukuran file:</strong> Maksimal 5 MB</li>
+	                <li><strong>Konten:</strong> Foto santri/siswa (1 orang) yang akan ditampilkan di hero section</li>
+	                <li><strong>Penempatan:</strong> Muncul di sisi kanan teks hero (Slide 1–3, maksimal 3 gambar)</li>
+	                <li><strong>Catatan:</strong> Upload pada slide yang sama akan mengganti gambar sebelumnya</li>
+	              </ul>
+	            </div>
 
             <!-- Upload Section -->
             <div class="card mb-4">
@@ -2024,13 +2025,13 @@
               <div class="card-body">
                 <form id="heroCarouselUploadForm">
                   <div class="row">
-                    <div class="col-md-6">
-                      <div class="mb-3">
-                        <label for="heroCarouselImageInput" class="form-label">Pilih Gambar PNG</label>
-                        <input type="file" class="form-control" id="heroCarouselImageInput"
-                          accept="image/png,image/webp" required>
-                        <small class="text-muted">Format: PNG (transparan) atau WebP. Maks 5MB.</small>
-                      </div>
+	                    <div class="col-md-6">
+	                      <div class="mb-3">
+	                        <label for="heroCarouselImageInput" class="form-label">Pilih Gambar (PNG/WebP)</label>
+	                        <input type="file" class="form-control" id="heroCarouselImageInput"
+	                          accept="image/png,image/webp" required>
+	                        <small class="text-muted">Format: PNG transparan atau WebP transparan. Maks 5MB.</small>
+	                      </div>
                       <div class="mb-3">
                         <label for="heroCarouselSlideOrder" class="form-label">Urutan Slide</label>
                         <select class="form-select" id="heroCarouselSlideOrder">

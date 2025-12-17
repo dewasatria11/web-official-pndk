@@ -348,23 +348,59 @@
       border: 0;
     }
 
-    .quick-links a {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      padding: 0.6rem 1.25rem;
-      border-radius: 999px;
-      border: 1px solid rgba(4, 120, 87, 0.2);
-      color: #047857;
-      font-weight: 600;
-      transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
-    }
+	    .quick-links {
+	      display: flex;
+	      flex-wrap: wrap;
+	      justify-content: center;
+	      align-items: center;
+	      gap: 0.75rem;
+	    }
+	
+	    .quick-links a {
+	      display: inline-flex;
+	      align-items: center;
+	      gap: 0.35rem;
+	      padding: 0.6rem 1.25rem;
+	      border-radius: 999px;
+	      border: 1px solid rgba(4, 120, 87, 0.2);
+	      color: #047857;
+	      font-weight: 600;
+	      justify-content: center;
+	      text-align: center;
+	      transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+	    }
 
-    .quick-links a:hover {
-      background: rgba(4, 120, 87, 0.08);
-      color: #065f46;
-      box-shadow: 0 10px 20px rgba(4, 120, 87, 0.15);
-    }
+	    .quick-links a:hover {
+	      background: rgba(4, 120, 87, 0.08);
+	      color: #065f46;
+	      box-shadow: 0 10px 20px rgba(4, 120, 87, 0.15);
+	    }
+	
+	    /* Quick links on mobile: 2-column grid, stacked icon + text */
+	    @media (max-width: 768px) {
+	      .quick-links {
+	        display: grid;
+	        grid-template-columns: repeat(2, minmax(0, 1fr));
+	        gap: 0.75rem;
+	        padding: 0 0.25rem;
+	      }
+	
+	      .quick-links a {
+	        width: 100%;
+	        flex-direction: column;
+	        gap: 0.5rem;
+	        padding: 0.75rem 0.75rem;
+	        border-radius: 16px;
+	      }
+	
+	      .quick-links a i {
+	        font-size: 1.1rem;
+	      }
+	
+	      .quick-links a span {
+	        line-height: 1.15;
+	      }
+	    }
 
     @media (min-width: 1024px) {
       .news-grid {
@@ -952,85 +988,84 @@
             <p>Konsultasikan kebutuhan keluarga melalui WhatsApp, telepon, atau kunjungan langsung.</p>
           </div>
         </div>
-        <div
-          class="flex flex-nowrap overflow-x-auto pb-4 px-4 -mx-4 md:flex-wrap md:justify-center md:items-center md:pb-0 md:px-0 md:mx-0 gap-3 quick-links text-sm no-scrollbar snap-x">
-          <a href="/alur-pendaftaran.html" class="reveal reveal-fade-up delay-1">
-            <i class="bi bi-arrow-right-circle"></i>
-            <span data-i18n="seo.headings.flow">Alur Pendaftaran</span>
-          </a>
-          <a href="/syarat-pendaftaran.html" class="reveal reveal-fade-up delay-2">
-            <i class="bi bi-check-circle"></i>
-            <span data-i18n="seo.headings.requirements">Syarat Pendaftaran</span>
-          </a>
-          <a href="/biaya.html" class="reveal reveal-fade-up delay-3">
-            <i class="bi bi-cash-stack"></i>
-            <span data-i18n="seo.headings.fees">Biaya Pendidikan</span>
-          </a>
-          <a href="/brosur.html" class="reveal reveal-fade-up delay-4">
-            <i class="bi bi-file-earmark-text"></i>
-            <span data-i18n="seo.headings.brochure">Brosur PPDB</span>
-          </a>
-          <a href="/kontak.html" class="reveal reveal-fade-up delay-5">
-            <i class="bi bi-telephone-forward"></i>
-            <span data-i18n="seo.headings.contact">Kontak & Informasi Lengkap</span>
-          </a>
-        </div>
-      </div>
-    </section>
+	        <div class="quick-links text-sm">
+	          <a href="/alur-pendaftaran.html" class="reveal reveal-fade-up delay-1">
+	            <i class="bi bi-arrow-right-circle"></i>
+	            <span data-i18n="seo.headings.flow">Alur Pendaftaran</span>
+	          </a>
+	          <a href="/syarat-pendaftaran.html" class="reveal reveal-fade-up delay-2">
+	            <i class="bi bi-check-circle"></i>
+	            <span data-i18n="seo.headings.requirements">Syarat Pendaftaran</span>
+	          </a>
+	          <a href="/biaya.html" class="reveal reveal-fade-up delay-3">
+	            <i class="bi bi-cash-stack"></i>
+	            <span data-i18n="seo.headings.fees">Biaya Pendidikan</span>
+	          </a>
+	          <a href="/brosur.html" class="reveal reveal-fade-up delay-4">
+	            <i class="bi bi-file-earmark-text"></i>
+	            <span data-i18n="seo.headings.brochure">Brosur PPDB</span>
+	          </a>
+	          <a href="/kontak.html" class="reveal reveal-fade-up delay-5">
+	            <i class="bi bi-telephone-forward"></i>
+	            <span data-i18n="seo.headings.contact">Kontak & Informasi Lengkap</span>
+	          </a>
+	        </div>
+	      </div>
+	    </section>
 
-    <!-- IMAGE SLIDER SECTION (Card Minimalis - Slide Animation) -->
-    <section class="py-8 bg-gray-50 reveal reveal-zoom">
-      <div id="imageSliderContainer">
-        <div id="imageSlider">
-          <div id="sliderTrack" class="slider-track">
-            <!-- Fallback gradient -->
-            <div id="sliderFallback" class="slider-slide"
-              style="background: linear-gradient(135deg, #047857 0%, #064e3b 100%);"></div>
-          </div>
-        </div>
-      </div>
-    </section>
+	    <!-- GELOMBANG PENDAFTARAN -->
+	    <section class="py-12 bg-gray-50">
+	      <!-- Section header with reveal animation -->
+	      <div class="container mx-auto px-4">
+	        <div class="flex justify-center mb-12 reveal reveal-fade-up">
+	          <div class="w-full lg:w-2/3 text-center">
+	            <h2 class="text-3xl lg:text-4xl font-bold mb-3 text-gray-800" data-i18n="sections.gelombang.title">Gelombang
+	              Pendaftaran</h2>
 
-    <!-- WHY SECTION (Modern 2-Column Layout) -->
-    <section class="py-16 bg-white reveal reveal-fade-up">
-      <div class="container mx-auto px-4">
-        <div class="max-w-6xl mx-auto">
-          <div id="whySectionContent" class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-            <!-- Loading state -->
-            <div class="animate-pulse lg:col-span-2">
-              <div class="h-8 bg-gray-200 rounded mb-4 max-w-md"></div>
-              <div class="h-4 bg-gray-200 rounded mb-2 max-w-xl"></div>
-              <div class="h-4 bg-gray-200 rounded mb-6 max-w-lg"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+	          </div>
+	        </div>
 
-    <!-- GELOMBANG PENDAFTARAN -->
-    <section class="py-12 bg-gray-50">
-      <!-- Section header with reveal animation -->
-      <div class="container mx-auto px-4">
-        <div class="flex justify-center mb-12 reveal reveal-fade-up">
-          <div class="w-full lg:w-2/3 text-center">
-            <h2 class="text-3xl lg:text-4xl font-bold mb-3 text-gray-800" data-i18n="sections.gelombang.title">Gelombang
-              Pendaftaran</h2>
+	        <!-- Dynamic Gelombang Cards -->
+	        <div id="gelombangContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+	          <!-- Loading skeleton -->
+	          <div class="text-center py-12 col-span-full">
+	            <div class="spinner-border text-primary" role="status">
+	              <span class="visually-hidden" data-i18n="sections.gelombang.loadingAlt">Memuat data gelombang...</span>
+	            </div>
+	            <p class="text-gray-500 mt-3" data-i18n="sections.gelombang.loading">Memuat data gelombang...</p>
+	          </div>
+	        </div>
+	      </div>
+	    </section>
 
-          </div>
-        </div>
+	    <!-- WHY SECTION (Modern 2-Column Layout) -->
+	    <section class="py-16 bg-white reveal reveal-fade-up">
+	      <div class="container mx-auto px-4">
+	        <div class="max-w-6xl mx-auto">
+	          <div id="whySectionContent" class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+	            <!-- Loading state -->
+	            <div class="animate-pulse lg:col-span-2">
+	              <div class="h-8 bg-gray-200 rounded mb-4 max-w-md"></div>
+	              <div class="h-4 bg-gray-200 rounded mb-2 max-w-xl"></div>
+	              <div class="h-4 bg-gray-200 rounded mb-6 max-w-lg"></div>
+	            </div>
+	          </div>
+	        </div>
+	      </div>
+	    </section>
 
-        <!-- Dynamic Gelombang Cards -->
-        <div id="gelombangContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          <!-- Loading skeleton -->
-          <div class="text-center py-12 col-span-full">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden" data-i18n="sections.gelombang.loadingAlt">Memuat data gelombang...</span>
-            </div>
-            <p class="text-gray-500 mt-3" data-i18n="sections.gelombang.loading">Memuat data gelombang...</p>
-          </div>
-        </div>
-      </div>
-    </section>
+	    <!-- IMAGE SLIDER SECTION (Card Minimalis - Slide Animation) -->
+	    <section class="py-8 bg-gray-50 reveal reveal-zoom">
+	      <div id="imageSliderContainer">
+	        <div id="imageSlider">
+	          <div id="sliderTrack" class="slider-track">
+	            <!-- Fallback gradient -->
+	            <div id="sliderFallback" class="slider-slide"
+	              style="background: linear-gradient(135deg, #047857 0%, #064e3b 100%);"></div>
+	          </div>
+	        </div>
+	      </div>
+	    </section>
 
     <!-- BERITA & ARTIKEL -->
     <section class="py-16 bg-gray-50">
